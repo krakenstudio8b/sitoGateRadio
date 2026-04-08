@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const archiveModalCloseBtn = $('#archive-modal-close-btn');
 
         openArchiveModal = (streamId) => {
-            if (!streamsData) return;
-            const stream = streamsData.find(s => s.id == streamId);
+            // Cerca sia in streams che in eventi normalizzati per archivio
+            const stream = (window._allArchiveItems || streamsData || []).find(s => s.id == streamId);
             if (!stream) return;
 
             archiveModal.classList.remove('winter', 'spring', 'summer', 'autumn');
@@ -289,7 +289,31 @@ document.addEventListener('DOMContentLoaded', async () => {
             container.innerHTML = items.length > 0 ? items.map(createArchiveItemHTML).join('') : '<p class="col-span-full text-center text-[var(--text-secondary)]">Nessun risultato trovato.</p>';
         };
 
-        const pastStreams = streamsData.filter(s => new Date(s.date) < new Date()).sort((a, b) => new Date(b.date) - new Date(a.date));
+        // Unisci streams + eventi nell'archivio (card identiche)
+        function seasonFromDate(dateStr) {
+            const m = new Date(dateStr).getMonth(); // 0-11
+            if (m >= 2 && m <= 4) return 'spring';
+            if (m >= 5 && m <= 7) return 'summer';
+            if (m >= 8 && m <= 10) return 'autumn';
+            return 'winter';
+        }
+        const normalizedEvents = (typeof eventsData !== 'undefined' ? eventsData : []).map(ev => ({
+            id: ev.id,
+            artist: ev.title || 'EVENTO',
+            title: ev.location || 'EVENTO',
+            date: ev.date,
+            imageUrl: ev.mainImage || '',
+            soundcloudUrl: null,
+            season: ev.season || seasonFromDate(ev.date),
+            tags: ev.tags || [],
+            _type: 'event',
+        }));
+        const allArchiveItems = [
+            ...streamsData.map(s => ({ ...s, _type: 'stream' })),
+            ...normalizedEvents,
+        ];
+        window._allArchiveItems = allArchiveItems;
+        const pastStreams = allArchiveItems.filter(s => new Date(s.date) < new Date()).sort((a, b) => new Date(b.date) - new Date(a.date));
         
         if (archiveGrid) {
             renderGrid(pastStreams, archiveGrid);
