@@ -3,6 +3,13 @@
 /* ============================================= */
 
 /* ----- FONT IMPORT ----- */
+@font-face {
+    font-family: 'Grifter';
+    src: url('/fonts/grifter-bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
 
 /* ----- VARIABILI COLORE GLOBALI ----- */
 :root {
@@ -107,17 +114,14 @@ h1,h2,h3,h4,h5,h6 { font-weight: 700; color: white; }
     font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 4rem;
     line-height: 1; text-transform: uppercase; letter-spacing: 0.1em;
     color: var(--text-primary);
-    text-shadow: 2px 2px 0px var(--background-color), 4px 4px 0px var(--accent);
 }
 .next-event-card {
     max-width: 320px; border-radius: 0.75rem; overflow: hidden;
     border: 1px solid var(--border-color);
-    box-shadow: 0 0 12px -2px var(--accent), 0 0 3px 0 var(--accent) inset;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
 }
 .next-event-card:hover {
     transform: scale(1.03);
-    box-shadow: 0 0 20px -2px var(--accent), 0 0 5px 0 var(--accent) inset;
 }
 .next-event-date {
     font-family: 'Roboto Mono', monospace; font-size: 1.25rem;
@@ -138,7 +142,8 @@ header {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
-.header-logo-text { transition: text-shadow 0.3s ease-in-out; }
+.header-logo-text { transition: text-shadow 0.3s ease-in-out; font-family: 'Grifter', sans-serif; }
+.grifter-font { font-family: 'Grifter', sans-serif; }
 .header-logo-img {
     transition: filter 0.3s ease-in-out; /* Regola esistente */
     height: 6rem; /* Riga aggiunta per aumentare l'altezza */
@@ -208,7 +213,7 @@ header .hidden.md\:flex a:hover::after {
 
 /* ----- CARD ARCHIVIO ----- */
 .archive-card {
-    background-color: #1a1a1a;
+    background-color: #0a0a0a;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 .archive-card:hover {
@@ -343,7 +348,7 @@ header .hidden.md\:flex a:hover::after {
 .page-about .team-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 1024px) { .page-about .team-grid { grid-template-columns: repeat(3, 1fr); } }
 .page-about .team-member {
-    background-color: #1a1a1a; border-radius: 0.75rem; border: 1px solid var(--border-color);
+    background-color: #0a0a0a; border-radius: 0.75rem; border: 1px solid var(--border-color);
     text-align: center; padding: 2rem; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .page-about .team-member:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.2); border-color: rgba(var(--accent-rgb), 0.5); }
@@ -389,7 +394,7 @@ header .hidden.md\:flex a:hover::after {
 /* ============================================= */
 
 .event-card {
-    background-color: #1a1a1a;
+    background-color: #0a0a0a;
     border-radius: 0.75rem;
     border: 1px solid var(--border-color);
     overflow: hidden;
@@ -483,7 +488,7 @@ header .hidden.md\:flex a:hover::after {
     flex-grow: 0;
     border-radius: 0.5rem;
     overflow: hidden;
-    background-color: #1a1a1a;
+    background-color: #000;
     cursor: zoom-in;
 }
 .gallery-item img {
@@ -494,6 +499,37 @@ header .hidden.md\:flex a:hover::after {
 }
 .gallery-row { height: 58%; }
 .posts-row { height: 38%; }
+
+/* Gallery grid intelligente */
+.gallery-grid {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+}
+.gallery-grid-2 {
+    grid-template-columns: 1fr 1fr;
+}
+.gallery-grid-2 .gallery-item {
+    height: 100%;
+}
+.gallery-grid-2 .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.gallery-grid-3 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+.gallery-grid-3 .gallery-item-big {
+    grid-row: 1 / -1;
+}
+.gallery-grid-3 .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
 .single-image-mode .gallery-column {
     display: flex; align-items: center; justify-content: center;
@@ -636,7 +672,7 @@ header .hidden.md\:flex a:hover::after {
 
 /* Sovrascrive la regola per il contenitore dell'immagine */
 .archive-modal-image-wrapper {
-    padding-top: 0; /* Rimuove il padding che forza il formato quadrato */
+    padding-top: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -644,13 +680,18 @@ header .hidden.md\:flex a:hover::after {
     min-height: 0;
 }
 
-/* Modifica la regola per l'immagine */
+/* Immagine singola nel modale */
 .archive-modal-image-wrapper img {
-    position: static; /* Rimuove il posizionamento assoluto */
+    position: static;
     height: auto;
-    width: auto;
-    max-height: 70vh; /* Limita l'altezza dell'immagine */
-    object-fit: contain; /* Assicura che sia visibile per intero */
+    width: 100%;
+    max-height: 60vh;
+    object-fit: contain;
+}
+
+/* Grid gallery: la prima immagine su 3 occupa 2 righe */
+#archive-modal-body .grid .row-span-2 {
+    grid-row: span 2;
 }
 .archive-modal-soundcloud-btn {
     display: inline-block;
@@ -711,7 +752,7 @@ header .hidden.md\:flex a:hover::after {
 */
 
 .artist-card {
-    background-color: #1a1a1a;
+    background-color: #0a0a0a;
     border-radius: 0.75rem;
     border: 1px solid var(--border-color);
     overflow: hidden;
@@ -1457,7 +1498,7 @@ textarea:focus-visible,
 }
 
 .img-skeleton {
-    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background: linear-gradient(90deg, #0a0a0a 25%, #141414 50%, #0a0a0a 75%);
     background-size: 800px 100%;
     animation: skeleton-shimmer 1.4s infinite linear;
 }
@@ -1476,7 +1517,7 @@ img:not([src]), img[src=""] {
 .radio-playlist-thumb,
 .radio-artwork-img,
 #radio-next-artwork {
-    background: linear-gradient(90deg, #1a1a1a 25%, #252525 50%, #1a1a1a 75%);
+    background: linear-gradient(90deg, #0a0a0a 25%, #111111 50%, #0a0a0a 75%);
     background-size: 800px 100%;
     animation: skeleton-shimmer 1.4s infinite linear;
 }
