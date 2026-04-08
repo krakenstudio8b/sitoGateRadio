@@ -4,6 +4,11 @@
 old/
 assets/images/drafts/
 
+# Grafiche locali non usate dal sito
+Grafiche Gate/
+Grafiche originali/
+Eventi Gate/
+
 # OS files
 .DS_Store
 Thumbs.db
