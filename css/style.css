@@ -181,7 +181,7 @@ header .hidden.md\:flex a:hover::after {
 }
 #hero-section::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; 
-    background-image: url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/sfondoradio.PNG') !important;
+    background-image: url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/sfondoradio.png') !important;
     background-position: center -50% !important; /* SPOSTA L'IMMAGINE PIÙ IN ALTO */
     background-repeat: no-repeat !important;
     background-size: 65% auto !important; 
@@ -1448,6 +1448,47 @@ textarea:focus-visible,
     font-size: 0.78rem;
     cursor: pointer;
     white-space: nowrap;
+}
+
+/* ─── SKELETON LOADING ──────────────────────────────────────────────────────── */
+@keyframes skeleton-shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+.img-skeleton {
+    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background-size: 800px 100%;
+    animation: skeleton-shimmer 1.4s infinite linear;
+}
+
+img {
+    background: #111;
+}
+
+img:not([src]), img[src=""] {
+    visibility: hidden;
+}
+
+/* Skeleton su card archivio e eventi */
+.stream-card img,
+.event-card img,
+.radio-playlist-thumb,
+.radio-artwork-img,
+#radio-next-artwork {
+    background: linear-gradient(90deg, #1a1a1a 25%, #252525 50%, #1a1a1a 75%);
+    background-size: 800px 100%;
+    animation: skeleton-shimmer 1.4s infinite linear;
+}
+
+/* Quando l'immagine è caricata, rimuove il shimmer */
+.stream-card img.loaded,
+.event-card img.loaded,
+.radio-playlist-thumb.loaded,
+.radio-artwork-img.loaded,
+#radio-next-artwork.loaded {
+    animation: none;
+    background: none;
 }
 
 /* ----- Screen Reader Only ----- */

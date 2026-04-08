@@ -528,4 +528,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target === lightbox) closeLightbox();
         });
     }
+
+    // Skeleton: marca immagini come loaded quando pronte (rimuove shimmer)
+    document.querySelectorAll('img').forEach(img => {
+        if (img.complete && img.naturalWidth > 0) { img.classList.add('loaded'); return; }
+        img.addEventListener('load',  () => img.classList.add('loaded'));
+        img.addEventListener('error', () => img.classList.add('loaded'));
+    });
 });
