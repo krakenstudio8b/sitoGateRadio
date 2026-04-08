@@ -62,10 +62,41 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ? `<a href="${stream.soundcloudUrl}" target="_blank" class="btn-primary inline-block px-8 py-2 rounded-lg mt-1 font-bold"><i class="fas fa-play-circle mr-2"></i>GUARDA LA STREAMING</a>`
                 : '';
 
+            // Gallery intelligente: layout diverso in base al numero di immagini
+            const images = stream.galleryImages && stream.galleryImages.length > 0
+                ? stream.galleryImages
+                : [stream.imageUrl];
+            const count = images.length;
+
+            const modalContent = document.getElementById('archive-modal-content');
+            // Allarga il modale se ci sono più immagini
+            modalContent.className = modalContent.className.replace(/max-w-\S+/g, '');
+            modalContent.classList.add(count > 1 ? 'max-w-3xl' : 'max-w-sm');
+
+            let imagesHTML = '';
+            if (count === 1) {
+                imagesHTML = `<div class="archive-modal-image-wrapper flex-shrink-0">
+                    <img src="${images[0]}" alt="${stream.title}" loading="lazy" class="w-full h-auto rounded-t-xl object-contain max-h-[60vh]">
+                </div>`;
+            } else if (count === 2) {
+                imagesHTML = `<div class="grid grid-cols-2 gap-1 rounded-t-xl overflow-hidden">
+                    ${images.map(img => `<img src="${img}" alt="${stream.title}" loading="lazy" class="w-full h-full object-cover aspect-square">`).join('')}
+                </div>`;
+            } else if (count === 3) {
+                imagesHTML = `<div class="grid grid-cols-2 gap-1 rounded-t-xl overflow-hidden" style="grid-template-rows: 1fr 1fr;">
+                    <img src="${images[0]}" alt="${stream.title}" loading="lazy" class="w-full h-full object-cover row-span-2">
+                    <img src="${images[1]}" alt="${stream.title}" loading="lazy" class="w-full h-full object-cover">
+                    <img src="${images[2]}" alt="${stream.title}" loading="lazy" class="w-full h-full object-cover">
+                </div>`;
+            } else {
+                // 4+ immagini: griglia 2 colonne
+                imagesHTML = `<div class="grid grid-cols-2 gap-1 rounded-t-xl overflow-hidden">
+                    ${images.map(img => `<img src="${img}" alt="${stream.title}" loading="lazy" class="w-full aspect-square object-cover">`).join('')}
+                </div>`;
+            }
+
             archiveModalBody.innerHTML = `
-                <div class="archive-modal-image-wrapper flex-shrink-0">
-                    <img src="${stream.imageUrl}" alt="${stream.title}" loading="lazy">
-                </div>
+                ${imagesHTML}
                 <div class="p-6 text-center overflow-y-auto">
                     <h3 class="text-2xl font-bold text-[var(--accent)] mb-1">${stream.artist}</h3>
                     <p class="text-md text-[var(--text-secondary)] mb-4">${stream.title}</p>
@@ -178,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (nextStream) {
             const eventDate    = new Date(nextStream.date);
             const formattedDate = eventDate.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
-            const eventTime    = "18:00 -> 21:00";
+            const eventTime    = (nextStream.timeStart && nextStream.timeEnd) ? `${nextStream.timeStart} -> ${nextStream.timeEnd}` : "18:00 -> 19:00";
 
             // Widget Radio 24/7 — mostra cosa sta girando ora
             let radioWidgetHTML = '';
@@ -189,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="radio-widget-info">
                             <div class="radio-widget-dot"></div>
                             <div class="radio-widget-texts">
-                                <p class="radio-widget-label">GATE RADIO 24/7 — ORA IN ROTAZIONE</p>
+                                <p class="radio-widget-label grifter-font">GATE RADIO 24/7 — ORA IN ROTAZIONE</p>
                                 <p class="radio-widget-artist">${rs.current.artist}</p>
                             </div>
                         </div>
@@ -199,43 +230,40 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>`;
             } else {
                 radioWidgetHTML = `
-                    <div class="radio-widget-banner">
-                        <div class="radio-widget-info">
+                    <div class="radio-widget-banner inline-flex flex-col items-center gap-3 mx-auto px-6 py-3">
+                        <div class="radio-widget-info justify-center">
                             <div class="radio-widget-dot"></div>
-                            <div class="radio-widget-texts">
-                                <p class="radio-widget-label">GATE RADIO 24/7</p>
-                                <p class="radio-widget-artist">Set live in rotazione continua</p>
-                            </div>
+                            <p class="radio-widget-label text-xl font-bold grifter-font">GATE RADIO 24/7</p>
                         </div>
-                        <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2 flex-shrink-0">
+                        <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2">
                             <i class="fas fa-radio"></i> ASCOLTA ORA
                         </a>
                     </div>`;
             }
 
+            const eventImage = nextStream.imageUrl || 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png';
             liveContainer.innerHTML = `
                 <div class="coming-soon-container text-center">
-                    <h2 class="coming-soon-title">COMING SOON</h2>
-                    <div class="next-event-card my-8 mx-auto">
-                        <img src="${nextStream.imageUrl}" alt="${nextStream.title}" class="w-full h-auto" loading="lazy">
-                    </div>
-                    <p class="next-event-date">${formattedDate} - ${eventTime}</p>
                     ${radioWidgetHTML}
+                    <div class="inline-block bg-black/90 rounded-xl px-8 py-8 mt-10">
+                        <h2 class="coming-soon-title grifter-font mb-16" style="font-size: 2rem;">COMING SOON</h2>
+                        <div class="next-event-card mb-6 mx-auto">
+                            <img src="${eventImage}" alt="${nextStream.title}" class="w-full h-auto" loading="lazy">
+                        </div>
+                        <p class="next-event-date">${formattedDate} - ${eventTime}</p>
+                    </div>
                 </div>`;
         } else {
             liveContainer.innerHTML = `
                 <div class="coming-soon-container text-center">
-                    <h2 class="coming-soon-title">STAY TUNED</h2>
+                    <h2 class="coming-soon-title grifter-font">STAY TUNED</h2>
                     <p class="next-event-date mt-4">Nessun evento in programma.</p>
-                    <div class="radio-widget-banner mt-8 max-w-lg mx-auto">
-                        <div class="radio-widget-info">
+                    <div class="radio-widget-banner mt-8 inline-flex flex-col items-center gap-3 mx-auto px-6 py-3">
+                        <div class="radio-widget-info justify-center">
                             <div class="radio-widget-dot"></div>
-                            <div class="radio-widget-texts">
-                                <p class="radio-widget-label">GATE RADIO 24/7</p>
-                                <p class="radio-widget-artist">Set live in rotazione continua</p>
-                            </div>
+                            <p class="radio-widget-label text-xl font-bold grifter-font">GATE RADIO 24/7</p>
                         </div>
-                        <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2 flex-shrink-0">
+                        <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2">
                             <i class="fas fa-radio"></i> ASCOLTA ORA
                         </a>
                     </div>
@@ -301,37 +329,59 @@ document.addEventListener('DOMContentLoaded', async () => {
             if ((m === 8 && day >= 21) || (m > 8 && m < 11) || (m === 11 && day < 21)) return 'autumn';
             return 'winter';
         }
-        // Deduplica: se un evento Firebase ha stesso titolo+data di uno statico, tieni solo quello Firebase
+        // Merge streams + eventi: per date duplicate, l'EVENTO vince (dati più ricchi)
+        // ma prende il soundcloudUrl dallo stream se disponibile
         const allEvents = typeof eventsData !== 'undefined' ? eventsData : [];
-        const seen = new Set();
-        const deduped = [];
-        // Prima aggiungi quelli Firebase (hanno _fbKey), poi gli statici solo se non duplicati
-        const fbEvents = allEvents.filter(ev => ev._fbKey);
-        const staticEvents = allEvents.filter(ev => !ev._fbKey);
-        for (const ev of fbEvents) {
-            seen.add(ev.title + '|' + ev.date);
-            deduped.push(ev);
+        const eventsByDate = new Map();
+        for (const ev of allEvents) {
+            eventsByDate.set(ev.date, ev);
         }
-        for (const ev of staticEvents) {
-            if (!seen.has(ev.title + '|' + ev.date)) {
-                deduped.push(ev);
+
+        const mergedArchive = [];
+        const usedEventDates = new Set();
+
+        // Per ogni stream, controlla se esiste un evento con stessa data
+        for (const s of streamsData) {
+            const matchingEvent = eventsByDate.get(s.date);
+            if (matchingEvent) {
+                // Evento vince: usa dati evento + soundcloudUrl dallo stream
+                usedEventDates.add(s.date);
+                mergedArchive.push({
+                    id: matchingEvent.id,
+                    artist: matchingEvent.title || s.artist,
+                    title: matchingEvent.location || s.title,
+                    date: matchingEvent.date,
+                    imageUrl: matchingEvent.mainImage || s.imageUrl,
+                    soundcloudUrl: s.soundcloudUrl || null,
+                    season: matchingEvent.season || s.season || seasonFromDate(s.date),
+                    tags: matchingEvent.tags || s.tags || [],
+                    galleryImages: matchingEvent.galleryImages || [],
+                    _type: 'event',
+                });
+            } else {
+                mergedArchive.push({ ...s, _type: 'stream' });
             }
         }
-        const normalizedEvents = deduped.map(ev => ({
-            id: ev.id,
-            artist: ev.title || 'EVENTO',
-            title: ev.location || 'EVENTO',
-            date: ev.date,
-            imageUrl: ev.mainImage || '',
-            soundcloudUrl: null,
-            season: ev.season || seasonFromDate(ev.date),
-            tags: ev.tags || [],
-            _type: 'event',
-        }));
-        const allArchiveItems = [
-            ...streamsData.map(s => ({ ...s, _type: 'stream' })),
-            ...normalizedEvents,
-        ];
+
+        // Aggiungi eventi che NON hanno uno stream corrispondente
+        for (const ev of allEvents) {
+            if (!usedEventDates.has(ev.date)) {
+                mergedArchive.push({
+                    id: ev.id,
+                    artist: ev.title || 'EVENTO',
+                    title: ev.location || 'EVENTO',
+                    date: ev.date,
+                    imageUrl: ev.mainImage || '',
+                    soundcloudUrl: null,
+                    season: ev.season || seasonFromDate(ev.date),
+                    tags: ev.tags || [],
+                    galleryImages: ev.galleryImages || [],
+                    _type: 'event',
+                });
+            }
+        }
+
+        const allArchiveItems = mergedArchive;
         window._allArchiveItems = allArchiveItems;
         const pastStreams = allArchiveItems.filter(s => new Date(s.date) < new Date()).sort((a, b) => new Date(b.date) - new Date(a.date));
         
@@ -412,7 +462,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const eventDate = new Date(event.date);
             return `
                 <div class="event-card group" data-event-id="${event.id}" style="cursor: pointer;">
-                    <div class="event-card-image-wrapper"><img src="${event.mainImage}" alt="${event.title}" class="event-card-image" loading="lazy"></div>
+                    <div class="event-card-image-wrapper"><img src="${event.mainImage || 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png'}" alt="${event.title}" class="event-card-image" loading="lazy"></div>
                     <div class="event-card-content">
                         <h3 class="event-card-title">${event.title}</h3>
                         <p class="event-card-date">${eventDate.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
@@ -430,17 +480,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             $('#modal-event-details').textContent = event.details;
             $('#modal-event-tags').innerHTML = event.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
             
-            if (event.galleryImages.length === 1) {
+            const fallbackImg = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png';
+            const rawImgs = event.galleryImages && event.galleryImages.length > 0 ? event.galleryImages : (event.mainImage ? [event.mainImage] : [fallbackImg]);
+            const imgs = rawImgs;
+            modalContent.classList.remove('single-image-mode');
+            if (imgs.length === 1) {
                 modalContent.classList.add('single-image-mode');
-                galleryContainer.innerHTML = `<div class="single-image-wrapper"><img src="${event.galleryImages[0]}" alt="Evento: ${event.title}" loading="lazy"></div>`;
+                galleryContainer.innerHTML = `<div class="single-image-wrapper"><img src="${imgs[0]}" alt="${event.title}" loading="lazy"></div>`;
+            } else if (imgs.length === 2) {
+                galleryContainer.innerHTML = `<div class="gallery-grid gallery-grid-2">${imgs.map(src => `<div class="gallery-item"><img src="${src}" alt="${event.title}" loading="lazy"></div>`).join('')}</div>`;
+            } else if (imgs.length === 3) {
+                galleryContainer.innerHTML = `<div class="gallery-grid gallery-grid-3"><div class="gallery-item gallery-item-big"><img src="${imgs[0]}" alt="${event.title}" loading="lazy"></div><div class="gallery-item"><img src="${imgs[1]}" alt="${event.title}" loading="lazy"></div><div class="gallery-item"><img src="${imgs[2]}" alt="${event.title}" loading="lazy"></div></div>`;
+            } else if (imgs.length >= 4) {
+                // Prima riga: immagini più grandi, seconda riga: più piccole
+                const half = Math.ceil(imgs.length / 2);
+                const row1 = imgs.slice(0, half);
+                const row2 = imgs.slice(half);
+                galleryContainer.innerHTML = `
+                    <div class="gallery-row">${row1.map(src => `<div class="gallery-item"><img src="${src}" alt="${event.title}" loading="lazy"></div>`).join('')}</div>
+                    <div class="gallery-row posts-row">${row2.map(src => `<div class="gallery-item"><img src="${src}" alt="${event.title}" loading="lazy"></div>`).join('')}</div>`;
             } else {
-                modalContent.classList.remove('single-image-mode');
-                const posters = event.galleryImages.filter(img => img.toUpperCase().includes('GRAFICA'));
-                const posts = event.galleryImages.filter(img => img.toUpperCase().includes('POST'));
-                let galleryHTML = '';
-                if (posters.length > 0) galleryHTML += `<div class="gallery-row">${posters.map(imgSrc => `<div class="gallery-item"><img src="${imgSrc}" alt="Grafica: ${event.title}" loading="lazy"></div>`).join('')}</div>`;
-                if (posts.length > 0) galleryHTML += `<div class="gallery-row posts-row">${posts.map(imgSrc => `<div class="gallery-item"><img src="${imgSrc}" alt="Post: ${event.title}" loading="lazy"></div>`).join('')}</div>`;
-                galleryContainer.innerHTML = galleryHTML;
+                galleryContainer.innerHTML = '';
             }
             
             $$('.gallery-item img, .single-image-wrapper img').forEach(img => {
