@@ -243,8 +243,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const eventImage = nextStream.imageUrl || 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png';
             liveContainer.innerHTML = `
-                <div class="coming-soon-container text-center">
-                    ${radioWidgetHTML}
+                <div class="coming-soon-container text-center flex flex-col items-center">
+                    <div class="w-full">${radioWidgetHTML}</div>
                     <div class="inline-block bg-black/90 rounded-xl px-8 py-8 mt-10">
                         <h2 class="coming-soon-title grifter-font mb-16" style="font-size: 2rem;">COMING SOON</h2>
                         <div class="next-event-card mb-6 mx-auto">
