@@ -20,7 +20,7 @@
     --border-color: rgba(255, 255, 255, 0.1);
     --text-primary: #e2e8f0;
     --text-secondary: #cbd5e0; /* Migliorato contrasto da #a0aec0 */
-    --background-color: #000000;
+    --background-color: #0d0d0d;
 }
 
 /* ----- STILI GLOBALI ----- */
@@ -30,7 +30,7 @@
 
 /* ----- STILI GLOBALI ----- */
 body {
-    background-color: #000000; /* Sfondo NERO PURO */
+    background-color: #0d0d0d; /* Sfondo NERO PURO */
     color: var(--text-primary);
     font-family: 'Poppins', sans-serif;
     position: relative; /* Indispensabile per far funzionare ::before */
@@ -182,7 +182,7 @@ header .hidden.md\:flex a:hover::after {
 
 /* ----- SEZIONI SPECIFICHE ----- */
 #hero-section {
-    background-color: #000000; position: relative;
+    background-color: #0d0d0d; position: relative;
 }
 #hero-section::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; 
@@ -213,7 +213,7 @@ header .hidden.md\:flex a:hover::after {
 
 /* ----- CARD ARCHIVIO ----- */
 .archive-card {
-    background-color: #000000;
+    background-color: #0d0d0d;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 .archive-card:hover {
@@ -348,7 +348,7 @@ header .hidden.md\:flex a:hover::after {
 .page-about .team-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 1024px) { .page-about .team-grid { grid-template-columns: repeat(3, 1fr); } }
 .page-about .team-member {
-    background-color: #000000; border-radius: 0.75rem; border: 1px solid var(--border-color);
+    background-color: #0d0d0d; border-radius: 0.75rem; border: 1px solid var(--border-color);
     text-align: center; padding: 2rem; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .page-about .team-member:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.2); border-color: rgba(var(--accent-rgb), 0.5); }
@@ -394,7 +394,7 @@ header .hidden.md\:flex a:hover::after {
 /* ============================================= */
 
 .event-card {
-    background-color: #000000;
+    background-color: #0d0d0d;
     border-radius: 0.75rem;
     border: 1px solid var(--border-color);
     overflow: hidden;
@@ -752,7 +752,7 @@ header .hidden.md\:flex a:hover::after {
 */
 
 .artist-card {
-    background-color: #000000;
+    background-color: #0d0d0d;
     border-radius: 0.75rem;
     border: 1px solid var(--border-color);
     overflow: hidden;
