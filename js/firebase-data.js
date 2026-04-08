@@ -14,12 +14,13 @@ window.gateRadioDataPromise = (async function fetchGateRadioData() {
         const eventsObj  = await eventsRes.json();
 
         // Firebase restituisce oggetti con push key → converti in array
+        // Usa la push key come `id` per compatibilità con il codice del sito
         const streams = streamsObj && typeof streamsObj === 'object'
-            ? Object.entries(streamsObj).map(([key, val]) => ({ ...val, _fbKey: key }))
+            ? Object.entries(streamsObj).map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
             : null;
 
         const events = eventsObj && typeof eventsObj === 'object'
-            ? Object.entries(eventsObj).map(([key, val]) => ({ ...val, _fbKey: key }))
+            ? Object.entries(eventsObj).map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
             : null;
 
         if (streams) console.log(`[GateRadio] ${streams.length} stream caricati da Firebase.`);
