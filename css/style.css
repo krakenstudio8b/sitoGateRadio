@@ -30,7 +30,7 @@
 
 /* ----- STILI GLOBALI ----- */
 body {
-    background-color: #0d0d0d; /* Sfondo NERO PURO */
+    background-color: #000000; /* Sfondo NERO PURO */
     color: var(--text-primary);
     font-family: 'Poppins', sans-serif;
     position: relative; /* Indispensabile per far funzionare ::before */
@@ -182,7 +182,7 @@ header .hidden.md\:flex a:hover::after {
 
 /* ----- SEZIONI SPECIFICHE ----- */
 #hero-section {
-    background-color: #0d0d0d; position: relative;
+    background-color: #000000; position: relative;
 }
 #hero-section::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; 
