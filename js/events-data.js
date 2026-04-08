@@ -4,14 +4,14 @@ const eventsData = [
     id: 1,
     title: "GATE NACHT",
     date: "2025-04-26",
-    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/GRAFICA 1 - EVENTO 1.png", // Corretto in .png
+    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/GRAFICA%201%20-%20EVENTO%201.png", // Corretto in .png
     galleryImages: [
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/GRAFICA 1 - EVENTO 1.png",
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/GRAFICA 2 - EVENTO 1.png",
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/GRAFICA 3 - EVENTO 1.png",
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/POST 1 - EVENTO 1.png",
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/POST 2 - EVENTO 1.png",
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/POST 3 - EVENTO 1.png"
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/GRAFICA%201%20-%20EVENTO%201.png",
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/GRAFICA%202%20-%20EVENTO%201.png",
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/GRAFICA%203%20-%20EVENTO%201.png",
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/POST%201%20-%20EVENTO%201.png",
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/POST%202%20-%20EVENTO%201.png",
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/POST%203%20-%20EVENTO%201.png"
     ],
     location: "Secret Location",
     description: "Questo spazio è sacro e la musica è il nostro linguaggio, la notte è il nostro intermediario. Vivi il momento. Senza schermi. Senza barriere.",
@@ -22,9 +22,9 @@ const eventsData = [
     id: 2,
     title: "GATE RADIO x TIMO",
     date: "2025-07-10",
-    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/GRAFICA  1  - EVENTO 2.jpeg",
+    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/GRAFICA%20%201%20%20-%20EVENTO%202.jpeg",
     galleryImages: [
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/GRAFICA  1  - EVENTO 2.jpeg"
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/GRAFICA%20%201%20%20-%20EVENTO%202.jpeg"
     ],
     location: "TIMO Tevere, Roma",
     description: "Streaming straight from the heart of Rome. Appuntamento speciale per la stagione estiva di GATE Radio in collaborazione con TIMO Tevere.",
@@ -35,9 +35,9 @@ const eventsData = [
     id: 3,
     title: "SHOWCASE x FREENETICA CREW",
     date: "2026-01-06",
-    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Grafiche Gate/GRAFICA 30 - GATE.jpeg",
+    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%2030%20-%20GATE.jpeg",
     galleryImages: [
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Grafiche Gate/GRAFICA 30 - GATE.jpeg"
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%2030%20-%20GATE.jpeg"
     ],
     location: "Gate Radio Studio",
     description: "Gate Radio accoglie Freenetica Crew per una giornata dedicata a ricerca, dialogo e condivisione. L'incontro unisce due realtà della scena indipendente con una visione comune fondata su rispetto, apertura e ricerca artistica. Il collettivo toscano Freenetica porta a Roma un sound profondo e ricercato, mentre Gate Radio prosegue il suo percorso come piattaforma di diffusione di espressioni sonore libere e consapevoli.",
@@ -48,9 +48,9 @@ const eventsData = [
     id: 4,
     title: "GATE x GROOVELAB",
     date: "2026-01-16",
-    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Grafiche Gate/GRAFICA 33 - GATE.jpeg",
+    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%2033%20-%20GATE.jpeg",
     galleryImages: [
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Grafiche Gate/GRAFICA 33 - GATE.jpeg"
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%2033%20-%20GATE.jpeg"
     ],
     location: "Groovelab",
     description: "Evento speciale in collaborazione con Groovelab. MERLO e COUNTERCULTURE behind the decks per una serata dedicata alla techno.",
@@ -61,9 +61,9 @@ const eventsData = [
     id: 5,
     title: "SHOWCASE x ASS3",
     date: "2026-02-07",
-    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Grafiche Gate/GRAFICA 35 - GATE.jpeg",
+    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%2035%20-%20GATE.jpeg",
     galleryImages: [
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Grafiche Gate/GRAFICA 35 - GATE.jpeg"
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%2035%20-%20GATE.jpeg"
     ],
     location: "Gate Radio Studio",
     description: "Gate Radio accoglie ASS3 per la seconda giornata dedicata a ricerca, dialogo e condivisione. Le due realtà si incontrano con la volontà di consolidare e promuovere l'evoluzione della scena elettronica romana, unendo visioni e valori affini. ASS3 è un'etichetta indipendente romana fondata da Alessandro Cocco e Leo Cava, nata dall'esigenza di costruire una linea artistica coerente e riconoscibile.",
@@ -74,9 +74,9 @@ const eventsData = [
     id: 6,
     title: "GATE NACHT",
     date: "2026-01-23",
-    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/GRAFICA 1 - EVENTO 3.jpeg",
+    mainImage: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/GRAFICA%201%20-%20EVENTO%203.jpeg",
     galleryImages: [
-        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/Eventi Gate/GRAFICA 1 - EVENTO 3.jpeg"
+        "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Eventi%20Gate/GRAFICA%201%20-%20EVENTO%203.jpeg"
     ],
     location: "Brancaleone, Roma",
     description: "Gate Nacht nasce dall'esigenza di creare un posto sicuro, da una visione di clubbing come necessità. Vogliamo ritrovare quel tipo di clubbing dove conta solo chi c'è e cosa succede in quel preciso istante, lontano dalle finzioni quotidiane. Da aspettative o doveri. Per questa prima notte abbiamo scelto di affidare la sala ai nostri resident e ai collaboratori più stretti. Una scelta precisa per caratterizzare musicalmente il progetto e delineare, finalmente, il suono di Gate.",

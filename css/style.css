@@ -43,7 +43,7 @@ body::before {
     pointer-events: none;
     
     /* --- MODIFICA QUI IL PERCORSO DEL TUO FILE --- */
-    background-image: url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/sfondogateufficiale.png');
+    background-image: url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/sfondogateufficiale.png');
 
     background-repeat: no-repeat;
     background-size: cover; /* Copre l'intera pagina */
@@ -56,7 +56,7 @@ body::before {
 body::before {
     content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     width: 100%; height: 100%; z-index: -1; pointer-events: none;
-    background-color: transparent; background-image: url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/logogate2.png');
+    background-color: transparent; background-image: url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png');
     background-position: center center; background-size: 100px 100px;
     background-repeat: repeat; opacity: 0.1; transition: opacity 0.5s ease;
 }*/
@@ -181,7 +181,7 @@ header .hidden.md\:flex a:hover::after {
 }
 #hero-section::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; 
-    background-image: url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/sfondoradio.PNG') !important;
+    background-image: url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/sfondoradio.PNG') !important;
     background-position: center -50% !important; /* SPOSTA L'IMMAGINE PIÙ IN ALTO */
     background-repeat: no-repeat !important;
     background-size: 65% auto !important; 
@@ -334,7 +334,7 @@ header .hidden.md\:flex a:hover::after {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/gate-radio-assets/sfondochisiamo.jpg');
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/sfondochisiamo.jpg');
 }
 
 .page-about .about-hero > * { position: relative; z-index: 1; }
