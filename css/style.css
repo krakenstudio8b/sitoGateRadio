@@ -213,7 +213,7 @@ header .hidden.md\:flex a:hover::after {
 
 /* ----- CARD ARCHIVIO ----- */
 .archive-card {
-    background-color: #0a0a0a;
+    background-color: #000000;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 .archive-card:hover {
@@ -348,7 +348,7 @@ header .hidden.md\:flex a:hover::after {
 .page-about .team-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 1024px) { .page-about .team-grid { grid-template-columns: repeat(3, 1fr); } }
 .page-about .team-member {
-    background-color: #0a0a0a; border-radius: 0.75rem; border: 1px solid var(--border-color);
+    background-color: #000000; border-radius: 0.75rem; border: 1px solid var(--border-color);
     text-align: center; padding: 2rem; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .page-about .team-member:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.2); border-color: rgba(var(--accent-rgb), 0.5); }
@@ -394,7 +394,7 @@ header .hidden.md\:flex a:hover::after {
 /* ============================================= */
 
 .event-card {
-    background-color: #0a0a0a;
+    background-color: #000000;
     border-radius: 0.75rem;
     border: 1px solid var(--border-color);
     overflow: hidden;
@@ -752,7 +752,7 @@ header .hidden.md\:flex a:hover::after {
 */
 
 .artist-card {
-    background-color: #0a0a0a;
+    background-color: #000000;
     border-radius: 0.75rem;
     border: 1px solid var(--border-color);
     overflow: hidden;
@@ -1498,7 +1498,7 @@ textarea:focus-visible,
 }
 
 .img-skeleton {
-    background: linear-gradient(90deg, #0a0a0a 25%, #141414 50%, #0a0a0a 75%);
+    background: linear-gradient(90deg, #000000 25%, #141414 50%, #000000 75%);
     background-size: 800px 100%;
     animation: skeleton-shimmer 1.4s infinite linear;
 }
@@ -1517,7 +1517,7 @@ img:not([src]), img[src=""] {
 .radio-playlist-thumb,
 .radio-artwork-img,
 #radio-next-artwork {
-    background: linear-gradient(90deg, #0a0a0a 25%, #111111 50%, #0a0a0a 75%);
+    background: linear-gradient(90deg, #000000 25%, #111111 50%, #000000 75%);
     background-size: 800px 100%;
     animation: skeleton-shimmer 1.4s infinite linear;
 }
