@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventi Techno - GATE RADIO | Serate e Party Underground</title>
+
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="Scopri tutti gli eventi e le serate techno organizzate da GATE RADIO. Party underground, festival e appuntamenti speciali per gli amanti della musica elettronica.">
+    <meta name="keywords" content="eventi techno, serate techno, party underground, festival techno, eventi gate radio, club nights">
+    <meta name="author" content="GATE RADIO">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.gateradio.com/events.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.gateradio.com/events.html">
+    <meta property="og:title" content="Eventi Techno - GATE RADIO">
+    <meta property="og:description" content="Scopri tutti gli eventi e le serate techno organizzate da GATE RADIO.">
+    <meta property="og:image" content="https://www.gateradio.com/logogate2.png">
+    <meta property="og:locale" content="it_IT">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.gateradio.com/events.html">
+    <meta name="twitter:title" content="Eventi Techno - GATE RADIO">
+    <meta name="twitter:description" content="Scopri tutti gli eventi e le serate techno organizzate da GATE RADIO.">
+    <meta name="twitter:image" content="https://www.gateradio.com/logogate2.png">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#FFF200">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+          (function() {
+            function getStagione(data) {
+              const mese = data.getMonth(); // 0 = Gen, 11 = Dic
+              const giorno = data.getDate();
+              // Primavera
+              if ((mese === 2 && giorno >= 21) || (mese > 2 && mese < 5) || (mese === 5 && giorno < 21)) return 'spring';
+              // Estate
+              if ((mese === 5 && giorno >= 21) || (mese > 5 && mese < 8) || (mese === 8 && giorno < 21)) return 'summer';
+              // Autunno
+              if ((mese === 8 && giorno >= 21) || (mese > 8 && mese < 11) || (mese === 11 && giorno < 21)) return 'autumn';
+              // Inverno
+              return 'winter';
+            }
+            const stagione = getStagione(new Date());
+            // Applica la classe all'elemento <html> (document.documentElement)
+            // È più veloce e sicuro che aspettare il <body>
+            document.documentElement.classList.add(stagione);
+          })();
+        </script>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="">
+    <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+    <header class="sticky top-0 z-50"> 
+        <nav class="border-b border-[var(--border-color)] py-4 px-6 flex justify-between items-center bg-opacity-80 backdrop-blur-md"> 
+            <div class="flex items-center gap-4">
+                <h1 class="text-3xl font-bold glow-text header-logo-text"> 
+                    <a href="index.html" class="flex items-center"> 
+                        <img src="logogate2.png" alt="Gate Radio Logo" class="h-14 w-auto mr-2 inline-block header-logo-img"> 
+                        <span>GATE <span class="text-[var(--accent)]">RADIO</span></span> 
+                    </a> 
+                </h1>
+                <a href="index.html#live" id="dynamic-live-button" class="btn-live hidden">
+                    <span class="pulse"></span>LIVE
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-home fa-fw"></i>HOME</a>
+                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i>ARCHIVIO</a> 
+                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i>PROGRAMMAZIONE</a> 
+                <a href="events.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i>EVENTI</a> 
+                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>ARTISTI</a> 
+                <a href="about.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i>CHI SIAMO</a> 
+                <a href="contact.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i>CONTATTI</a> 
+            </div> 
+            <button id="mobile-menu-button" aria-label="Apri menu" aria-expanded="false" class="md:hidden text-xl text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><i class="fas fa-bars"></i></button> 
+        </nav> 
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-opacity-95 backdrop-blur-md border-b border-[var(--border-color)] p-6 space-y-4"> 
+            <a href="index.html" class="block text-center hover:text-[var(--accent)] transition-colors">HOME</a>
+            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARCHIVIO</a> 
+            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors">PROGRAMMAZIONE</a> 
+            <a href="events.html" class="block text-center text-[var(--accent)] font-bold">EVENTI</a> 
+            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARTISTI</a> 
+            <a href="about.html" class="block text-center hover:text-[var(--accent)] transition-colors">CHI SIAMO</a> 
+            <a href="contact.html" class="block text-center hover:text-[var(--accent)] transition-colors">CONTATTI</a> 
+        </div> 
+    </header>
+    <main> 
+        <section id="events" class="py-32 px-6"> 
+            <div class="max-w-6xl mx-auto"> 
+                <div class="section-heading-box block max-w-3xl mx-auto text-center p-6 mb-16 rounded-xl border glow-border"> 
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4 glow-text">I NOSTRI <span class="text-[var(--accent)]">EVENTI</span></h2> 
+                    <p class="text-lg text-[var(--text-secondary)]">Scopri i nostri eventi fisici passati e futuri.</p> 
+                </div> 
+                <div id="events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div> 
+            </div> 
+        </section> 
+    </main>
+    
+    <div class="mt-24 footer-main-area">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left py-16 px-6">
+            
+            <div>
+                <h4 class="text-lg font-bold">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
+                <p class="text-sm text-[var(--text-secondary)] max-w-sm mx-auto md:mx-0">
+                    Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.
+                </p>
+            </div>
+            
+            <div class="md:text-center">
+                <h4 class="text-lg font-bold">LINK VELOCI</h4>
+                <nav class="space-y-1 text-sm">
+                    <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
+                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Archivio</a>
+                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Programmazione</a>
+                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Eventi</a>
+                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Artisti</a>
+                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Chi Siamo</a>
+                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Contatti</a>
+                </nav>
+            </div>
+            
+            <div class="md:text-center"> <h4 class="text-lg font-bold">SEGUICI</h4>
+                <div class="flex justify-center md:justify-center space-x-4 text-2xl">
+                    <a href="#" aria-label="Instagram" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="SoundCloud" class="footer-social-link"><i class="fab fa-soundcloud"></i></a>
+                    <a href="#" aria-label="YouTube" class="footer-social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Twitch" class="footer-social-link"><i class="fab fa-twitch"></i></a>
+                    <a href="#" aria-label="Mixcloud" class="footer-social-link"><i class="fab fa-mixcloud"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer class="py-8 px-6 border-t border-black text-center text-[var(--text-secondary)] text-sm">
+        <p>© <span id="footer-year"></span> GATE RADIO | Tutti i diritti riservati</p>
+    </footer>
+    
+    <div id="event-gallery-modal" class="event-modal-container hidden">
+        <div class="event-modal-backdrop"></div>
+        <div class="event-modal-content">
+            <button id="event-modal-close" class="event-modal-close-btn">&times;</button>
+            <div class="event-modal-body">
+                <div id="gallery-container" class="gallery-column"></div>
+                <div class="event-details">
+                    <h3 id="modal-event-title" class="modal-event-title"></h3>
+                    <p class="modal-event-date-location">
+                        <span id="modal-event-date"></span> &bull; <span id="modal-event-location"></span>
+                    </p>
+                    <p id="modal-event-description" class="modal-event-description"></p>
+                    <p id="modal-event-details" class="modal-event-details"></p>
+                    <div id="modal-event-tags" class="mt-4 flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightbox" class="lightbox-container hidden">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-image">
+    </div>
+
+    <script src="js/config.js" defer></script>
+    <script src="js/events-data.js" defer></script>
+    <script src="js/script.js" defer></script>
+</body>
+</html>

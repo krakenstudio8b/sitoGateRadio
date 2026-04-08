@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatti - GATE RADIO | Entra in Contatto con Noi</title>
+
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="Contatta GATE RADIO per collaborazioni, booking, informazioni o semplicemente per connetterti con noi. Siamo sempre aperti a nuove proposte.">
+    <meta name="keywords" content="contatti gate radio, booking dj, collaborazioni, info gate radio, email gate radio">
+    <meta name="author" content="GATE RADIO">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.gateradio.com/contact.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.gateradio.com/contact.html">
+    <meta property="og:title" content="Contatti - GATE RADIO">
+    <meta property="og:description" content="Contatta GATE RADIO per collaborazioni, booking e informazioni.">
+    <meta property="og:image" content="https://www.gateradio.com/logogate2.png">
+    <meta property="og:locale" content="it_IT">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.gateradio.com/contact.html">
+    <meta name="twitter:title" content="Contatti - GATE RADIO">
+    <meta name="twitter:description" content="Contatta GATE RADIO per collaborazioni, booking e informazioni.">
+    <meta name="twitter:image" content="https://www.gateradio.com/logogate2.png">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#FFF200">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+          (function() {
+            function getStagione(data) {
+              const mese = data.getMonth(); // 0 = Gen, 11 = Dic
+              const giorno = data.getDate();
+              // Primavera
+              if ((mese === 2 && giorno >= 21) || (mese > 2 && mese < 5) || (mese === 5 && giorno < 21)) return 'spring';
+              // Estate
+              if ((mese === 5 && giorno >= 21) || (mese > 5 && mese < 8) || (mese === 8 && giorno < 21)) return 'summer';
+              // Autunno
+              if ((mese === 8 && giorno >= 21) || (mese > 8 && mese < 11) || (mese === 11 && giorno < 21)) return 'autumn';
+              // Inverno
+              return 'winter';
+            }
+            const stagione = getStagione(new Date());
+            // Applica la classe all'elemento <html> (document.documentElement)
+            // È più veloce e sicuro che aspettare il <body>
+            document.documentElement.classList.add(stagione);
+          })();
+        </script>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="page-contact">
+    <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+
+    <header class="sticky top-0 z-50"> 
+        <nav class="border-b border-[var(--border-color)] py-4 px-6 flex justify-between items-center bg-opacity-80 backdrop-blur-md"> 
+            <div class="flex items-center gap-4">
+                <h1 class="text-3xl font-bold glow-text header-logo-text"> 
+                    <a href="index.html" class="flex items-center"> 
+                        <img src="logogate2.png" alt="Gate Radio Logo" class="h-14 w-auto mr-2 inline-block header-logo-img"> 
+                        <span>GATE <span class="text-[var(--accent)]">RADIO</span></span> 
+                    </a> 
+                </h1>
+                <a href="index.html#live" id="dynamic-live-button" class="btn-live hidden">
+                    <span class="pulse"></span>LIVE
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-home fa-fw"></i>HOME</a>
+                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i>ARCHIVIO</a> 
+                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i>PROGRAMMAZIONE</a> 
+                <a href="events.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i>EVENTI</a> 
+                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>ARTISTI</a> 
+                <a href="about.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i>CHI SIAMO</a> 
+                <a href="contact.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i>CONTATTI</a> 
+            </div> 
+            <button id="mobile-menu-button" aria-label="Apri menu" aria-expanded="false" class="md:hidden text-xl text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><i class="fas fa-bars"></i></button> 
+        </nav> 
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-opacity-95 backdrop-blur-md border-b border-[var(--border-color)] p-6 space-y-4"> 
+            <a href="index.html" class="block text-center hover:text-[var(--accent)] transition-colors">HOME</a>
+            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARCHIVIO</a> 
+            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors">PROGRAMMAZIONE</a> 
+            <a href="events.html" class="block text-center hover:text-[var(--accent)] transition-colors">EVENTI</a> 
+            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARTISTI</a> 
+            <a href="about.html" class="block text-center hover:text-[var(--accent)] transition-colors">CHI SIAMO</a> 
+            <a href="contact.html" class="block text-center text-[var(--accent)] font-bold">CONTATTI</a> 
+        </div> 
+    </header>
+
+    <main>
+        <section class="contact-hero">
+            <h1 class="text-5xl md:text-6xl glow-text"><i class="fas fa-envelope-open-text mr-4"></i>ENTRA IN <span class="text-[var(--accent)]">CONTATTO</span></h1>
+            <p class="text-xl mt-4 max-w-2xl">Siamo qui per ascoltarti. Proposte, domande o saluti.</p>
+            <a href="#contact-form" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2 mt-8"><i class="fas fa-arrow-down"></i> Vai al Modulo</a>
+        </section>
+
+         <section id="contact-form" class="py-24 px-6">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-10 lg:gap-16 p-8 md:p-12 rounded-xl border glow-border">
+                    <div class="flex flex-col justify-between md:pl-6 lg:pl-8">
+                        <div>
+                            <h3 class="text-3xl font-bold mb-8 text-[var(--accent)]">INFO DIRETTE</h3>
+                            <div class="contact-info-list space-y-8">
+                                <div class="info-item">
+                                    <i class="info-icon fas fa-at"></i>
+                                    <div class="info-text">
+                                        <h4>Email Generali</h4>
+                                        <a href="mailto:info@gateradio.example.com" class="text-lg">info@gateradio.example.com</a>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <i class="info-icon fas fa-music"></i>
+                                    <div class="info-text">
+                                        <h4>Proposte Artistiche</h4>
+                                        <a href="programmazione.html#artist-booking" class="text-lg">Vai al modulo di candidatura</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-12">
+                             <h4 class="text-lg font-bold uppercase text-[var(--text-secondary)] mb-4">SEGUICI SUI SOCIAL</h4>
+                             <div class="contact-info-list space-y-4">
+                                <a href="#" class="flex items-center gap-3 group text-white">
+                                    <i class="fab fa-instagram text-2xl w-6 text-center"></i>
+                                    <span class="text-lg group-hover:text-[var(--accent)] transition-colors">@gateradio.official</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 group text-white">
+                                    <i class="fab fa-soundcloud text-2xl w-6 text-center"></i>
+                                    <span class="text-lg group-hover:text-[var(--accent)] transition-colors">SoundCloud/GateRadio</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 group text-white">
+                                    <i class="fab fa-mixcloud text-2xl w-6 text-center"></i>
+                                    <span class="text-lg group-hover:text-[var(--accent)] transition-colors">Mixcloud/GateRadio</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-3xl font-bold mb-8 text-[var(--accent)]">INVIA UN MESSAGGIO</h3>
+                        <form action="#" method="POST" class="space-y-5">
+                            <div>
+                                <label for="contact-name" class="sr-only">Nome</label>
+                                <input id="contact-name" name="name" type="text" placeholder="Il tuo nome" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black">
+                            </div>
+                            <div>
+                                <label for="contact-email" class="sr-only">Email</label>
+                                <input id="contact-email" name="email" type="email" placeholder="La tua email" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black">
+                            </div>
+                            <div>
+                                <label for="contact-reason" class="sr-only">Motivo del contatto</label>
+                                <select id="contact-reason" name="reason" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black">
+                                    <option value="" disabled selected>Seleziona un motivo...</option>
+                                    <option value="info">Info Generali</option>
+                                    <option value="collaborazione">Proposta di Collaborazione</option>
+                                    <option value="supporto">Supporto Tecnico</option>
+                                    <option value="altro">Altro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="contact-message" class="sr-only">Messaggio</label>
+                                <textarea id="contact-message" name="message" placeholder="Il tuo messaggio..." rows="5" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-paper-plane"></i> INVIA MESSAGGIO</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="mt-24 footer-main-area">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left py-16 px-6">
+            
+            <div>
+                <h4 class="text-lg font-bold">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
+                <p class="text-sm text-[var(--text-secondary)] max-w-sm mx-auto md:mx-0">
+                    Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.
+                </p>
+            </div>
+            
+            <div class="md:text-center">
+                <h4 class="text-lg font-bold">LINK VELOCI</h4>
+                <nav class="space-y-1 text-sm">
+                    <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
+                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Archivio</a>
+                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Programmazione</a>
+                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Eventi</a>
+                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Artisti</a>
+                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Chi Siamo</a>
+                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Contatti</a>
+                </nav>
+            </div>
+            
+            <div class="md:text-center"> <h4 class="text-lg font-bold">SEGUICI</h4>
+                <div class="flex justify-center md:justify-center space-x-4 text-2xl">
+                    <a href="#" aria-label="Instagram" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="SoundCloud" class="footer-social-link"><i class="fab fa-soundcloud"></i></a>
+                    <a href="#" aria-label="YouTube" class="footer-social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Twitch" class="footer-social-link"><i class="fab fa-twitch"></i></a>
+                    <a href="#" aria-label="Mixcloud" class="footer-social-link"><i class="fab fa-mixcloud"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer class="py-8 px-6 border-t border-black text-center text-[var(--text-secondary)] text-sm">
+        <p>© <span id="footer-year"></span> GATE RADIO | Tutti i diritti riservati</p>
+    </footer>
+
+    <script src="js/script.js" defer></script>
+</body>
+</html>

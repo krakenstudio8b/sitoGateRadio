@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GATE RADIO 24/7 | Live Stream Radio</title>
+
+    <meta name="description" content="Ascolta Gate Radio 24 ore su 24, 7 giorni su 7. Una rotazione continua dei migliori set live di techno e musica elettronica.">
+    <meta name="keywords" content="gate radio, radio 24h, techno radio, live streaming, musica elettronica continua">
+    <meta name="author" content="GATE RADIO">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.gateradio.com/radio.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.gateradio.com/radio.html">
+    <meta property="og:title" content="GATE RADIO 24/7 | Live Stream Radio">
+    <meta property="og:description" content="Ascolta Gate Radio 24/7 — una rotazione continua dei migliori set live di techno.">
+    <meta property="og:image" content="https://www.gateradio.com/logogate2.png">
+
+    <meta name="theme-color" content="#FFF200">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        (function () {
+            function getStagione(d) {
+                const m = d.getMonth(), g = d.getDate();
+                if ((m === 2 && g >= 21) || (m > 2 && m < 5) || (m === 5 && g < 21)) return 'spring';
+                if ((m === 5 && g >= 21) || (m > 5 && m < 8) || (m === 8 && g < 21)) return 'summer';
+                if ((m === 8 && g >= 21) || (m > 8 && m < 11) || (m === 11 && g < 21)) return 'autumn';
+                return 'winter';
+            }
+            document.documentElement.classList.add(getStagione(new Date()));
+        })();
+    </script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+
+    <!-- ═══ HEADER ═══════════════════════════════════════════════════════════ -->
+    <header class="sticky top-0 z-50">
+        <nav class="border-b border-[var(--border-color)] py-4 px-6 flex justify-between items-center bg-opacity-80 backdrop-blur-md">
+            <div class="flex items-center gap-4">
+                <h1 class="text-3xl font-bold glow-text header-logo-text">
+                    <a href="index.html" class="flex items-center">
+                        <img src="logogate2.png" alt="Gate Radio Logo" class="h-14 w-auto mr-2 inline-block header-logo-img">
+                        <span>GATE <span class="text-[var(--accent)]">RADIO</span></span>
+                    </a>
+                </h1>
+            </div>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html"          class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-home fa-fw"></i>HOME</a>
+                <a href="radio.html"          class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-radio fa-fw"></i>RADIO 24/7</a>
+                <a href="archive.html"        class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i>ARCHIVIO</a>
+                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i>PROGRAMMAZIONE</a>
+                <a href="events.html"         class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i>EVENTI</a>
+                <a href="artists.html"        class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>ARTISTI</a>
+                <a href="about.html"          class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i>CHI SIAMO</a>
+                <a href="contact.html"        class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i>CONTATTI</a>
+            </div>
+            <button id="mobile-menu-button" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-menu"
+                class="md:hidden text-xl text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-opacity-95 backdrop-blur-md border-b border-[var(--border-color)] p-6 space-y-4">
+            <a href="index.html"          class="block text-center hover:text-[var(--accent)] transition-colors">HOME</a>
+            <a href="radio.html"          class="block text-center text-[var(--accent)] font-bold">RADIO 24/7</a>
+            <a href="archive.html"        class="block text-center hover:text-[var(--accent)] transition-colors">ARCHIVIO</a>
+            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors">PROGRAMMAZIONE</a>
+            <a href="events.html"         class="block text-center hover:text-[var(--accent)] transition-colors">EVENTI</a>
+            <a href="artists.html"        class="block text-center hover:text-[var(--accent)] transition-colors">ARTISTI</a>
+            <a href="about.html"          class="block text-center hover:text-[var(--accent)] transition-colors">CHI SIAMO</a>
+            <a href="contact.html"        class="block text-center hover:text-[var(--accent)] transition-colors">CONTATTI</a>
+        </div>
+    </header>
+
+    <!-- ═══ MAIN ══════════════════════════════════════════════════════════════ -->
+    <main id="main-content" class="min-h-screen py-12 px-4 md:px-6">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- PWA install banner -->
+            <div id="radio-install-banner">
+                <span><i class="fas fa-mobile-screen-button" style="color:var(--accent);margin-right:0.4rem"></i> Aggiungi Gate Radio alla schermata Home per ascoltare come un'app.</span>
+                <button id="radio-install-btn">Installa</button>
+            </div>
+
+            <!-- Page header -->
+            <div class="text-center mb-10">
+                <div class="radio-live-badge">
+                    <span class="radio-live-dot"></span>
+                    <span id="radio-status-text">CARICAMENTO...</span>
+                </div>
+                <h2 class="text-4xl md:text-6xl font-bold mt-4 glow-text">
+                    GATE <span class="text-[var(--accent)]">RADIO</span> <span class="text-2xl md:text-3xl font-light text-[var(--text-secondary)]">24/7</span>
+                </h2>
+                <p class="text-[var(--text-secondary)] mt-2 text-sm md:text-base">
+                    Rotazione continua dei nostri set live — tutti ascoltano lo stesso punto.
+                </p>
+            </div>
+
+            <!-- Player principale -->
+            <div id="radio-player-container" class="radio-main-card glow-border transition-all duration-500">
+
+                <!-- Loading state -->
+                <div id="radio-loading" class="flex flex-col items-center justify-center py-24 gap-4">
+                    <div class="radio-spinner"></div>
+                    <p class="text-[var(--text-secondary)] text-sm font-mono">Sintonizzazione in corso...</p>
+                </div>
+
+                <!-- Player layout (nascosto finché non è pronto) -->
+                <div id="radio-player-wrapper" class="opacity-0 transition-opacity duration-500">
+                    <div class="radio-layout">
+
+                        <!-- Colonna sinistra: video YouTube -->
+                        <div class="radio-video-col">
+                            <div class="radio-video-wrapper">
+                                <div id="radio-yt-player"></div>
+                            </div>
+                        </div>
+
+                        <!-- Colonna destra: info + controlli -->
+                        <div class="radio-info-col">
+
+                            <!-- Artwork -->
+                            <div class="radio-artwork-wrapper">
+                                <img id="radio-artwork" src="" alt="" class="radio-artwork-img">
+                                <div class="radio-artwork-overlay">
+                                    <div class="radio-artwork-season-icon">
+                                        <i class="fas fa-snowflake"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Testo -->
+                            <div class="radio-text">
+                                <p id="radio-artist" class="radio-artist-name">—</p>
+                                <p id="radio-title"  class="radio-set-title">—</p>
+                                <div id="radio-tags" class="flex flex-wrap gap-1 mt-2"></div>
+                            </div>
+
+                            <!-- Progress bar -->
+                            <div class="radio-progress-section">
+                                <div class="radio-progress-track" role="progressbar" aria-label="Avanzamento riproduzione">
+                                    <div id="radio-progress-bar" class="radio-progress-fill"></div>
+                                </div>
+                                <div class="radio-progress-times">
+                                    <span id="radio-current-time" class="font-mono text-xs text-[var(--text-secondary)]">00:00</span>
+                                    <span id="radio-duration"     class="font-mono text-xs text-[var(--text-secondary)]">00:00</span>
+                                </div>
+                            </div>
+
+                            <!-- Controlli -->
+                            <div class="radio-controls">
+                                <button id="radio-prev-btn" class="radio-ctrl-btn radio-ctrl-secondary" aria-label="Set precedente" title="Set precedente">
+                                    <i class="fas fa-backward-step"></i>
+                                </button>
+                                <button id="radio-play-btn" class="radio-ctrl-btn radio-ctrl-primary" aria-label="Riproduci">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button id="radio-next-btn" class="radio-ctrl-btn radio-ctrl-secondary" aria-label="Set successivo" title="Set successivo">
+                                    <i class="fas fa-forward-step"></i>
+                                </button>
+                            </div>
+
+                            <!-- Volume -->
+                            <div class="radio-volume-row">
+                                <button id="radio-mute-btn" class="radio-ctrl-btn radio-ctrl-secondary" style="width:2.2rem;height:2.2rem;font-size:0.85rem" aria-label="Muto" title="Muto / Riattiva">
+                                    <i class="fas fa-volume-high"></i>
+                                </button>
+                                <input id="radio-volume" type="range" min="0" max="100" value="100" class="radio-volume-slider" aria-label="Volume">
+                                <span id="radio-volume-label" style="font-size:0.7rem;color:var(--text-secondary);font-family:monospace;width:2.2rem;text-align:right">100</span>
+                            </div>
+
+                            <!-- Prossimo -->
+                            <div class="radio-next-card">
+                                <p class="radio-next-label">PROSSIMO</p>
+                                <div class="radio-next-inner">
+                                    <img id="radio-next-artwork" src="" alt="" class="radio-next-thumb">
+                                    <div>
+                                        <p id="radio-next-artist" class="radio-next-artist">—</p>
+                                        <p id="radio-next-title"  class="radio-next-title">—</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini Playlist -->
+            <div class="mt-10">
+                <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
+                    <div class="section-heading-box p-4 rounded-lg border glow-border inline-block">
+                        <h3 class="text-xl font-bold glow-text">IN <span class="text-[var(--accent)]">ROTAZIONE</span></h3>
+                    </div>
+                    <button onclick="localStorage.removeItem('gateradio_radio_cache_v3');localStorage.removeItem('gateradio_durations');location.reload()"
+                        title="Forza ricaricamento della playlist da YouTube"
+                        style="font-size:0.72rem;opacity:0.45;background:transparent;border:1px solid currentColor;border-radius:9999px;padding:0.25rem 0.75rem;cursor:pointer;color:var(--text-secondary);transition:opacity 0.2s"
+                        onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='0.45'">
+                        <i class="fas fa-rotate-right"></i> Svuota cache
+                    </button>
+                </div>
+                <div id="radio-mini-playlist" class="radio-playlist-container"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ═══ FOOTER ═════════════════════════════════════════════════════════════ -->
+    <div class="mt-24 footer-main-area">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left py-16 px-6">
+            <div>
+                <h4 class="text-lg font-bold">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
+                <p class="text-sm text-[var(--text-secondary)] max-w-sm mx-auto md:mx-0">
+                    Un portale sulla techno, scandito dal ritmo delle stagioni.
+                </p>
+            </div>
+            <div class="md:text-center">
+                <h4 class="text-lg font-bold">LINK VELOCI</h4>
+                <nav class="space-y-1 text-sm">
+                    <a href="index.html"          class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
+                    <a href="radio.html"          class="block text-[var(--accent)] font-semibold">Radio 24/7</a>
+                    <a href="archive.html"        class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Archivio</a>
+                    <a href="events.html"         class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Eventi</a>
+                    <a href="artists.html"        class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Artisti</a>
+                    <a href="about.html"          class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Chi Siamo</a>
+                    <a href="contact.html"        class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Contatti</a>
+                </nav>
+            </div>
+            <div class="md:text-center">
+                <h4 class="text-lg font-bold">SEGUICI</h4>
+                <div class="flex justify-center md:justify-center space-x-4 text-2xl">
+                    <a href="https://instagram.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://soundcloud.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="SoundCloud" class="footer-social-link"><i class="fab fa-soundcloud"></i></a>
+                    <a href="https://youtube.com/@gateradio"  target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="footer-social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="https://twitch.tv/gateradio"     target="_blank" rel="noopener noreferrer" aria-label="Twitch" class="footer-social-link"><i class="fab fa-twitch"></i></a>
+                    <a href="https://mixcloud.com/gateradio"  target="_blank" rel="noopener noreferrer" aria-label="Mixcloud" class="footer-social-link"><i class="fab fa-mixcloud"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="py-8 px-6 border-t border-black text-center text-[var(--text-secondary)] text-sm">
+        <p>© <span id="footer-year"></span> GATE RADIO | Tutti i diritti riservati</p>
+    </footer>
+
+    <script src="js/config.js"       defer></script>
+    <script src="js/streams-data.js" defer></script>
+    <script src="js/radio.js"        defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Footer year
+            const fy = document.getElementById('footer-year');
+            if (fy) fy.textContent = new Date().getFullYear();
+            // Mobile menu
+            const btn  = document.getElementById('mobile-menu-button');
+            const menu = document.getElementById('mobile-menu');
+            if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+        });
+
+        // ── Service Worker ──────────────────────────────────────────────────
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
+
+        // ── PWA Install prompt ──────────────────────────────────────────────
+        let _deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', e => {
+            e.preventDefault();
+            _deferredPrompt = e;
+            const banner = document.getElementById('radio-install-banner');
+            if (banner) banner.classList.add('visible');
+        });
+        document.getElementById('radio-install-btn')?.addEventListener('click', async () => {
+            if (!_deferredPrompt) return;
+            _deferredPrompt.prompt();
+            const { outcome } = await _deferredPrompt.userChoice;
+            _deferredPrompt = null;
+            if (outcome === 'accepted') {
+                const banner = document.getElementById('radio-install-banner');
+                if (banner) banner.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>

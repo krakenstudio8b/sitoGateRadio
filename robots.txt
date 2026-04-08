@@ -1,0 +1,14 @@
+# robots.txt for GATE RADIO
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.gateradio.com/sitemap.xml
+
+# Disallow development folders
+Disallow: /old/
+Disallow: /assets/images/drafts/
+Disallow: /Grafiche Gate/
+Disallow: /Grafiche originali/
+Disallow: /Eventi Gate/

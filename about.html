@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Siamo - GATE RADIO | Il Nostro Team e La Nostra Storia</title>
+
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="Scopri il team e la storia di GATE RADIO. Siamo un collettivo di DJ, producer e appassionati uniti dalla passione per la techno e la musica elettronica.">
+    <meta name="keywords" content="gate radio team, chi siamo, collettivo techno, dj italiani, producer techno, storia gate radio">
+    <meta name="author" content="GATE RADIO">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.gateradio.com/about.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.gateradio.com/about.html">
+    <meta property="og:title" content="Chi Siamo - GATE RADIO | Il Nostro Team">
+    <meta property="og:description" content="Scopri il team e la storia di GATE RADIO. Un collettivo di appassionati uniti dalla musica elettronica.">
+    <meta property="og:image" content="https://www.gateradio.com/sfondochisiamo.jpg">
+    <meta property="og:locale" content="it_IT">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.gateradio.com/about.html">
+    <meta name="twitter:title" content="Chi Siamo - GATE RADIO">
+    <meta name="twitter:description" content="Scopri il team e la storia di GATE RADIO.">
+    <meta name="twitter:image" content="https://www.gateradio.com/sfondochisiamo.jpg">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#FFF200">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+          (function() {
+            function getStagione(data) {
+              const mese = data.getMonth(); // 0 = Gen, 11 = Dic
+              const giorno = data.getDate();
+              // Primavera
+              if ((mese === 2 && giorno >= 21) || (mese > 2 && mese < 5) || (mese === 5 && giorno < 21)) return 'spring';
+              // Estate
+              if ((mese === 5 && giorno >= 21) || (mese > 5 && mese < 8) || (mese === 8 && giorno < 21)) return 'summer';
+              // Autunno
+              if ((mese === 8 && giorno >= 21) || (mese > 8 && mese < 11) || (mese === 11 && giorno < 21)) return 'autumn';
+              // Inverno
+              return 'winter';
+            }
+            const stagione = getStagione(new Date());
+            // Applica la classe all'elemento <html> (document.documentElement)
+            // È più veloce e sicuro che aspettare il <body>
+            document.documentElement.classList.add(stagione);
+          })();
+        </script>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="page-about">
+    <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+
+    <header class="sticky top-0 z-50"> 
+        <nav class="border-b border-[var(--border-color)] py-4 px-6 flex justify-between items-center bg-opacity-80 backdrop-blur-md"> 
+            <div class="flex items-center gap-4">
+                <h1 class="text-3xl font-bold glow-text header-logo-text"> 
+                    <a href="index.html" class="flex items-center"> 
+                        <img src="logogate2.png" alt="Gate Radio Logo" class="h-14 w-auto mr-2 inline-block header-logo-img"> 
+                        <span>GATE <span class="text-[var(--accent)]">RADIO</span></span> 
+                    </a> 
+                </h1>
+                <a href="index.html#live" id="dynamic-live-button" class="btn-live hidden">
+                    <span class="pulse"></span>LIVE
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-home fa-fw"></i>HOME</a>
+                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i>ARCHIVIO</a> 
+                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i>PROGRAMMAZIONE</a> 
+                <a href="events.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i>EVENTI</a> 
+                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>ARTISTI</a> 
+                <a href="about.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i>CHI SIAMO</a> 
+                <a href="contact.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i>CONTATTI</a> 
+            </div> 
+            <button id="mobile-menu-button" aria-label="Apri menu di navigazione principale" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden text-xl text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><i class="fas fa-bars" aria-hidden="true"></i></button> 
+        </nav> 
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-opacity-95 backdrop-blur-md border-b border-[var(--border-color)] p-6 space-y-4"> 
+            <a href="index.html" class="block text-center hover:text-[var(--accent)] transition-colors">HOME</a>
+            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARCHIVIO</a> 
+            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors">PROGRAMMAZIONE</a> 
+            <a href="events.html" class="block text-center hover:text-[var(--accent)] transition-colors">EVENTI</a> 
+            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARTISTI</a> 
+            <a href="about.html" class="block text-center text-[var(--accent)] font-bold">CHI SIAMO</a> 
+            <a href="contact.html" class="block text-center hover:text-[var(--accent)] transition-colors">CONTATTI</a> 
+        </div> 
+    </header>
+
+    <main id="main-content">
+        <section class="about-hero flex-col">
+            <h1 class="text-5xl md:text-6xl glow-text">IL PROGETTO <span class="text-[var(--accent)]">GATE RADIO</span></h1>
+            <p class="text-xl mt-4 max-w-2xl">La nostra storia, la nostra visione, la nostra musica.</p>
+            <a href="#chi-siamo-section" class="btn-primary font-bold py-3 px-6 rounded-full text-lg inline-flex items-center gap-2 mt-8">
+                <i class="fas fa-arrow-down"></i> Scopri Chi Siamo
+            </a>
+        </section>
+
+        <section id="chi-siamo-section" class="section-padding">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold glow-text">LA NOSTRA <span class="text-[var(--accent)]">IDENTITÀ</span></h2>
+                    <p class="text-lg text-[var(--text-secondary)] mt-2">Un portale sulla techno, scandito dal ritmo delle stagioni.</p>
+                </div>
+                <div class="chi-siamo-text">
+                    <p>Gate Radio nasce dalla passione per la musica elettronica e dall'idea di creare un'esperienza che vada oltre il semplice streaming. Siamo un collettivo di DJ, producer e appassionati, uniti dalla voglia di esplorare le sfumature della techno e condividerle con una community attenta.</p>
+                    <p>Il cuore pulsante del nostro progetto è il legame con il ciclo naturale delle stagioni. Crediamo che la musica, come la natura, abbia i suoi cicli e le sue atmosfere: per questo, la nostra programmazione musicale e visiva si evolve, cambiando colori e suoni con il passare dei mesi.</p>
+                </div>
+
+                <div class="text-center mt-24 mb-12">
+                    <h3 class="text-3xl font-bold glow-text">IL NOSTRO <span class="text-[var(--accent)]">TEAM</span></h3>
+                </div>
+                <div class="max-w-5xl mx-auto team-grid">
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <img src="assets/team_placeholder_1.jpg" alt="Direzione Artistica">
+                        </div>
+                        <h3 class="text-xl">Direzione Artistica</h3>
+                        <p class="text-sm text-[var(--text-secondary)]">La mente dietro la selezione musicale e il suono distintivo di Gate Radio.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <img src="assets/team_placeholder_2.jpg" alt="Community Manager">
+                        </div>
+                        <h3 class="text-xl">Community & Eventi</h3>
+                        <p class="text-sm text-[var(--text-secondary)]">L'anima che organizza i nostri eventi e tiene unita la community online e offline.</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <img src="assets/team_placeholder_3.jpg" alt="Talent Scout">
+                        </div>
+                        <h3 class="text-xl">Talent Scout / A&R</h3>
+                        <p class="text-sm text-[var(--text-secondary)]">Costantemente alla ricerca di nuovi suoni e artisti da presentare alla nostra community.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section section-padding">
+            <div class="max-w-4xl mx-auto px-6">
+                <h2 class="text-4xl font-bold glow-text">ENTRA A FAR PARTE DEL <span class="text-[var(--accent)]">VIAGGIO</span></h2>
+                <p class="text-lg text-[var(--text-secondary)] mt-4 mb-8">Seguici, proponiti come artista o entra in contatto con noi.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="programmazione.html#artist-booking" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-play-circle"></i> Proponiti come Artista</a>
+                    <a href="contact.html" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-envelope-open-text"></i> Contattaci</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="mt-24 footer-main-area">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left py-16 px-6">
+            
+            <div>
+                <h4 class="text-lg font-bold">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
+                <p class="text-sm text-[var(--text-secondary)] max-w-sm mx-auto md:mx-0">
+                    Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.
+                </p>
+            </div>
+            
+            <div class="md:text-center">
+                <h4 class="text-lg font-bold">LINK VELOCI</h4>
+                <nav class="space-y-1 text-sm">
+                    <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
+                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Archivio</a>
+                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Programmazione</a>
+                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Eventi</a>
+                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Artisti</a>
+                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Chi Siamo</a>
+                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Contatti</a>
+                </nav>
+            </div>
+            
+            <div class="md:text-center"> <h4 class="text-lg font-bold">SEGUICI</h4>
+                <div class="flex justify-center md:justify-center space-x-4 text-2xl">
+                    <a href="https://instagram.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Seguici su Instagram (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a href="https://soundcloud.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Ascoltaci su SoundCloud (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-soundcloud" aria-hidden="true"></i></a>
+                    <a href="https://youtube.com/@gateradio" target="_blank" rel="noopener noreferrer" aria-label="Guardaci su YouTube (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                    <a href="https://twitch.tv/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Guardaci in diretta su Twitch (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-twitch" aria-hidden="true"></i></a>
+                    <a href="https://mixcloud.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Ascoltaci su Mixcloud (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-mixcloud" aria-hidden="true"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer class="py-8 px-6 border-t border-black text-center text-[var(--text-secondary)] text-sm">
+        <p>© <span id="footer-year"></span> GATE RADIO | Tutti i diritti riservati</p>
+    </footer>
+
+    <script src="js/script.js" defer></script>
+</body>
+</html>

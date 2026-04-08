@@ -1,0 +1,1464 @@
+/* ============================================= */
+/* ========== FILE CSS - GATE RADIO ========== */
+/* ============================================= */
+
+/* ----- FONT IMPORT ----- */
+
+/* ----- VARIABILI COLORE GLOBALI ----- */
+:root {
+    --accent: #FFF200; /* Giallo Neon */
+    --accent-rgb: 255, 242, 0;
+    --accent-secondary: #FFFF55; /* Giallo più chiaro per hover */
+    --accent-event: #4682B4;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-primary: #e2e8f0;
+    --text-secondary: #cbd5e0; /* Migliorato contrasto da #a0aec0 */
+    --background-color: #000000;
+}
+
+/* ----- STILI GLOBALI ----- */
+/* ============================================= */
+/* ========== STILI GLOBALI (BODY) ========== */
+/* ============================================= */
+
+/* ----- STILI GLOBALI ----- */
+body {
+    background-color: #000000; /* Sfondo NERO PURO */
+    color: var(--text-primary);
+    font-family: 'Poppins', sans-serif;
+    position: relative; /* Indispensabile per far funzionare ::before */
+}
+
+/* QUESTA È LA PARTE CHE AGGIUNGE LA TEXTURE DI SFONDO */
+body::before {
+    content: ""; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    width: 100%; 
+    height: 100%; 
+    z-index: -1; 
+    pointer-events: none;
+    
+    /* --- MODIFICA QUI IL PERCORSO DEL TUO FILE --- */
+    background-image: url('../sfondogateufficiale.png');
+
+    background-repeat: no-repeat;
+    background-size: cover; /* Copre l'intera pagina */
+    background-position: center center;
+    opacity: 1;
+    filter: brightness(0.4); /* Luminosità ridotta */
+}
+
+/*
+body::before {
+    content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%; z-index: -1; pointer-events: none;
+    background-color: transparent; background-image: url('../logogate.png');
+    background-position: center center; background-size: 100px 100px;
+    background-repeat: repeat; opacity: 0.1; transition: opacity 0.5s ease;
+}*/
+h1,h2,h3,h4,h5,h6 { font-weight: 700; color: white; }
+
+/* ----- EFFETTI GLOW E BORDI ----- */
+.glow-text {
+    transition: text-shadow 0.3s ease-in-out;
+    text-shadow: 0 0 1px rgba(255,255,255,0.4), 0 0 3px var(--accent), 0 0 5px var(--accent);
+}
+.glow-text span.text-\[var\(--accent\)\] {
+    text-shadow: none;
+}
+.glow-border {
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    box-shadow: 0 0 12px -2px var(--accent), 0 0 3px 0 var(--accent) inset;
+}
+.glow-border:hover { border-color: var(--accent); }
+.section-divider {
+    max-width: 100px; height: 1px; background: var(--accent);
+    margin: 8rem auto; 
+    box-shadow: 0 0 12px -4px var(--accent);
+}
+
+/* ----- COMPONENTI SPECIALI ----- */
+.on-air-indicator {
+    display: inline-block; position: relative; font-family: 'Poppins', sans-serif;
+    font-weight: 700; font-size: 2.25rem; color: #FF2D2D;
+    text-transform: uppercase; letter-spacing: 0.2em; text-align: center;
+    text-shadow: 0 0 2px rgba(255,255,255,0.5), 0 0 8px rgba(255,0,0,0.7);
+    animation: breathe-on-air 4s infinite ease-in-out; padding: 0.5rem 1rem;
+}
+.on-air-indicator::before {
+    content: ''; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #FFFFFF; border-radius: 0.375rem; border: 3px solid #FF0000;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.7), 0 0 5px #FF0000 inset;
+    opacity: 0.9;
+}
+@keyframes breathe-on-air {
+    0%, 100% { color: #FF2D2D; text-shadow: 0 0 2px rgba(255,255,255,0.5), 0 0 8px rgba(255,0,0,0.7); }
+    50% { color: #FF5555; text-shadow: 0 0 4px rgba(255,255,255,0.6), 0 0 12px rgba(255,0,0,0.8); }
+}
+.coming-soon-title {
+    font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 4rem;
+    line-height: 1; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-primary);
+    text-shadow: 2px 2px 0px var(--background-color), 4px 4px 0px var(--accent);
+}
+.next-event-card {
+    max-width: 320px; border-radius: 0.75rem; overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 12px -2px var(--accent), 0 0 3px 0 var(--accent) inset;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.next-event-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px -2px var(--accent), 0 0 5px 0 var(--accent) inset;
+}
+.next-event-date {
+    font-family: 'Roboto Mono', monospace; font-size: 1.25rem;
+    color: var(--text-secondary); font-weight: 700; text-transform: uppercase;
+}
+
+/* ----- PULSANTE PRIMARIO ----- */
+.btn-primary {
+    background-color: var(--accent); color: var(--background-color);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    will-change: transform;
+}
+.btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 15px 0 var(--accent); }
+
+/* ----- HEADER E NAVIGAZIONE ----- */
+header {
+    background-color: rgba(0, 0, 0, 0.7); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+.header-logo-text { transition: text-shadow 0.3s ease-in-out; }
+.header-logo-img {
+    transition: filter 0.3s ease-in-out; /* Regola esistente */
+    height: 6rem; /* Riga aggiunta per aumentare l'altezza */
+}
+.header-logo-text:hover { text-shadow: 0 0 10px var(--accent); }
+.header-logo-text:hover .header-logo-img { filter: drop-shadow(0 0 8px var(--accent)); }
+
+/*
+============================================================
+ ANIMAZIONE SOTTOLINEATURA PER I LINK DEL MENU
+============================================================
+*/
+
+/* Prepara i link del menu per l'animazione */
+header .hidden.md\:flex a {
+    position: relative; /* Necessario per posizionare la linea */
+    padding-bottom: 5px; /* Aggiunge un po' di spazio per la linea */
+}
+
+/* Crea la linea (inizialmente invisibile) */
+header .hidden.md\:flex a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0; /* La linea parte da larghezza zero */
+    height: 2px;
+    background-color: var(--accent); /* Usa il colore della stagione */
+    transition: width 0.3s ease-in-out; /* Anima il cambio di larghezza */
+}
+
+/* Mostra la linea quando passi il mouse sopra il link */
+header .hidden.md\:flex a:hover::after {
+    width: 100%; /* La linea si estende per tutta la larghezza */
+}
+
+/* ----- SEZIONI SPECIFICHE ----- */
+#hero-section {
+    background-color: #000000; position: relative;
+}
+#hero-section::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; 
+    background-image: url('../sfondoradio.png') !important;
+    background-position: center -50% !important; /* SPOSTA L'IMMAGINE PIÙ IN ALTO */
+    background-repeat: no-repeat !important;
+    background-size: 65% auto !important; 
+    opacity: 0.6 !important;
+}
+.hero-text-shadow {
+    /* Ombra/bagliore leggermente più ampia e morbida */
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.9), 0 0 5px rgba(0, 0, 0, 1);
+}
+/* ----- FILTRI ----- */
+.filter-btn {
+    border: 1px solid var(--border-color); 
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+}
+.filter-btn:hover { color: var(--accent); border-color: var(--accent); }
+.filter-btn.active {
+    background-color: var(--accent); color: var(--background-color);
+    border-color: var(--accent); font-weight: bold;
+}
+
+/* ----- CARD ARCHIVIO ----- */
+.archive-card {
+    background-color: #1a1a1a;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.archive-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px -5px var(--accent);
+}
+.archive-card-image-wrapper { height: 240px; background-color: #000; }
+.card-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px; 
+    border: 1px solid var(--border-color);
+    border-radius: 9999px; font-size: 0.7rem; font-weight: 500;
+    text-transform: uppercase; color: var(--text-secondary);
+    margin-right: 4px; margin-bottom: 4px;
+}
+
+/* ----- STILI STAGIONALI ----- */
+.winter { --accent: #4682B4; --accent-rgb: 70, 130, 180; --accent-secondary: #5F9EA0; }
+.spring { --accent: #32CD32; --accent-rgb: 50, 205, 50; --accent-secondary: #9ACD32; }
+.autumn { --accent: #D2691E; --accent-rgb: 210, 105, 30; --accent-secondary: #CD853F; }
+.summer { --accent: #FFF200; --accent-rgb: 255, 242, 0; --accent-secondary: #FFFF55; }
+
+/* ----- CALENDARIO E FOOTER ----- */
+.day-cell {
+    position: relative;
+    padding-top: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid transparent; /* Aggiunto per transizione fluida */
+}
+.day-cell-content {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center; /* Centra il numero */
+    justify-content: center; /* Centra il numero */
+}
+.day-number {
+    z-index: 1;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+.day-cell.other-month {
+    opacity: 0.3;
+    pointer-events: none;
+}
+.day-cell.today .day-number {
+    background-color: var(--accent);
+    color: #000;
+    font-weight: 700;
+}
+
+/* Stili per le caselle con eventi */
+/* Stili per le caselle con eventi (COLORI AGGIORNATI) */
+.day-cell.has-event {
+    cursor: pointer;
+    font-weight: 700;
+    color: white;
+}
+
+.day-cell.event-type-stream {
+    /* MODIFICATO: Usa il colore della stagione per le dirette */
+    background-color: rgba(var(--accent-rgb), 0.25);
+}
+.day-cell.event-type-event {
+    /* MANTENUTO: Sfondo verde per gli eventi fisici */
+    background-color: rgba(50, 205, 50, 0.3);
+}
+
+/* Stile speciale per giorni con ENTRAMBI i tipi di eventi (COLORI AGGIORNATI) */
+.day-cell.event-type-stream.event-type-event {
+    /* MODIFICATO: Sfumatura da colore stagione a verde */
+    background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.25) 50%, rgba(50, 205, 50, 0.3) 51%);
+}
+
+.day-cell.has-event:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+#event-modal.is-open { display: flex; opacity: 1; }
+#event-modal.is-open #modal-content { transform: scale(1); }
+.footer-social-icon { color: var(--text-secondary); transition: color 0.3s ease, transform 0.3s ease; }
+.footer-social-icon:hover { color: var(--accent); transform: scale(1.1); }
+
+/* NUOVI STILI PER LA LEGENDA DEL CALENDARIO */
+.marker-stream {
+    /* Usa il colore della stagione corrente (--accent è dinamico) */
+    background-color: var(--accent);
+}
+.marker-event {
+    /* Usa il verde per coerenza con le caselle */
+    background-color: #32CD32; /* Verde */
+}
+
+/* ----- FLATPICKR BOOKING CALENDAR ----- */
+.flatpickr-day.selected, .flatpickr-day.selected:hover { background: var(--accent); border-color: var(--accent); color: #000 !important; }
+.flatpickr-day.today { border-color: var(--accent-secondary); }
+.flatpickr-day.today:hover { background: var(--accent-secondary); border-color: var(--accent-secondary); color: #000; }
+
+/* =================================================================== */
+/* ========== STILI ESCLUSIVI E ISOLATI PER PAGINA "CHI SIAMO" ========== */
+/* =================================================================== */
+.page-about .section-padding { padding-top: 6rem; padding-bottom: 6rem; }
+.page-about .about-hero {
+    position: relative;
+    z-index: 0; /* <-- AGGIUNTA CHIAVE PER RISOLVERE LA SOVRAPPOSIZIONE */
+    height: 90vh;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+    color: white;
+    background-color: #000;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../sfondochisiamo.jpg');
+}
+
+.page-about .about-hero > * { position: relative; z-index: 1; }
+.page-about .chi-siamo-text { max-width: 56rem; margin-left: auto; margin-right: auto; margin-bottom: 6rem; }
+.page-about .chi-siamo-text p { margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 1.1rem; line-height: 1.7; }
+.page-about .team-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+@media (min-width: 1024px) { .page-about .team-grid { grid-template-columns: repeat(3, 1fr); } }
+.page-about .team-member {
+    background-color: #1a1a1a; border-radius: 0.75rem; border: 1px solid var(--border-color);
+    text-align: center; padding: 2rem; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.page-about .team-member:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.2); border-color: rgba(var(--accent-rgb), 0.5); }
+.page-about .member-photo {
+    width: 160px; height: 160px; border: 2px solid var(--border-color); padding: 0.5rem;
+    border-radius: 9999px; background-color: #111; margin-bottom: 1.5rem;
+    transition: border-color 0.3s ease; margin-left: auto; margin-right: auto;
+}
+.page-about .team-member:hover .member-photo { border-color: var(--accent); }
+.page-about .member-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 9999px; }
+.page-about .team-member h3 { color: var(--accent); margin-bottom: 0.5rem; }
+.page-about .valori-section { background-color: #111; }
+.page-about .valori-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.page-about .valore-card {
+    background-color: #1c1c1e; border-radius: 10px; padding: 40px 30px;
+    border: 1px solid var(--border-color); transition: all 0.3s ease-in-out;
+    display: flex; flex-direction: column; text-align: center; align-items: center;
+}
+.page-about .valore-card:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.15); border-color: rgba(var(--accent-rgb), 0.5); }
+.page-about .valore-icon { font-size: 2.5rem; color: var(--accent); margin-bottom: 1.5rem; }
+.page-about .valore-card h3 { margin-bottom: 1rem; color: white; font-size: 1.3rem; transition: color 0.35s ease; }
+.page-about .valore-card:hover h3 { color: var(--accent); }
+.page-about .valore-card p { color: var(--text-secondary); }
+.page-about .cta-section { text-align: center; }
+.page-about .cta-section .btn-primary { margin: 0.5rem; }
+
+/* =================================================================== */
+/* ========== STILI ESCLUSIVI E ISOLATI PER PAGINA "CONTATTI" ========== */
+/* =================================================================== */
+.page-contact .contact-hero {
+    position: relative; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; color: white; padding: 6rem 1.5rem;
+}
+.page-contact .contact-hero > * { position: relative; z-index: 1; }
+.page-contact .contact-info-list .info-item { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+.page-contact .contact-info-list .info-icon { font-size: 1.25rem; color: var(--accent); margin-top: 0.25rem; width: 20px; text-align: center; }
+.page-contact .contact-info-list .info-text h4 { font-size: 1rem; font-weight: bold; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.25rem; }
+.page-contact .contact-info-list .info-text a { color: white; word-break: break-all; }
+.page-contact .contact-info-list .info-text a:hover { color: var(--accent); }
+
+/* ============================================= */
+/* ========== STILI AGGIUNTIVI PER EVENTI ========== */
+/* ============================================= */
+
+.event-card {
+    background-color: #1a1a1a;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px -5px var(--accent-event);
+}
+
+.event-card-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 125%;
+    background-color: #000;
+}
+.event-card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.event-card:hover .event-card-image {
+    transform: scale(1.05);
+}
+
+.event-card-content { 
+    padding: 1rem;
+    text-align: center;
+}
+.event-card-title {
+    font-size: 1.25rem; font-weight: bold;
+    color: white; margin-bottom: 0.25rem;
+}
+.event-card-date {
+    font-size: 0.875rem; color: var(--text-secondary);
+}
+
+/* ----- Modal/Galleria Evento ----- */
+.event-modal-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 100; display: flex; align-items: center; justify-content: center;
+}
+.event-modal-backdrop {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+}
+.event-modal-content {
+    position: relative; z-index: 101;
+    width: 95%; max-width: 1600px;
+    height: 90vh;
+    background-color: #111;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    display: flex; overflow: hidden;
+}
+.event-modal-close-btn {
+    position: absolute; top: 0.75rem; right: 1rem; z-index: 102;
+    background: none; border: none; color: white;
+    font-size: 2.5rem; cursor: pointer; line-height: 1;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+.event-modal-close-btn:hover {
+    transform: scale(1.1); color: var(--accent);
+}
+.event-modal-body {
+    display: flex; width: 100%; height: 100%;
+}
+
+.gallery-column {
+    flex: 3; 
+    display: flex; flex-direction: column;
+    overflow-y: hidden;
+    padding: 2rem;
+    background-color: #000;
+    gap: 1.5rem; 
+}
+.gallery-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+}
+.gallery-item {
+    flex-shrink: 1; 
+    flex-grow: 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    cursor: zoom-in;
+}
+.gallery-item img {
+    display: block;
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+}
+.gallery-row { height: 58%; }
+.posts-row { height: 38%; }
+
+.single-image-mode .gallery-column {
+    display: flex; align-items: center; justify-content: center;
+}
+.single-image-wrapper {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: zoom-in;
+}
+.single-image-wrapper img {
+    width: auto; height: auto;
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+}
+.single-image-mode .gallery-row { display: none; } 
+
+.event-details {
+    flex: 1; padding: 2rem;
+    overflow-y: auto;
+    border-left: 1px solid var(--border-color);
+}
+.modal-event-title {
+    font-size: 2rem; font-weight: 700; color: var(--accent);
+    line-height: 1.2; margin-bottom: 0.5rem;
+}
+.modal-event-date-location {
+    font-family: 'Roboto Mono', monospace; color: var(--text-secondary);
+    margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.875rem;
+}
+.modal-event-description {
+    color: var(--text-primary); line-height: 1.6; margin-bottom: 1rem;
+}
+.modal-event-details {
+    font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;
+    border-left: 3px solid var(--accent-event);
+    padding-left: 1rem; margin-top: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+    .event-modal-content { flex-direction: column; }
+    .gallery-column { flex: 1; padding-top: 4rem; }
+    .event-details {
+        flex: 0 0 40%; 
+        border-left: none; border-top: 1px solid var(--border-color);
+    }
+}
+
+/* ========== STILI PER IL LIGHTBOX ========== */
+.lightbox-container {
+    position: fixed;
+    z-index: 9999;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    cursor: zoom-out;
+}
+.lightbox-content {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    cursor: default;
+}
+.lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    color: #fff;
+    font-size: 3rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ============================================= */
+/* ========== STILI PER PULSANTE LIVE DINAMICO ========== */
+/* ============================================= */
+
+.btn-live {
+    display: inline-flex;
+    align-items: center;
+    background-color: #ff0000;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid #ff4d4d;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-live:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+}
+
+.btn-live .pulse {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse-live 1.5s infinite;
+}
+
+@keyframes pulse-live {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+/* ============================================= */
+/* ========== STILI PER MODAL ARCHIVIO ========== */
+/* ============================================= */
+
+#archive-modal {
+    display: flex; /* Aggiunto per forzare il comportamento flex */
+    align-items: center; /* Aggiunto per centrare verticalmente */
+    justify-content: center; /* Aggiunto per centrare orizzontalmente */
+}
+
+/* Nasconde il modal con opacità 0 e pointer-events none per le transizioni */
+#archive-modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+
+/* Sovrascrive la regola per il contenitore dell'immagine */
+.archive-modal-image-wrapper {
+    padding-top: 0; /* Rimuove il padding che forza il formato quadrato */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 1;
+    min-height: 0;
+}
+
+/* Modifica la regola per l'immagine */
+.archive-modal-image-wrapper img {
+    position: static; /* Rimuove il posizionamento assoluto */
+    height: auto;
+    width: auto;
+    max-height: 70vh; /* Limita l'altezza dell'immagine */
+    object-fit: contain; /* Assicura che sia visibile per intero */
+}
+.archive-modal-soundcloud-btn {
+    display: inline-block;
+    background-color: #ff5500;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+.archive-modal-soundcloud-btn:hover {
+    transform: scale(1.05);
+}
+
+/*
+===================================================================
+ COLORI PERSONALIZZATI PER I FILTRI STAGIONE IN ARCHIVIO
+===================================================================
+*/
+
+/* --- Colori per il pulsante INVERNO --- */
+.filter-btn[data-season="winter"]:hover,
+.filter-btn[data-season="winter"].active {
+    border-color: #4682B4; /* Blu Inverno */
+    background-color: #4682B4;
+    color: white;
+}
+
+/* --- Colori per il pulsante PRIMAVERA --- */
+.filter-btn[data-season="spring"]:hover,
+.filter-btn[data-season="spring"].active {
+    border-color: #32CD32; /* Verde Primavera */
+    background-color: #32CD32;
+    color: black;
+}
+
+/* --- Colori per il pulsante ESTATE --- */
+.filter-btn[data-season="summer"]:hover,
+.filter-btn[data-season="summer"].active {
+    border-color: #FFF200; /* Giallo Estate */
+    background-color: #FFF200;
+    color: black;
+}
+
+/* --- Colori per il pulsante AUTUNNO --- */
+.filter-btn[data-season="autumn"]:hover,
+.filter-btn[data-season="autumn"].active {
+    border-color: #D2691E; /* Marrone Autunno */
+    background-color: #D2691E;
+    color: white;
+}
+
+/*
+============================================================
+ STILI PER LA PAGINA ARTISTI
+============================================================
+*/
+
+.artist-card {
+    background-color: #1a1a1a;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.artist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px -5px var(--accent);
+}
+
+.artist-card-image-wrapper {
+    width: 100%;
+    padding-top: 100%; /* Immagine quadrata */
+    position: relative;
+    background-color: #000;
+}
+
+.artist-card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.artist-card:hover .artist-card-image {
+    transform: scale(1.05);
+}
+
+.artist-card-content {
+    padding: 1rem;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Aggiungi questa riga */
+}
+
+.artist-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+}
+
+.artist-card-stream-count {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.artist-card-streams-list {
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.artist-stream-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+    border-radius: 0.25rem;
+    text-decoration: none;
+}
+
+.artist-stream-link:hover {
+    color: var(--accent);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/*
+============================================================
+ STILI PERSONALIZZATI PER IL FOOTER
+============================================================
+*/
+
+/* Sfondo nero per l'area principale del footer e il piè di pagina */
+footer, .footer-main-area {
+    background-color: #000;
+    position: relative; /* Assicura che lo sfondo copra il pattern */
+    z-index: 10;
+}
+/*
+============================================================
+ NUOVI STILI PER IL FOOTER (LINEA COLORATA E ICONE)
+============================================================
+*/
+
+/* 1. Crea la linea colorata sopra al footer */
+.footer-main-area {
+    border-top: 3px solid var(--accent); /* Usa il colore della stagione */
+    background-color: #000; /* Assicura lo sfondo nero */
+    position: relative;
+    z-index: 10;
+}
+
+/* Rimuove lo stile precedente dell'icona per non creare conflitti */
+.footer-social-icon {
+    color: inherit;
+    transition: none;
+    transform: none;
+}
+.footer-social-icon:hover {
+    color: inherit;
+    transform: none;
+}
+
+/* 2. Crea il nuovo stile a "tondino" per i link social */
+.footer-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;  /* Dimensione del cerchio */
+    height: 44px;
+    background-color: #2d2d2d; /* Grigio scuro per lo sfondo */
+    border-radius: 50%; /* Lo rende un cerchio perfetto */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Colore dell'icona all'interno del tondino */
+.footer-social-link i {
+    color: var(--text-secondary);
+    font-size: 1.1rem; /* Dimensione dell'icona */
+    transition: color 0.3s ease;
+}
+
+/* Effetto al passaggio del mouse */
+.footer-social-link:hover {
+    background-color: var(--accent); /* Il cerchio si colora con il colore della stagione */
+    transform: scale(1.1); /* Leggero ingrandimento */
+}
+
+/* L'icona diventa nera per contrastare con lo sfondo colorato */
+.footer-social-link:hover i {
+    color: #000;
+}
+
+/*
+============================================================
+ STILI AGGIUNTIVI FOOTER (LINEA SOTTO I TITOLI E LINK)
+============================================================
+*/
+
+/* Stile per i titoli del footer (H4) */
+.footer-main-area h4 {
+    position: relative; /* Necessario per posizionare la linea */
+    display: inline-block; /* Permette alla linea di avere la stessa larghezza del testo */
+    padding-bottom: 8px; /* Spazio tra il testo e la linea */
+    margin-bottom: 1rem; /* Spazio sotto la linea */
+}
+
+/* Creazione della linea colorata animata */
+.footer-main-area h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%; /* La linea è subito visibile, non animata in entrata */
+    height: 2px;
+    background-color: var(--accent); /* Usa il colore della stagione! */
+    transition: transform 0.3s ease;
+}
+
+/* Rimuove lo stile di default dei link nel footer per applicare quello nuovo */
+.footer-main-area nav a {
+    padding: 4px 0;
+}
+
+
+/* ============================================= */
+/* ========== STILI PER BOTTONE PLAY YOUTUBE ========== */
+/* ============================================= */
+
+/* Rimuoviamo la regola per .relative che non serve più per il bottone */
+/* .archive-card .relative {
+    position: relative;
+} */
+
+.card-play-button-link {
+    /* NON più posizionato in modo assoluto */
+    display: inline-flex; /* Lo trattiamo come un elemento inline */
+    width: 32px;  /* Ridimensionato a 32px */
+    height: 32px; /* Ridimensionato a 32px */
+    background-color: var(--accent);
+    color: #000;
+    border-radius: 50%;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    flex-shrink: 0; /* Impedisce che il bottone si rimpicciolisca */
+}
+
+.card-play-button-link:hover {
+    transform: scale(1.1);
+}
+
+/* Icona SVG ridimensionata */
+.card-play-button-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ============================================= */
+/* ========== ACCESSIBILITÀ ========== */
+/* ============================================= */
+
+/* ----- Skip Link per navigazione da tastiera ----- */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent);
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 100;
+    border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ----- Focus Indicators Migliorati ----- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Focus per elementi interattivi custom */
+.archive-card:focus-visible,
+.event-card:focus-visible,
+.artist-card:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+    transform: translateY(-2px);
+}
+
+/* Rimuove outline di default ma mantiene focus-visible */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ----- Rispetto prefers-reduced-motion ----- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Disabilita animazioni specifiche */
+    .pulse,
+    .breathe-on-air {
+        animation: none !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* ═══════════════  GATE RADIO 24/7 — PLAYER  ═══════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Badge "IN ROTAZIONE" */
+.radio-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    box-shadow: 0 0 12px -2px var(--accent);
+}
+.radio-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: radio-pulse 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+}
+@keyframes radio-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* Card principale */
+.radio-main-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 1.5rem;
+}
+
+/* Layout: video | info */
+.radio-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+@media (min-width: 900px) {
+    .radio-layout {
+        grid-template-columns: 3fr 2fr;
+        align-items: start;
+    }
+}
+
+/* Video YouTube */
+.radio-video-col {}
+.radio-video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 0 20px -4px var(--accent);
+}
+.radio-video-wrapper iframe,
+.radio-video-wrapper > div {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Info column */
+.radio-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Artwork */
+.radio-artwork-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 16px -4px var(--accent);
+    aspect-ratio: 1;
+}
+.radio-artwork-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+.radio-artwork-wrapper:hover .radio-artwork-img {
+    transform: scale(1.05);
+}
+.radio-artwork-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+    pointer-events: none;
+}
+.radio-artwork-season-icon {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.75rem;
+    font-size: 1rem;
+    opacity: 0.6;
+}
+
+/* Testi */
+.radio-text {}
+.radio-artist-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+    margin-bottom: 0.15rem;
+}
+.radio-set-title {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-family: 'Roboto Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* Progress bar */
+.radio-progress-section {}
+.radio-progress-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+}
+.radio-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 9999px;
+    box-shadow: 0 0 8px var(--accent);
+    transition: width 0.8s linear;
+}
+.radio-progress-times {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Controlli */
+.radio-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.radio-ctrl-btn {
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+.radio-ctrl-btn:hover { transform: scale(1.1); }
+.radio-ctrl-primary {
+    width: 56px;
+    height: 56px;
+    font-size: 1.3rem;
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 16px -2px var(--accent);
+}
+.radio-ctrl-primary:hover { box-shadow: 0 0 24px 0 var(--accent); }
+.radio-ctrl-secondary {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.08);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+.radio-ctrl-secondary:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Prossimo set */
+.radio-next-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+}
+.radio-next-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+.radio-next-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.radio-next-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: 0.25rem;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid var(--border-color);
+}
+.radio-next-artist {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.radio-next-title {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-family: 'Roboto Mono', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Spinner di caricamento */
+.radio-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255,242,0,0.15);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: radio-spin 0.8s linear infinite;
+}
+@keyframes radio-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mini playlist */
+.radio-playlist-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+@media (min-width: 640px)  { .radio-playlist-container { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1024px) { .radio-playlist-container { grid-template-columns: repeat(3, 1fr); } }
+
+.radio-playlist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
+    background: rgba(0,0,0,0.4);
+    transition: border-color 0.2s ease, background 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+.radio-playlist-item:hover {
+    border-color: var(--accent);
+    background: rgba(255,242,0,0.04);
+}
+.radio-playlist-current {
+    border-color: var(--accent);
+    background: rgba(255,242,0,0.07);
+    box-shadow: 0 0 12px -4px var(--accent);
+}
+.radio-playlist-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.25rem;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.radio-playlist-info {
+    flex: 1;
+    min-width: 0;
+}
+.radio-playlist-artist {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.radio-playlist-title {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-family: 'Roboto Mono', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.radio-playlist-playing {
+    color: var(--accent);
+    font-size: 0.85rem;
+    animation: radio-pulse 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+/* Colori stagionali nel player */
+#radio-player-container.spring .radio-progress-fill { background: #32CD32; box-shadow: 0 0 8px #32CD32; }
+#radio-player-container.spring .radio-ctrl-primary  { background: #32CD32; box-shadow: 0 0 16px -2px #32CD32; }
+#radio-player-container.summer .radio-progress-fill { background: #FFF200; }
+#radio-player-container.autumn .radio-progress-fill { background: #D2691E; box-shadow: 0 0 8px #D2691E; }
+#radio-player-container.autumn .radio-ctrl-primary  { background: #D2691E; color: #fff; box-shadow: 0 0 16px -2px #D2691E; }
+#radio-player-container.winter .radio-progress-fill { background: #4682B4; box-shadow: 0 0 8px #4682B4; }
+#radio-player-container.winter .radio-ctrl-primary  { background: #4682B4; color: #fff; box-shadow: 0 0 16px -2px #4682B4; }
+
+/* Widget radio in index.html */
+.radio-widget-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid var(--accent);
+    border-radius: 0.75rem;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 0 20px -4px var(--accent);
+    margin-top: 1.5rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.radio-widget-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+.radio-widget-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: radio-pulse 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+}
+.radio-widget-texts {
+    min-width: 0;
+}
+.radio-widget-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+.radio-widget-artist {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ─── VOLUME SLIDER ────────────────────────────────────────────────────────── */
+.radio-volume-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+}
+
+.radio-volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 4px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.15);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.radio-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 6px var(--accent);
+    transition: transform 0.15s;
+}
+
+.radio-volume-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
+.radio-volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 6px var(--accent);
+}
+
+/* Colore accent stagionale per il fill del volume */
+#radio-player-container.spring .radio-volume-slider::-webkit-slider-thumb { background: #32CD32; box-shadow: 0 0 6px #32CD32; }
+#radio-player-container.summer .radio-volume-slider::-webkit-slider-thumb { background: #FFF200; box-shadow: 0 0 6px #FFF200; }
+#radio-player-container.autumn .radio-volume-slider::-webkit-slider-thumb { background: #D2691E; box-shadow: 0 0 6px #D2691E; }
+#radio-player-container.winter .radio-volume-slider::-webkit-slider-thumb { background: #4682B4; box-shadow: 0 0 6px #4682B4; }
+
+/* ─── PWA install banner ────────────────────────────────────────────────────── */
+#radio-install-banner {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: rgba(255,242,0,0.08);
+    border: 1px solid rgba(255,242,0,0.25);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+}
+#radio-install-banner.visible { display: flex; }
+#radio-install-btn {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.35rem 1rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* ----- Screen Reader Only ----- */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}

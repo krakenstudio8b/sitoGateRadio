@@ -1,0 +1,28 @@
+{
+    "name": "Gate Radio 24/7",
+    "short_name": "Gate Radio",
+    "description": "Rotazione continua dei migliori set live di techno e musica elettronica.",
+    "start_url": "/radio.html",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#FFF200",
+    "orientation": "portrait-primary",
+    "categories": ["music", "entertainment"],
+    "icons": [
+        {
+            "src": "logogate2.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "logogate2.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [],
+    "lang": "it"
+}

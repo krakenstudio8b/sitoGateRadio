@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programmazione Live Stream - GATE RADIO | Calendario Dirette</title>
+
+    <!-- Meta Tags SEO -->
+    <meta name="description" content="Consulta il calendario delle dirette di GATE RADIO. Scopri quando vanno in onda i tuoi DJ preferiti e prenota il tuo slot per suonare.">
+    <meta name="keywords" content="calendario dirette, programmazione gate radio, booking dj slot, quando suona, calendario live stream">
+    <meta name="author" content="GATE RADIO">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://www.gateradio.com/programmazione.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.gateradio.com/programmazione.html">
+    <meta property="og:title" content="Programmazione Live Stream - GATE RADIO">
+    <meta property="og:description" content="Consulta il calendario delle dirette di GATE RADIO.">
+    <meta property="og:image" content="https://www.gateradio.com/logogate2.png">
+    <meta property="og:locale" content="it_IT">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.gateradio.com/programmazione.html">
+    <meta name="twitter:title" content="Programmazione Live Stream - GATE RADIO">
+    <meta name="twitter:description" content="Consulta il calendario delle dirette di GATE RADIO.">
+    <meta name="twitter:image" content="https://www.gateradio.com/logogate2.png">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#FFF200">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <script>
+          (function() {
+            function getStagione(data) {
+              const mese = data.getMonth(); // 0 = Gen, 11 = Dic
+              const giorno = data.getDate();
+              // Primavera
+              if ((mese === 2 && giorno >= 21) || (mese > 2 && mese < 5) || (mese === 5 && giorno < 21)) return 'spring';
+              // Estate
+              if ((mese === 5 && giorno >= 21) || (mese > 5 && mese < 8) || (mese === 8 && giorno < 21)) return 'summer';
+              // Autunno
+              if ((mese === 8 && giorno >= 21) || (mese > 8 && mese < 11) || (mese === 11 && giorno < 21)) return 'autumn';
+              // Inverno
+              return 'winter';
+            }
+            const stagione = getStagione(new Date());
+            // Applica la classe all'elemento <html> (document.documentElement)
+            // È più veloce e sicuro che aspettare il <body>
+            document.documentElement.classList.add(stagione);
+          })();
+        </script>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body class="">
+    <a href="#main-content" class="skip-link">Salta al contenuto principale</a>
+    <header class="sticky top-0 z-50"> 
+        <nav class="border-b border-[var(--border-color)] py-4 px-6 flex justify-between items-center bg-opacity-80 backdrop-blur-md"> 
+            <div class="flex items-center gap-4">
+                <h1 class="text-3xl font-bold glow-text header-logo-text"> 
+                    <a href="index.html" class="flex items-center"> 
+                        <img src="logogate2.png" alt="Gate Radio Logo" class="h-14 w-auto mr-2 inline-block header-logo-img"> 
+                        <span>GATE <span class="text-[var(--accent)]">RADIO</span></span> 
+                    </a> 
+                </h1>
+                <a href="index.html#live" id="dynamic-live-button" class="btn-live hidden">
+                    <span class="pulse"></span>LIVE
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-home fa-fw"></i>HOME</a>
+                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i>ARCHIVIO</a> 
+                <a href="programmazione.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i>PROGRAMMAZIONE</a> 
+                <a href="events.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i>EVENTI</a> 
+                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>ARTISTI</a> 
+                <a href="about.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i>CHI SIAMO</a> 
+                <a href="contact.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i>CONTATTI</a> 
+            </div> 
+            <button id="mobile-menu-button" aria-label="Apri menu" aria-expanded="false" class="md:hidden text-xl text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><i class="fas fa-bars"></i></button> 
+        </nav> 
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-opacity-95 backdrop-blur-md border-b border-[var(--border-color)] p-6 space-y-4"> 
+            <a href="index.html" class="block text-center hover:text-[var(--accent)] transition-colors">HOME</a>
+            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARCHIVIO</a> 
+            <a href="programmazione.html" class="block text-center text-[var(--accent)] font-bold">PROGRAMMAZIONE</a> 
+            <a href="events.html" class="block text-center hover:text-[var(--accent)] transition-colors">EVENTI</a> 
+            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARTISTI</a> 
+            <a href="about.html" class="block text-center hover:text-[var(--accent)] transition-colors">CHI SIAMO</a> 
+            <a href="contact.html" class="block text-center hover:text-[var(--accent)] transition-colors">CONTATTI</a> 
+        </div> 
+    </header>
+
+    <main>
+        <section id="calendar" class="py-16 px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="rounded-xl p-6 md:p-8 glow-border border">
+                    <div class="text-center mb-10">
+                        <h2 class="text-4xl md:text-5xl font-bold glow-text">PROGRAMMAZIONE</h2>
+                        <p class="text-lg text-[var(--text-secondary)] mt-2">Scopri i nostri prossimi eventi e le dirette in arrivo.</p>
+                    </div>
+
+                    <div id="calendar-filters" class="flex justify-center items-center gap-2 mb-6 flex-wrap">
+                        <button data-filter="all" class="filter-btn active">Tutti</button>
+                        <button data-filter="stream" class="filter-btn">Dirette</button>
+                        <button data-filter="event" class="filter-btn">Eventi Fisici</button>
+                    </div>
+                    <div class="flex justify-between items-center mb-6">
+                        <button id="prev-month-btn" aria-label="Mese precedente" class="text-[var(--accent)] text-2xl hover:text-[var(--accent-secondary)] transition-colors"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="month-year-header" class="text-xl font-bold font-mono uppercase text-center w-48"></h3>
+                        <button id="next-month-btn" aria-label="Mese successivo" class="text-[var(--accent)] text-2xl hover:text-[var(--accent-secondary)] transition-colors"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center font-bold text-[var(--text-secondary)] text-xs sm:text-sm mb-4 border-b border-[var(--border-color)] pb-2">
+                        <div aria-hidden="true">LUN</div> <div aria-hidden="true">MAR</div> <div aria-hidden="true">MER</div> <div aria-hidden="true">GIO</div> <div aria-hidden="true">VEN</div> <div aria-hidden="true">SAB</div> <div aria-hidden="true">DOM</div>
+                    </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-2 text-center"></div>
+                    <div class="text-xs text-center mt-6 text-[var(--text-secondary)] flex justify-center items-center gap-4">
+                        <span><span class="inline-block w-3 h-3 marker-stream rounded-full mr-1 align-middle"></span> Diretta</span>
+                        <span><span class="inline-block w-3 h-3 marker-event rounded-full mr-1 align-middle"></span> Evento Fisico</span>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider" aria-hidden="true"></div>
+
+        <section id="artist-booking" class="py-16 px-6">
+            <div class="max-w-3xl mx-auto">
+                 <form class="space-y-5 p-8 rounded-xl border glow-border">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold mb-4 glow-text">VUOI SUONARE <span class="text-[var(--accent)]">DA NOI?</span></h2>
+                        <p class="text-[var(--text-secondary)]">Clicca sul campo data per scegliere uno degli slot disponibili e inviaci la tua proposta.</p>
+                    </div>
+                     <div><label for="artist-name" class="block text-sm font-medium text-[var(--text-secondary)] mb-1">Nome Artista / DJ</label><input type="text" id="artist-name" name="artist-name" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></div>
+                     <div><label for="artist-email" class="block text-sm font-medium text-[var(--text-secondary)] mb-1">La tua Email</label><input type="email" id="artist-email" name="artist-email" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></div>
+                     <div><label for="artist-music" class="block text-sm font-medium text-[var(--text-secondary)] mb-1">Link alla tua Musica</label><input type="url" id="artist-music" name="artist-music" required placeholder="https://" class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></div>
+                     <div>
+                        <label for="booking-date-input" class="block text-sm font-medium text-[var(--text-secondary)] mb-1">Data Proposta</label>
+                        <input type="text" id="booking-date-input" name="preferred_date" placeholder="Seleziona una data disponibile..." readonly="readonly" class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black cursor-pointer">
+                     </div>
+                     <div><label for="artist-bio" class="block text-sm font-medium text-[var(--text-secondary)] mb-1">Breve Bio / Genere Musicale</label><textarea id="artist-bio" name="artist-bio" rows="4" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black" placeholder="Descrivi brevemente il tuo progetto..."></textarea></div>
+                     <div class="text-center pt-4"><button type="submit" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-paper-plane"></i> INVIA PROPOSTA</button></div>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <div class="mt-24 footer-main-area">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left py-16 px-6">
+            
+            <div>
+                <h4 class="text-lg font-bold">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
+                <p class="text-sm text-[var(--text-secondary)] max-w-sm mx-auto md:mx-0">
+                    Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.
+                </p>
+            </div>
+            
+            <div class="md:text-center">
+                <h4 class="text-lg font-bold">LINK VELOCI</h4>
+                <nav class="space-y-1 text-sm">
+                    <a href="index.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
+                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Archivio</a>
+                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Programmazione</a>
+                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Eventi</a>
+                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Artisti</a>
+                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Chi Siamo</a>
+                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Contatti</a>
+                </nav>
+            </div>
+            
+            <div class="md:text-center"> <h4 class="text-lg font-bold">SEGUICI</h4>
+                <div class="flex justify-center md:justify-center space-x-4 text-2xl">
+                    <a href="#" aria-label="Instagram" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="SoundCloud" class="footer-social-link"><i class="fab fa-soundcloud"></i></a>
+                    <a href="#" aria-label="YouTube" class="footer-social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Twitch" class="footer-social-link"><i class="fab fa-twitch"></i></a>
+                    <a href="#" aria-label="Mixcloud" class="footer-social-link"><i class="fab fa-mixcloud"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer class="py-8 px-6 border-t border-black text-center text-[var(--text-secondary)] text-sm">
+        <p>© <span id="footer-year"></span> GATE RADIO | Tutti i diritti riservati</p>
+    </footer>
+
+    <div id="event-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4 transition-opacity duration-300">
+        <div id="modal-content" class="bg-[#0d0d0d] rounded-xl border glow-border max-w-sm w-full relative transition-transform duration-300 scale-95">
+            <button id="modal-close-btn" aria-label="Chiudi finestra" class="absolute -top-3 -right-3 text-black bg-[var(--accent)] rounded-full h-9 w-9 flex items-center justify-center text-2xl font-bold leading-none hover:scale-110 transition-transform">&times;</button>
+            <div id="modal-body" class="p-0"></div>
+        </div>
+    </div>
+    
+    <div id="archive-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden p-4 transition-opacity duration-300 items-center justify-center">
+        <div id="archive-modal-content" class="bg-[#0d0d0d] rounded-xl border glow-border max-w-sm w-full relative transition-transform duration-300 scale-95">
+            <button id="archive-modal-close-btn" aria-label="Chiudi finestra" class="absolute -top-3 -right-3 text-black bg-[var(--accent)] rounded-full h-9 w-9 flex items-center justify-center text-2xl font-bold leading-none hover:scale-110 transition-transform">&times;</button>
+            <div id="archive-modal-body"></div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/it.js"></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/streams-data.js" defer></script>
+    <script src="js/events-data.js" defer></script>
+    <script src="js/script.js" defer></script>
+</body>
+</html>
