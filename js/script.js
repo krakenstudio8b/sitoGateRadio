@@ -291,10 +291,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Unisci streams + eventi nell'archivio (card identiche)
         function seasonFromDate(dateStr) {
-            const m = new Date(dateStr).getMonth(); // 0-11
-            if (m >= 2 && m <= 4) return 'spring';
-            if (m >= 5 && m <= 7) return 'summer';
-            if (m >= 8 && m <= 10) return 'autumn';
+            const d = new Date(dateStr);
+            const m = d.getMonth(); // 0-11
+            const day = d.getDate();
+            const year = d.getFullYear();
+            const inizioPrimavera = year === 2026 ? 28 : 21;
+            if ((m === 2 && day >= inizioPrimavera) || (m > 2 && m < 5) || (m === 5 && day < 21)) return 'spring';
+            if ((m === 5 && day >= 21) || (m > 5 && m < 8) || (m === 8 && day < 21)) return 'summer';
+            if ((m === 8 && day >= 21) || (m > 8 && m < 11) || (m === 11 && day < 21)) return 'autumn';
             return 'winter';
         }
         const normalizedEvents = (typeof eventsData !== 'undefined' ? eventsData : []).map(ev => ({
