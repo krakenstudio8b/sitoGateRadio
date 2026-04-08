@@ -229,7 +229,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const archivePreviewGrid = $('#archive-grid-preview');
         if ((!archiveGrid && !archivePreviewGrid) || typeof streamsData === 'undefined') return;
 
+        let _archiveCardIndex = 0;
         const createArchiveItemHTML = (item) => {
+            const loadingAttr = _archiveCardIndex++ < 4 ? 'eager' : 'lazy';
+            void loadingAttr; // usato sotto
             const seasonIcons = { spring: 'fas fa-seedling', summer: 'fas fa-sun', autumn: 'fas fa-leaf', winter: 'fas fa-snowflake' };
             const tagsHTML = item.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
             const seasonClass = item.season || 'summer';
@@ -245,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return `<div class="archive-card rounded-xl overflow-hidden border border-[var(--border-color)] flex flex-col group ${seasonClass}" data-stream-id="${item.id}">
                         <div class="relative">
-                            <img src="${item.imageUrl}" alt="${item.title}" class="archive-card-image-wrapper w-full h-full object-cover" loading="lazy">
+                            <img src="${item.imageUrl}" alt="${item.title}" class="archive-card-image-wrapper w-full h-full object-cover" loading="${loadingAttr}" decoding="async">
                         </div>
                         <div class="p-4 md:p-5 flex flex-col flex-grow bg-[#1a1a1a]" style="cursor: pointer;">
                             <h3 class="text-lg font-bold text-[var(--accent)]">${item.artist}</h3>
@@ -278,6 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     button.classList.add('active');
                     const season = button.dataset.season;
                     const filteredData = season === 'all' ? pastStreams : pastStreams.filter(item => item.season === season);
+                    _archiveCardIndex = 0;
                     renderGrid(filteredData.sort((a, b) => new Date(b.date) - new Date(a.date)), archiveGrid);
                 });
             });
