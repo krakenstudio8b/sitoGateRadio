@@ -48,7 +48,8 @@
               const mese = data.getMonth(); // 0 = Gen, 11 = Dic
               const giorno = data.getDate();
               // Primavera
-              if ((mese === 2 && giorno >= 21) || (mese > 2 && mese < 5) || (mese === 5 && giorno < 21)) return 'spring';
+              var inizioPrimavera = data.getFullYear() === 2026 ? 28 : 21;
+              if ((mese === 2 && giorno >= inizioPrimavera) || (mese > 2 && mese < 5) || (mese === 5 && giorno < 21)) return 'spring';
               // Estate
               if ((mese === 5 && giorno >= 21) || (mese > 5 && mese < 8) || (mese === 8 && giorno < 21)) return 'summer';
               // Autunno
