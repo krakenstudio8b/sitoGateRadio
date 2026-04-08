@@ -7,14 +7,22 @@ const bookingConfig = {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Carica dati da Firebase (sovrascrive i file statici se disponibili)
+    // Carica dati da Firebase e uniscili con quelli statici
     if (window.gateRadioDataPromise) {
         const fbData = await window.gateRadioDataPromise;
         if (fbData.streams && fbData.streams.length > 0) {
-            window.streamsData = fbData.streams;
+            const staticIds = new Set((window.streamsData || []).map(s => String(s.id)));
+            const newStreams = fbData.streams.filter(s => !staticIds.has(String(s.id)));
+            if (newStreams.length > 0) {
+                window.streamsData = [...(window.streamsData || []), ...newStreams];
+            }
         }
         if (fbData.events && fbData.events.length > 0) {
-            window.eventsData = fbData.events;
+            const staticIds = new Set((window.eventsData || []).map(e => String(e.id)));
+            const newEvents = fbData.events.filter(e => !staticIds.has(String(e.id)));
+            if (newEvents.length > 0) {
+                window.eventsData = [...(window.eventsData || []), ...newEvents];
+            }
         }
     }
 
