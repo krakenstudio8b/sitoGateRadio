@@ -1,6 +1,6 @@
 // Questo file contiene tutti i dati per le dirette archiviate.
 // Le stagioni sono state corrette automaticamente in base alla data.
-const streamsData = [
+window.streamsData = [
     { id: 1, title: "LIVE STREAMING", artist: "FIONN, ETTORE CORSI | DUANE, SPINO", date: "2024-11-01", season: "winter", imageUrl: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%201%20-%20GATE.jpeg", soundcloudUrl: "#", tags: ["Techno", "Opening"] },
     { id: 2, title: "LIVE SPECIAL", artist: "ROSIE CPT", date: "2024-11-13", season: "winter", imageUrl: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%202%20-%20GATE.png", soundcloudUrl: "https://www.youtube.com/live/_1hVkqTJpBs?si=S2aAug_HHIzMhgi-", tags: ["Deep House"] },
     { id: 3, title: "LIVE STREAMING", artist: "MARCOLINO, DEDO, SPINO", date: "2024-11-15", season: "winter", imageUrl: "https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/Grafiche%20Gate/GRAFICA%203%20-%20GATE.png", soundcloudUrl: "https://www.youtube.com/live/nLorVzZEhPc?si=dsrc6w0-9QgoxzKi", tags: ["Minimal", "Live"] },

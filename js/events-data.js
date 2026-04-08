@@ -1,5 +1,5 @@
 // Questo file contiene i dati per gli EVENTI FISICI (serate, party, ecc.).
-const eventsData = [
+window.eventsData = [
   {
     id: 1,
     title: "GATE NACHT",
