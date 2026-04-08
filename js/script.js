@@ -301,7 +301,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             if ((m === 8 && day >= 21) || (m > 8 && m < 11) || (m === 11 && day < 21)) return 'autumn';
             return 'winter';
         }
-        const normalizedEvents = (typeof eventsData !== 'undefined' ? eventsData : []).map(ev => ({
+        // Deduplica: se un evento Firebase ha stesso titolo+data di uno statico, tieni solo quello Firebase
+        const allEvents = typeof eventsData !== 'undefined' ? eventsData : [];
+        const seen = new Set();
+        const deduped = [];
+        // Prima aggiungi quelli Firebase (hanno _fbKey), poi gli statici solo se non duplicati
+        const fbEvents = allEvents.filter(ev => ev._fbKey);
+        const staticEvents = allEvents.filter(ev => !ev._fbKey);
+        for (const ev of fbEvents) {
+            seen.add(ev.title + '|' + ev.date);
+            deduped.push(ev);
+        }
+        for (const ev of staticEvents) {
+            if (!seen.has(ev.title + '|' + ev.date)) {
+                deduped.push(ev);
+            }
+        }
+        const normalizedEvents = deduped.map(ev => ({
             id: ev.id,
             artist: ev.title || 'EVENTO',
             title: ev.location || 'EVENTO',
