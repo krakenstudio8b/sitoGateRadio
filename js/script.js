@@ -6,7 +6,18 @@ const bookingConfig = {
     ]
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Carica dati da Firebase (sovrascrive i file statici se disponibili)
+    if (window.gateRadioDataPromise) {
+        const fbData = await window.gateRadioDataPromise;
+        if (fbData.streams && fbData.streams.length > 0) {
+            window.streamsData = fbData.streams;
+        }
+        if (fbData.events && fbData.events.length > 0) {
+            window.eventsData = fbData.events;
+        }
+    }
+
 
     // Funzioni helper
     function $(selector) { return document.querySelector(selector); }

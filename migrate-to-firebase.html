@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Migrazione dati → Firebase</title>
+    <style>
+        body { font-family: monospace; padding: 2rem; background: #0a0a0a; color: #e2e8f0; }
+        button { background: #FFF200; color: #000; font-weight: bold; border: none;
+                 padding: 0.75rem 2rem; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        #log { margin-top: 1.5rem; background: #111; padding: 1rem; border-radius: 8px;
+               border: 1px solid #333; max-height: 500px; overflow-y: auto; }
+        .ok  { color: #4ade80; }
+        .err { color: #f87171; }
+        .info { color: #93c5fd; }
+    </style>
+</head>
+<body>
+    <h2>🚀 Migrazione dati statici → Firebase</h2>
+    <p style="color:#94a3b8;font-size:0.85rem">
+        Importa streams e eventi dai file JS statici in Firebase Realtime Database.<br>
+        <strong style="color:#FFF200">Da eseguire una sola volta.</strong>
+    </p>
+    <button id="migrate-btn">Avvia Migrazione</button>
+    <div id="log"><span class="info">Premi il pulsante per iniziare...</span></div>
+
+    <script src="js/streams-data.js"></script>
+    <script src="js/events-data.js"></script>
+    <script type="module">
+        const FIREBASE_URL = 'https://studio-kraken-gate-default-rtdb.firebaseio.com';
+        const log = document.getElementById('log');
+
+        function print(msg, type = 'info') {
+            const line = document.createElement('div');
+            line.className = type;
+            line.textContent = msg;
+            log.appendChild(line);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        async function migrateData() {
+            const btn = document.getElementById('migrate-btn');
+            btn.disabled = true;
+            log.innerHTML = '';
+
+            // Leggi token di autenticazione dal localStorage del gestionale
+            // (devi essere loggato nel gestionale nello stesso browser)
+            const token = await getAuthToken();
+            if (!token) {
+                print('❌ Non sei autenticato. Apri prima il gestionale e fai login, poi torna qui.', 'err');
+                btn.disabled = false;
+                return;
+            }
+
+            print('✓ Token Firebase ottenuto', 'ok');
+
+            // Migra streams
+            print(`→ Migro ${streamsData.length} live streaming...`, 'info');
+            let okStreams = 0, errStreams = 0;
+            for (const s of streamsData) {
+                const { id, ...data } = s; // rimuove id numerico
+                try {
+                    const res = await fetch(`${FIREBASE_URL}/gateRadio/streams.json?auth=${token}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                    okStreams++;
+                } catch (err) {
+                    print(`  ✗ ${s.artist} (${s.date}): ${err.message}`, 'err');
+                    errStreams++;
+                }
+            }
+            print(`✓ Streams: ${okStreams} ok, ${errStreams} errori`, okStreams > 0 ? 'ok' : 'err');
+
+            // Migra eventi
+            print(`→ Migro ${eventsData.length} eventi...`, 'info');
+            let okEvents = 0, errEvents = 0;
+            for (const ev of eventsData) {
+                const { id, ...data } = ev;
+                try {
+                    const res = await fetch(`${FIREBASE_URL}/gateRadio/events.json?auth=${token}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    if (!res.ok) throw new Error(await res.text());
+                    okEvents++;
+                } catch (err) {
+                    print(`  ✗ ${ev.title} (${ev.date}): ${err.message}`, 'err');
+                    errEvents++;
+                }
+            }
+            print(`✓ Eventi: ${okEvents} ok, ${errEvents} errori`, okEvents > 0 ? 'ok' : 'err');
+
+            if (okStreams > 0 || okEvents > 0) {
+                print('', 'info');
+                print('🎉 Migrazione completata! Puoi eliminare questo file.', 'ok');
+            }
+            btn.disabled = false;
+        }
+
+        async function getAuthToken() {
+            // Cerca il token Firebase nel localStorage (salvato dal gestionale)
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.includes('firebase') && key.includes('token')) {
+                    try {
+                        const val = JSON.parse(localStorage.getItem(key));
+                        if (val?.stsTokenManager?.accessToken) return val.stsTokenManager.accessToken;
+                    } catch {}
+                }
+            }
+            // Tenta da IndexedDB (Firebase Auth v9+)
+            return new Promise(resolve => {
+                const req = indexedDB.open('firebaseLocalStorageDb');
+                req.onsuccess = e => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('firebaseLocalStorage')) { resolve(null); return; }
+                    const tx = db.transaction('firebaseLocalStorage', 'readonly');
+                    const store = tx.objectStore('firebaseLocalStorage');
+                    const all = store.getAll();
+                    all.onsuccess = () => {
+                        for (const item of all.result) {
+                            const token = item?.value?.stsTokenManager?.accessToken;
+                            if (token) { resolve(token); return; }
+                        }
+                        resolve(null);
+                    };
+                    all.onerror = () => resolve(null);
+                };
+                req.onerror = () => resolve(null);
+            });
+        }
+
+        document.getElementById('migrate-btn').addEventListener('click', migrateData);
+    </script>
+</body>
+</html>
