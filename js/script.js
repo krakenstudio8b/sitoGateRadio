@@ -160,12 +160,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(yearSpan) yearSpan.textContent = new Date().getFullYear();
     }
     
+    // Ritorna un Date combinando date + timeStart (o 00:00 di default)
+    function itemStartDateTime(item) {
+        const t = item.timeStart || '00:00';
+        return new Date(`${item.date}T${t}:00`);
+    }
+    // Ritorna un Date combinando date + timeEnd (o 23:59 di default → fine giornata)
+    function itemEndDateTime(item) {
+        const t = item.timeEnd || '23:59';
+        return new Date(`${item.date}T${t}:00`);
+    }
+
     function findNextEvent(data) {
         if (!data) return null;
         const now = new Date();
+        // "Prossimo" = start time non ancora passato (include live che iniziano oggi)
         const futureEvents = data
-            .filter(event => new Date(event.date) > now)
-            .sort((a, b) => new Date(a.date) - new Date(b.date));
+            .filter(event => itemStartDateTime(event) > now)
+            .sort((a, b) => itemStartDateTime(a) - itemStartDateTime(b));
         return futureEvents.length > 0 ? futureEvents[0] : null;
     }
 
@@ -210,19 +222,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const nowPlaying = _t('home.nowPlaying', 'GATE RADIO 24/7 — ORA IN ROTAZIONE');
         const stayTunedMsg = _t('home.stayTuned', 'Nessun evento in programma.');
 
-        if (isLive) {
-            liveContainer.innerHTML = `<div class="mb-12"><div class="on-air-indicator">ON AIR</div></div><div style="aspect-ratio: 16/9;" class="w-full rounded-lg overflow-hidden glow-border"><iframe src="https://player.twitch.tv/?channel=${TWITCH_CONFIG.CHANNEL_NAME}&parent=${window.location.hostname}&autoplay=true&muted=true" height="100%" width="100%" allowfullscreen class="w-full h-full"></iframe></div>`;
-        } else if (nextStream) {
-            const eventDate    = new Date(nextStream.date);
-            const dateLocale   = _lang === 'en' ? 'en-GB' : 'it-IT';
-            const formattedDate = eventDate.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
-            const eventTime    = (nextStream.timeStart && nextStream.timeEnd) ? `${nextStream.timeStart} -> ${nextStream.timeEnd}` : "18:00 -> 19:00";
-
-            // Widget Radio 24/7 — mostra cosa sta girando ora
-            let radioWidgetHTML = '';
+        // Widget Radio 24/7 riutilizzabile (usato in COMING SOON e STAY TUNED)
+        const buildRadioWidget = () => {
             if (typeof GateRadio !== 'undefined') {
                 const rs = GateRadio.getCurrentState();
-                radioWidgetHTML = `
+                return `
                     <div class="radio-widget-banner">
                         <div class="radio-widget-info">
                             <div class="radio-widget-dot"></div>
@@ -235,24 +239,32 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <i class="fas fa-radio"></i> ${listenNow}
                         </a>
                     </div>`;
-            } else {
-                radioWidgetHTML = `
-                    <div class="radio-widget-banner inline-flex flex-col items-center gap-3 mx-auto px-6 py-3">
-                        <div class="radio-widget-info justify-center">
-                            <div class="radio-widget-dot"></div>
-                            <p class="radio-widget-label text-xl font-bold grifter-font">GATE RADIO 24/7</p>
-                        </div>
-                        <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2">
-                            <i class="fas fa-radio"></i> ${listenNow}
-                        </a>
-                    </div>`;
             }
+            return `
+                <div class="radio-widget-banner inline-flex flex-col items-center gap-3 mx-auto px-6 py-3">
+                    <div class="radio-widget-info justify-center">
+                        <div class="radio-widget-dot"></div>
+                        <p class="radio-widget-label text-xl font-bold grifter-font">GATE RADIO 24/7</p>
+                    </div>
+                    <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2">
+                        <i class="fas fa-radio"></i> ${listenNow}
+                    </a>
+                </div>`;
+        };
+
+        if (isLive) {
+            liveContainer.innerHTML = `<div class="mb-12"><div class="on-air-indicator">ON AIR</div></div><div style="aspect-ratio: 16/9;" class="w-full rounded-lg overflow-hidden glow-border"><iframe src="https://player.twitch.tv/?channel=${TWITCH_CONFIG.CHANNEL_NAME}&parent=${window.location.hostname}&autoplay=true&muted=true" height="100%" width="100%" allowfullscreen class="w-full h-full"></iframe></div>`;
+        } else if (nextStream) {
+            const eventDate    = new Date(nextStream.date);
+            const dateLocale   = _lang === 'en' ? 'en-GB' : 'it-IT';
+            const formattedDate = eventDate.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
+            const eventTime    = (nextStream.timeStart && nextStream.timeEnd) ? `${nextStream.timeStart} -> ${nextStream.timeEnd}` : "18:00 -> 19:00";
 
             const eventImage = nextStream.imageUrl || 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png';
             liveContainer.innerHTML = `
                 <div class="coming-soon-container text-center flex flex-col items-center">
-                    <div class="w-full">${radioWidgetHTML}</div>
-                    <div class="inline-block bg-black rounded-xl px-8 py-8 mt-10">
+                    <div class="w-full">${buildRadioWidget()}</div>
+                    <div class="inline-block bg-black rounded-xl px-8 pt-20 pb-8 mt-20">
                         <h2 class="coming-soon-title grifter-font mb-16" style="font-size: 2rem;">COMING SOON</h2>
                         <div class="next-event-card mb-6 mx-auto">
                             <img src="${eventImage}" alt="${nextStream.title}" class="w-full h-auto" loading="lazy">
@@ -262,17 +274,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>`;
         } else {
             liveContainer.innerHTML = `
-                <div class="coming-soon-container text-center">
-                    <h2 class="coming-soon-title grifter-font">STAY TUNED</h2>
-                    <p class="next-event-date mt-4">${stayTunedMsg}</p>
-                    <div class="radio-widget-banner mt-8 inline-flex flex-col items-center gap-3 mx-auto px-6 py-3">
-                        <div class="radio-widget-info justify-center">
-                            <div class="radio-widget-dot"></div>
-                            <p class="radio-widget-label text-xl font-bold grifter-font">GATE RADIO 24/7</p>
-                        </div>
-                        <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2">
-                            <i class="fas fa-radio"></i> ${listenNow}
-                        </a>
+                <div class="coming-soon-container text-center flex flex-col items-center">
+                    <div class="w-full">${buildRadioWidget()}</div>
+                    <div class="inline-block bg-black rounded-xl px-8 pt-20 pb-12 mt-20">
+                        <h2 class="coming-soon-title grifter-font mb-8" style="font-size: 2rem;">STAY TUNED</h2>
+                        <p class="next-event-date">${stayTunedMsg}</p>
                     </div>
                 </div>`;
         }
@@ -358,6 +364,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     artist: matchingEvent.title || s.artist,
                     title: matchingEvent.location || s.title,
                     date: matchingEvent.date,
+                    timeStart: s.timeStart,
+                    timeEnd: s.timeEnd,
                     imageUrl: matchingEvent.mainImage || s.imageUrl,
                     soundcloudUrl: s.soundcloudUrl || null,
                     season: matchingEvent.season || s.season || seasonFromDate(s.date),
@@ -390,7 +398,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const allArchiveItems = mergedArchive;
         window._allArchiveItems = allArchiveItems;
-        const pastStreams = allArchiveItems.filter(s => new Date(s.date) < new Date()).sort((a, b) => new Date(b.date) - new Date(a.date));
+        // Uno stream finisce nell'archivio solo quando la sua fine (timeEnd) è passata.
+        // Eventi senza orario: fallback a fine giornata (23:59).
+        const nowRef = new Date();
+        const pastStreams = allArchiveItems
+            .filter(s => itemEndDateTime(s) < nowRef)
+            .sort((a, b) => new Date(b.date) - new Date(a.date));
         
         if (archiveGrid) {
             renderGrid(pastStreams, archiveGrid);
@@ -416,7 +429,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const artistsGrid = $('#artists-grid');
         if (!artistsGrid) return;
 
-        const residents = [
+        // Fallback hardcoded: usato se Firebase non ha dati o non è raggiungibile
+        const fallbackResidents = [
             { name: 'ADAD', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
             { name: 'ALIUS BENZ', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
             { name: 'COUNTERCULTURE', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/counterculture.jpg', bio: 'Manuel López (Counterculture) is a Colombian DJ and live act based in Rome, focused on underground techno, modular live performance and hybrid sets combining vinyl, hardware and digital sources. A member of Gate Radio and resident of the Bugs collective, his sound is raw, hypnotic and functional for the dancefloor. He has performed at underground clubs and spaces in Rome such as Brancaleone and Hacienda, as well as independent venues, record stores and alternative organizations.', instagram: 'https://www.instagram.com/counterculturx/', soundcloud: 'https://soundcloud.com/counterculture666', mixcloud: '' },
@@ -427,6 +441,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             { name: 'SOFFICE', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/soffice.jpg', bio: 'A key resident of Freenetica Crew, Soffice is a techno DJ shaped by the Roman underground scene. Her sound moves through percussive grooves and pulsing basslines, drawing inspiration from the energy of \'90s and 2000s dancefloors, reworked through a contemporary and dynamic vision. Evolving toward hypnotic, percussion-driven sounds, she delivers solid, dancefloor-focused sets. She has played at key venues such as Cieloterra, Forte Antenne, Warehouse 303, Gate Milano, and Serendipity with MRC.', instagram: 'https://www.instagram.com/s0ffice/', soundcloud: 'https://soundcloud.com/user-872402408', mixcloud: '' },
         ];
 
+        // Prova a caricare i resident da Firebase; se vuoto o errore → fallback
+        const GATE_FB_URL = 'https://studio-kraken-gate-default-rtdb.firebaseio.com';
+        fetch(`${GATE_FB_URL}/gateRadio/residents.json`)
+            .then(r => r.ok ? r.json() : null)
+            .then(obj => {
+                let residents;
+                if (obj && typeof obj === 'object') {
+                    residents = Object.values(obj).sort((a, b) => (a.order || 0) - (b.order || 0));
+                    if (residents.length === 0) residents = fallbackResidents;
+                } else {
+                    residents = fallbackResidents;
+                }
+                renderResidents(residents);
+            })
+            .catch(() => renderResidents(fallbackResidents));
+
+        function renderResidents(residents) {
         const gridHTML = residents.map(artist => {
             const socials = [
                 artist.instagram ? `<a href="${artist.instagram}" target="_blank" rel="noopener" class="resident-social-link" aria-label="Instagram di ${artist.name}"><i class="fab fa-instagram"></i></a>` : '',
@@ -448,8 +479,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
         }).join('');
         artistsGrid.innerHTML = gridHTML;
+        }
     }
-    
+
     function gestioneEventi() {
         const eventsGrid = $('#events-grid');
         const eventsPreviewGrid = $('#events-grid-preview');
