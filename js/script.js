@@ -174,9 +174,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     function findNextEvent(data) {
         if (!data) return null;
         const now = new Date();
-        // "Prossimo" = start time non ancora passato (include live che iniziano oggi)
+        // "Upcoming" = fine (timeEnd o 23:59 di default) non ancora passata.
+        // Così una live di oggi senza orario esplicito resta COMING SOON per
+        // tutta la giornata, invece di sparire subito dopo la mezzanotte.
         const futureEvents = data
-            .filter(event => itemStartDateTime(event) > now)
+            .filter(event => itemEndDateTime(event) > now)
             .sort((a, b) => itemStartDateTime(a) - itemStartDateTime(b));
         return futureEvents.length > 0 ? futureEvents[0] : null;
     }
@@ -214,7 +216,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const liveContainer = $('#live-section-content');
         if (!liveContainer) return;
 
-        const nextStream = findNextEvent(typeof streamsData !== 'undefined' ? streamsData : []);
+        // Considera sia gli stream che gli eventi per la card COMING SOON.
+        // Normalizzo i campi così il render successivo funziona in entrambi i casi
+        // (eventi usano `mainImage`/`title`, stream usano `imageUrl`/`artist`).
+        const _streams = (typeof streamsData !== 'undefined' ? streamsData : []).map(s => ({ ...s, _kind: 'stream' }));
+        const _events  = (typeof eventsData  !== 'undefined' ? eventsData  : []).map(e => ({
+            ...e,
+            _kind: 'event',
+            imageUrl: e.mainImage || e.imageUrl || '',
+            artist: e.title || 'EVENTO',
+            title: 'EVENTO',
+        }));
+        const nextStream = findNextEvent([..._streams, ..._events]);
         
         const _t = window.GateI18n ? (k, fb) => window.GateI18n.t(k, window.GateI18n.getLang()) || fb : (k, fb) => fb;
         const _lang = window.GateI18n ? window.GateI18n.getLang() : 'it';
