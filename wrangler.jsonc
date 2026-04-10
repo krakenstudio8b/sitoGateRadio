@@ -1,14 +1,22 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "sitogateradio",
+  "main": "_worker.js",
   "compatibility_date": "2026-04-08",
+  "workers_dev": true,
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": true,
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "routes": [
+    { "pattern": "gateradiorm.com/*", "zone_name": "gateradiorm.com" },
+    { "pattern": "www.gateradiorm.com/*", "zone_name": "gateradiorm.com" }
   ]
 }

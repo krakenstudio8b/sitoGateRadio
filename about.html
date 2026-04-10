@@ -82,82 +82,71 @@
             </div>
             <div class="hidden md:flex space-x-6 items-center">
                 <a href="/" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-home fa-fw"></i>HOME</a>
-                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i>ARCHIVIO</a> 
-                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i>PROGRAMMAZIONE</a> 
-                <a href="events.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i>EVENTI</a> 
-                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>ARTISTI</a> 
-                <a href="about.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i>CHI SIAMO</a> 
-                <a href="contact.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i>CONTATTI</a> 
-            </div> 
+                <a href="radio.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-radio fa-fw"></i>RADIO 24/7</a>
+                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i><span data-i18n="nav.archive">ARCHIVIO</span></a>
+                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i><span data-i18n="nav.schedule">PROGRAMMAZIONE</span></a>
+                <a href="events.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i><span data-i18n="nav.events">EVENTI</span></a>
+                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>RESIDENT</a>
+                <a href="about.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i><span data-i18n="nav.about">CHI SIAMO</span></a>
+                <a href="contact.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i><span data-i18n="nav.contact">CONTATTI</span></a>
+            </div>
             <button id="mobile-menu-button" aria-label="Apri menu di navigazione principale" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden text-xl text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><i class="fas fa-bars" aria-hidden="true"></i></button> 
         </nav> 
         <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-opacity-95 backdrop-blur-md border-b border-[var(--border-color)] p-6 space-y-4"> 
             <a href="/" class="block text-center hover:text-[var(--accent)] transition-colors">HOME</a>
-            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARCHIVIO</a> 
-            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors">PROGRAMMAZIONE</a> 
-            <a href="events.html" class="block text-center hover:text-[var(--accent)] transition-colors">EVENTI</a> 
-            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARTISTI</a> 
-            <a href="about.html" class="block text-center text-[var(--accent)] font-bold">CHI SIAMO</a> 
-            <a href="contact.html" class="block text-center hover:text-[var(--accent)] transition-colors">CONTATTI</a> 
-        </div> 
+            <a href="radio.html" class="block text-center hover:text-[var(--accent)] transition-colors">RADIO 24/7</a>
+            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.archive">ARCHIVIO</span></a>
+            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.schedule">PROGRAMMAZIONE</span></a>
+            <a href="events.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.events">EVENTI</span></a>
+            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">RESIDENT</a>
+            <a href="about.html" class="block text-center text-[var(--accent)] font-bold"><span data-i18n="nav.about">CHI SIAMO</span></a>
+            <a href="contact.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.contact">CONTATTI</span></a>
+        </div>
     </header>
 
     <main id="main-content">
         <section class="about-hero flex-col">
-            <h1 class="text-5xl md:text-6xl glow-text">IL PROGETTO <span class="text-[var(--accent)]">GATE RADIO</span></h1>
-            <p class="text-xl mt-4 max-w-2xl">La nostra storia, la nostra visione, la nostra musica.</p>
+            <h1 class="text-5xl md:text-6xl glow-text" data-i18n-html="about.hero">IL PROGETTO <span class="text-[var(--accent)] grifter-font">GATE RADIO</span></h1>
+            <p class="text-xl mt-4 max-w-2xl" data-i18n="about.herosub">La nostra storia, la nostra visione, la nostra musica.</p>
             <a href="#chi-siamo-section" class="btn-primary font-bold py-3 px-6 rounded-full text-lg inline-flex items-center gap-2 mt-8">
-                <i class="fas fa-arrow-down"></i> Scopri Chi Siamo
+                <i class="fas fa-arrow-down"></i> <span data-i18n="about.herocta">Scopri Chi Siamo</span>
             </a>
         </section>
 
         <section id="chi-siamo-section" class="section-padding">
             <div class="max-w-6xl mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold glow-text">LA NOSTRA <span class="text-[var(--accent)]">IDENTITÀ</span></h2>
-                    <p class="text-lg text-[var(--text-secondary)] mt-2">Un portale sulla techno, scandito dal ritmo delle stagioni.</p>
+                    <h2 class="text-4xl font-bold glow-text" data-i18n-html="about.identity">LA NOSTRA <span class="text-[var(--accent)]">IDENTITÀ</span></h2>
+                    <p class="text-lg text-[var(--text-secondary)] mt-2" data-i18n="about.identdesc">Un portale sulla techno, scandito dal ritmo delle stagioni.</p>
                 </div>
                 <div class="chi-siamo-text">
-                    <p>Gate Radio nasce dalla passione per la musica elettronica e dall'idea di creare un'esperienza che vada oltre il semplice streaming. Siamo un collettivo di DJ, producer e appassionati, uniti dalla voglia di esplorare le sfumature della techno e condividerle con una community attenta.</p>
-                    <p>Il cuore pulsante del nostro progetto è il legame con il ciclo naturale delle stagioni. Crediamo che la musica, come la natura, abbia i suoi cicli e le sue atmosfere: per questo, la nostra programmazione musicale e visiva si evolve, cambiando colori e suoni con il passare dei mesi.</p>
+                    <p data-i18n="about.bio1">Gate Radio was born at the end of 2024 from a group of young electronic music enthusiasts, united by a shared dream: creating a sonic meeting space where emerging talents and established artists could converge and grow together.</p>
+                    <p data-i18n="about.bio2">More than just a streaming platform, Gate Radio is a musical journey celebrating the most innovative and experimental sounds, with the ambition of always pushing the boundaries of sound further. At its core lies a deep connection with the natural cycle of the seasons — we believe music, like nature, has its own rhythms and atmospheres. That's why our programming evolves throughout the year, shifting colors and sounds as the months pass.</p>
                 </div>
 
-                <div class="text-center mt-24 mb-12">
-                    <h3 class="text-3xl font-bold glow-text">IL NOSTRO <span class="text-[var(--accent)]">TEAM</span></h3>
-                </div>
-                <div class="max-w-5xl mx-auto team-grid">
-                    <div class="team-member">
-                        <div class="member-photo">
-                            <img src="assets/team_placeholder_1.jpg" alt="Direzione Artistica">
-                        </div>
-                        <h3 class="text-xl">Direzione Artistica</h3>
-                        <p class="text-sm text-[var(--text-secondary)]">La mente dietro la selezione musicale e il suono distintivo di Gate Radio.</p>
+                <div class="about-media-section mt-24"><div class="about-media-grid">
+                    <div class="about-media-item">
+                        <img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/sfondoradio.png" alt="Gate Radio" loading="lazy">
                     </div>
-                    <div class="team-member">
-                        <div class="member-photo">
-                            <img src="assets/team_placeholder_2.jpg" alt="Community Manager">
-                        </div>
-                        <h3 class="text-xl">Community & Eventi</h3>
-                        <p class="text-sm text-[var(--text-secondary)]">L'anima che organizza i nostri eventi e tiene unita la community online e offline.</p>
+                    <div class="about-media-item">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/video/magliette.mp4" type="video/mp4">
+                        </video>
                     </div>
-                    <div class="team-member">
-                        <div class="member-photo">
-                            <img src="assets/team_placeholder_3.jpg" alt="Talent Scout">
-                        </div>
-                        <h3 class="text-xl">Talent Scout / A&R</h3>
-                        <p class="text-sm text-[var(--text-secondary)]">Costantemente alla ricerca di nuovi suoni e artisti da presentare alla nostra community.</p>
+                    <div class="about-media-item">
+                        <img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/graficatorreradio.png" alt="Gate Radio Torre" loading="lazy">
                     </div>
-                </div>
+                </div></div>
             </div>
         </section>
 
         <section class="cta-section section-padding">
             <div class="max-w-4xl mx-auto px-6">
-                <h2 class="text-4xl font-bold glow-text">ENTRA A FAR PARTE DEL <span class="text-[var(--accent)]">VIAGGIO</span></h2>
-                <p class="text-lg text-[var(--text-secondary)] mt-4 mb-8">Seguici, proponiti come artista o entra in contatto con noi.</p>
+                <h2 class="text-4xl font-bold glow-text" data-i18n-html="about.cta">ENTRA A FAR PARTE DEL <span class="text-[var(--accent)]">VIAGGIO</span></h2>
+                <p class="text-lg text-[var(--text-secondary)] mt-4 mb-8" data-i18n="about.ctadesc">Seguici, proponiti come artista o entra in contatto con noi.</p>
                 <div class="flex flex-wrap justify-center gap-4">
-                    <a href="programmazione.html#artist-booking" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-play-circle"></i> Proponiti come Artista</a>
-                    <a href="contact.html" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-envelope-open-text"></i> Contattaci</a>
+                    <a href="programmazione.html#artist-booking" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-play-circle"></i> <span data-i18n="about.apply">Proponiti come Artista</span></a>
+                    <a href="contact.html" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-envelope-open-text"></i> <span data-i18n="about.contactus">Contattaci</span></a>
                 </div>
             </div>
         </section>
@@ -167,30 +156,30 @@
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left py-16 px-6">
             
             <div>
-                <h4 class="text-lg font-bold">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
+                <h4 class="text-lg font-bold grifter-font">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
                 <p class="text-sm text-[var(--text-secondary)] max-w-sm mx-auto md:mx-0">
-                    Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.
+                    <span data-i18n="footer.desc">Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.</span>
                 </p>
             </div>
             
             <div class="md:text-center">
-                <h4 class="text-lg font-bold">LINK VELOCI</h4>
+                <h4 class="text-lg font-bold"><span data-i18n="footer.links">LINK VELOCI</span></h4>
                 <nav class="space-y-1 text-sm">
                     <a href="/" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
-                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Archivio</a>
-                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Programmazione</a>
-                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Eventi</a>
-                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Artisti</a>
-                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Chi Siamo</a>
-                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Contatti</a>
+                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.archive">Archivio</span></a>
+                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.schedule">Programmazione</span></a>
+                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.events">Eventi</span></a>
+                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Resident</a>
+                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.about">Chi Siamo</span></a>
+                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.contact">Contatti</span></a>
                 </nav>
             </div>
             
-            <div class="md:text-center"> <h4 class="text-lg font-bold">SEGUICI</h4>
+            <div class="md:text-center"> <h4 class="text-lg font-bold"><span data-i18n="footer.follow">SEGUICI</span></h4>
                 <div class="flex justify-center md:justify-center space-x-4 text-2xl">
                     <a href="https://instagram.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Seguici su Instagram (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-instagram" aria-hidden="true"></i></a>
                     <a href="https://soundcloud.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Ascoltaci su SoundCloud (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-soundcloud" aria-hidden="true"></i></a>
-                    <a href="https://youtube.com/@gateradio" target="_blank" rel="noopener noreferrer" aria-label="Guardaci su YouTube (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                    <a href="https://www.youtube.com/@GateRadiorm" target="_blank" rel="noopener noreferrer" aria-label="Guardaci su YouTube (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-youtube" aria-hidden="true"></i></a>
                     <a href="https://twitch.tv/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Guardaci in diretta su Twitch (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-twitch" aria-hidden="true"></i></a>
                     <a href="https://mixcloud.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Ascoltaci su Mixcloud (si apre in una nuova finestra)" class="footer-social-link"><i class="fab fa-mixcloud" aria-hidden="true"></i></a>
                 </div>
@@ -199,10 +188,11 @@
         </div>
     </div>
     <footer class="py-8 px-6 border-t border-black text-center text-[var(--text-secondary)] text-sm">
-        <p>© <span id="footer-year"></span> GATE RADIO | Tutti i diritti riservati</p>
+        <p>© <span id="footer-year"></span> <span class="grifter-font">GATE RADIO</span> | <span data-i18n="footer.rights">Tutti i diritti riservati</span></p>
     </footer>
 
     <script src="js/firebase-data.js" defer></script>
+    <script src="js/i18n.js" defer></script>
     <script src="js/script.js"        defer></script>
 </body>
 </html>

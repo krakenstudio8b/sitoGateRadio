@@ -9,6 +9,13 @@ Grafiche Gate/
 Grafiche originali/
 Eventi Gate/
 
+# Presskit residenti: troppo pesanti (294MB, file .ARW), non servono sul sito
+# (già esclusi dal deploy Cloudflare via .assetsignore)
+PRESSKIT RESIDENT/
+
+# Video sorgente non referenziato dal sito
+reegliette.mp4
+
 # OS files
 .DS_Store
 Thumbs.db

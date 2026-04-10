@@ -227,10 +227,10 @@
                 return cached.data;
             }
             try {
-                showStatus('Caricamento playlist...');
+                showStatus('Caricamento playlist...', 'radio.loadpl');
                 let videos = await fetchPlaylistVideos(cfg.YOUTUBE_PLAYLIST_ID, cfg.YOUTUBE_API_KEY);
                 if (videos.length === 0) throw new Error('Playlist vuota');
-                showStatus('Recupero durate...');
+                showStatus('Recupero durate...', 'radio.fetchdur');
                 videos = await fetchVideoDurations(videos, cfg.YOUTUBE_API_KEY);
                 saveCache(videos);
                 console.log(`[GateRadio] Playlist YouTube: ${videos.length} video caricati.`);
@@ -320,12 +320,19 @@
         const btn = $('radio-play-btn');
         if (!btn) return;
         btn.innerHTML = playing ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-        btn.setAttribute('aria-label', playing ? 'Pausa' : 'Riproduci');
+        const _t = window.GateI18n ? (k) => window.GateI18n.t(k, window.GateI18n.getLang()) : () => null;
+        btn.setAttribute('aria-label', playing ? (_t('radio.pause') || 'Pausa') : (_t('radio.play') || 'Riproduci'));
     }
 
-    function showStatus(msg) {
+    function showStatus(msg, i18nKey) {
         const el = $('radio-status-text');
-        if (el) el.textContent = msg;
+        if (!el) return;
+        if (i18nKey && window.GateI18n) {
+            const translated = window.GateI18n.t(i18nKey, window.GateI18n.getLang());
+            el.textContent = translated || msg;
+        } else {
+            el.textContent = msg;
+        }
     }
 
     // ─── VOLUME ──────────────────────────────────────────────────────────────────
@@ -427,7 +434,7 @@
         if (player && isPlaying) {
             player.loadVideoById({ videoId: state.current.youtubeId, startSeconds: Math.floor(startAt) });
         }
-        showStatus('IN ROTAZIONE');
+        showStatus('IN ROTAZIONE', 'radio.playing');
     }
 
     function loadNext() { loadAt((state.currentIndex + 1) % playlist.length, 0); }
@@ -464,7 +471,7 @@
         if (loading) loading.classList.add('hidden');
         const wrapper = $('radio-player-wrapper');
         if (wrapper) wrapper.classList.remove('opacity-0');
-        showStatus('PRONTO — PREMI PLAY');
+        showStatus('PRONTO — PREMI PLAY', 'radio.ready');
     }
 
     function onPlayerStateChange(event) {
@@ -486,18 +493,18 @@
             }
             startTick();
             updatePlayBtn(true);
-            showStatus('IN ROTAZIONE');
+            showStatus('IN ROTAZIONE', 'radio.playing');
         } else if (event.data === 2) {    // PAUSED
             isPlaying = false;
             stopTick();
             updatePlayBtn(false);
-            showStatus('IN PAUSA');
+            showStatus('IN PAUSA', 'radio.paused');
             if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
         } else if (event.data === 0) {    // ENDED
             loadNext();
             if (player) player.loadVideoById({ videoId: state.current.youtubeId, startSeconds: 0 });
         } else if (event.data === 3) {    // BUFFERING
-            showStatus('BUFFERING...');
+            showStatus('BUFFERING...', 'radio.buffering');
         }
     }
 
@@ -520,7 +527,7 @@
 
         // Se TUTTI i video della playlist danno errore, smetti di girare in loop
         if (consecutiveErrors >= playlist.length) {
-            showStatus('NESSUN VIDEO DISPONIBILE');
+            showStatus('NESSUN VIDEO DISPONIBILE', 'radio.novideo');
             const wrapper = $('radio-video-wrapper');
             if (wrapper) {
                 wrapper.insertAdjacentHTML('beforeend', `
@@ -580,7 +587,7 @@
         }
 
         // Errore generico (codice 2, 5...) — salta subito
-        showStatus('ERRORE — SALTO AL PROSSIMO...');
+        showStatus('ERRORE — SALTO AL PROSSIMO...', 'radio.error');
         skipTimer = setTimeout(skipToNext, 1500);
     }
 
@@ -591,7 +598,7 @@
 
         // YouTube IFrame API non funziona su file:// — richiede un server HTTP
         if (window.location.protocol === 'file:') {
-            showStatus('ERRORE LOCALE');
+            showStatus('ERRORE LOCALE', 'radio.errorlocal');
             const loading = $('radio-loading');
             if (loading) loading.innerHTML = `
                 <div style="max-width:420px;text-align:center;padding:2rem 1rem">
@@ -618,13 +625,13 @@
             return;
         }
 
-        showStatus('SINTONIZZAZIONE...');
+        showStatus('SINTONIZZAZIONE...', 'radio.syncing');
 
         // Carica playlist (API YouTube o fallback)
         playlist = await initPlaylist();
 
         if (playlist.length === 0) {
-            showStatus('NESSUN VIDEO DISPONIBILE');
+            showStatus('NESSUN VIDEO DISPONIBILE', 'radio.novideo');
             const loading = $('radio-loading');
             if (loading) loading.innerHTML = '<p class="text-red-400 text-sm">Nessun video trovato. Controlla la configurazione in config.js.</p>';
             return;

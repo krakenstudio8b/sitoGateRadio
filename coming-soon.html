@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GATE RADIO | Coming Soon</title>
+    <link rel="icon" href="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Roboto Mono', monospace;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+        }
+
+        .logo {
+            width: 500px;
+            height: auto;
+        }
+
+        .coming-soon-text {
+            font-size: 1.5rem;
+            color: #888;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+        }
+
+        .socials {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .socials a {
+            color: #fff;
+            font-size: 1.8rem;
+            width: 65px;
+            height: 65px;
+            border: 1px solid #444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.3s, opacity 0.3s;
+            text-decoration: none;
+        }
+
+        .socials a:hover {
+            border-color: #fff;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            .logo { width: 280px; }
+            .coming-soon-text { font-size: 1.1rem; }
+            .socials a { width: 55px; height: 55px; font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/LOGO1.png" alt="Gate Radio Logo" class="logo">
+        <p class="coming-soon-text">Coming Soon</p>
+        <div class="socials">
+            <a href="https://instagram.com/gateradio" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@GateRadiorm" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+</body>
+</html>

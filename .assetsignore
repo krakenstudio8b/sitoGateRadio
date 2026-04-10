@@ -1,6 +1,9 @@
 Grafiche originali/
 Grafiche Gate/
 Eventi Gate/
+PRESSKIT RESIDENT/
 node_modules/
 .git/
 functions/
+.wrangler/state/
+.wrangler/cache/

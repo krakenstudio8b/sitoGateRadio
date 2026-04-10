@@ -79,31 +79,33 @@
             </div>
             <div class="hidden md:flex space-x-6 items-center">
                 <a href="/" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-home fa-fw"></i>HOME</a>
-                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i>ARCHIVIO</a> 
-                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i>PROGRAMMAZIONE</a> 
-                <a href="events.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i>EVENTI</a> 
-                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>ARTISTI</a> 
-                <a href="about.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i>CHI SIAMO</a> 
-                <a href="contact.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i>CONTATTI</a> 
-            </div> 
+                <a href="radio.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-radio fa-fw"></i>RADIO 24/7</a>
+                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i><span data-i18n="nav.archive">ARCHIVIO</span></a>
+                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i><span data-i18n="nav.schedule">PROGRAMMAZIONE</span></a>
+                <a href="events.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i><span data-i18n="nav.events">EVENTI</span></a>
+                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>RESIDENT</a>
+                <a href="about.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i><span data-i18n="nav.about">CHI SIAMO</span></a>
+                <a href="contact.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i><span data-i18n="nav.contact">CONTATTI</span></a>
+            </div>
             <button id="mobile-menu-button" aria-label="Apri menu" aria-expanded="false" class="md:hidden text-xl text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><i class="fas fa-bars"></i></button> 
         </nav> 
         <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-opacity-95 backdrop-blur-md border-b border-[var(--border-color)] p-6 space-y-4"> 
             <a href="/" class="block text-center hover:text-[var(--accent)] transition-colors">HOME</a>
-            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARCHIVIO</a> 
-            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors">PROGRAMMAZIONE</a> 
-            <a href="events.html" class="block text-center text-[var(--accent)] font-bold">EVENTI</a> 
-            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARTISTI</a> 
-            <a href="about.html" class="block text-center hover:text-[var(--accent)] transition-colors">CHI SIAMO</a> 
-            <a href="contact.html" class="block text-center hover:text-[var(--accent)] transition-colors">CONTATTI</a> 
-        </div> 
+            <a href="radio.html" class="block text-center hover:text-[var(--accent)] transition-colors">RADIO 24/7</a>
+            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.archive">ARCHIVIO</span></a>
+            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.schedule">PROGRAMMAZIONE</span></a>
+            <a href="events.html" class="block text-center text-[var(--accent)] font-bold"><span data-i18n="nav.events">EVENTI</span></a>
+            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">RESIDENT</a>
+            <a href="about.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.about">CHI SIAMO</span></a>
+            <a href="contact.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.contact">CONTATTI</span></a>
+        </div>
     </header>
     <main> 
         <section id="events" class="py-32 px-6"> 
             <div class="max-w-6xl mx-auto"> 
                 <div class="section-heading-box block max-w-3xl mx-auto text-center p-6 mb-16 rounded-xl border glow-border"> 
-                    <h2 class="text-4xl md:text-5xl font-bold mb-4 glow-text">I NOSTRI <span class="text-[var(--accent)]">EVENTI</span></h2> 
-                    <p class="text-lg text-[var(--text-secondary)]">Scopri i nostri eventi fisici passati e futuri.</p> 
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4 glow-text" data-i18n-html="events.title">I NOSTRI <span class="text-[var(--accent)]">EVENTI</span></h2> 
+                    <p class="text-lg text-[var(--text-secondary)] " data-i18n="events.desc">Scopri i nostri eventi fisici passati e futuri.</p> 
                 </div> 
                 <div id="events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div> 
             </div> 
@@ -114,26 +116,26 @@
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left py-16 px-6">
             
             <div>
-                <h4 class="text-lg font-bold">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
+                <h4 class="text-lg font-bold grifter-font">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
                 <p class="text-sm text-[var(--text-secondary)] max-w-sm mx-auto md:mx-0">
-                    Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.
+                    <span data-i18n="footer.desc">Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.</span>
                 </p>
             </div>
             
             <div class="md:text-center">
-                <h4 class="text-lg font-bold">LINK VELOCI</h4>
+                <h4 class="text-lg font-bold"><span data-i18n="footer.links">LINK VELOCI</span></h4>
                 <nav class="space-y-1 text-sm">
                     <a href="/" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
-                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Archivio</a>
-                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Programmazione</a>
-                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Eventi</a>
-                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Artisti</a>
-                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Chi Siamo</a>
-                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Contatti</a>
+                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.archive">Archivio</span></a>
+                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.schedule">Programmazione</span></a>
+                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.events">Eventi</span></a>
+                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Resident</a>
+                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.about">Chi Siamo</span></a>
+                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.contact">Contatti</span></a>
                 </nav>
             </div>
             
-            <div class="md:text-center"> <h4 class="text-lg font-bold">SEGUICI</h4>
+            <div class="md:text-center"> <h4 class="text-lg font-bold"><span data-i18n="footer.follow">SEGUICI</span></h4>
                 <div class="flex justify-center md:justify-center space-x-4 text-2xl">
                     <a href="#" aria-label="Instagram" class="footer-social-link"><i class="fab fa-instagram"></i></a>
                     <a href="#" aria-label="SoundCloud" class="footer-social-link"><i class="fab fa-soundcloud"></i></a>
@@ -146,7 +148,7 @@
         </div>
     </div>
     <footer class="py-8 px-6 border-t border-black text-center text-[var(--text-secondary)] text-sm">
-        <p>© <span id="footer-year"></span> GATE RADIO | Tutti i diritti riservati</p>
+        <p>© <span id="footer-year"></span> <span class="grifter-font">GATE RADIO</span> | <span data-i18n="footer.rights">Tutti i diritti riservati</span></p>
     </footer>
     
     <div id="event-gallery-modal" class="event-modal-container hidden">
@@ -176,6 +178,7 @@
     <script src="js/config.js" defer></script>
     <script src="js/events-data.js" defer></script>
     <script src="js/firebase-data.js" defer></script>
+    <script src="js/i18n.js" defer></script>
     <script src="js/script.js"        defer></script>
 </body>
 </html>

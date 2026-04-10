@@ -204,11 +204,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const nextStream = findNextEvent(typeof streamsData !== 'undefined' ? streamsData : []);
         
+        const _t = window.GateI18n ? (k, fb) => window.GateI18n.t(k, window.GateI18n.getLang()) || fb : (k, fb) => fb;
+        const _lang = window.GateI18n ? window.GateI18n.getLang() : 'it';
+        const listenNow = _t('home.listenNow', 'ASCOLTA ORA');
+        const nowPlaying = _t('home.nowPlaying', 'GATE RADIO 24/7 — ORA IN ROTAZIONE');
+        const stayTunedMsg = _t('home.stayTuned', 'Nessun evento in programma.');
+
         if (isLive) {
             liveContainer.innerHTML = `<div class="mb-12"><div class="on-air-indicator">ON AIR</div></div><div style="aspect-ratio: 16/9;" class="w-full rounded-lg overflow-hidden glow-border"><iframe src="https://player.twitch.tv/?channel=${TWITCH_CONFIG.CHANNEL_NAME}&parent=${window.location.hostname}&autoplay=true&muted=true" height="100%" width="100%" allowfullscreen class="w-full h-full"></iframe></div>`;
         } else if (nextStream) {
             const eventDate    = new Date(nextStream.date);
-            const formattedDate = eventDate.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
+            const dateLocale   = _lang === 'en' ? 'en-GB' : 'it-IT';
+            const formattedDate = eventDate.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
             const eventTime    = (nextStream.timeStart && nextStream.timeEnd) ? `${nextStream.timeStart} -> ${nextStream.timeEnd}` : "18:00 -> 19:00";
 
             // Widget Radio 24/7 — mostra cosa sta girando ora
@@ -220,12 +227,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div class="radio-widget-info">
                             <div class="radio-widget-dot"></div>
                             <div class="radio-widget-texts">
-                                <p class="radio-widget-label grifter-font">GATE RADIO 24/7 — ORA IN ROTAZIONE</p>
+                                <p class="radio-widget-label grifter-font">${nowPlaying}</p>
                                 <p class="radio-widget-artist">${rs.current.artist}</p>
                             </div>
                         </div>
                         <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2 flex-shrink-0">
-                            <i class="fas fa-radio"></i> ASCOLTA ORA
+                            <i class="fas fa-radio"></i> ${listenNow}
                         </a>
                     </div>`;
             } else {
@@ -236,7 +243,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <p class="radio-widget-label text-xl font-bold grifter-font">GATE RADIO 24/7</p>
                         </div>
                         <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2">
-                            <i class="fas fa-radio"></i> ASCOLTA ORA
+                            <i class="fas fa-radio"></i> ${listenNow}
                         </a>
                     </div>`;
             }
@@ -257,14 +264,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             liveContainer.innerHTML = `
                 <div class="coming-soon-container text-center">
                     <h2 class="coming-soon-title grifter-font">STAY TUNED</h2>
-                    <p class="next-event-date mt-4">Nessun evento in programma.</p>
+                    <p class="next-event-date mt-4">${stayTunedMsg}</p>
                     <div class="radio-widget-banner mt-8 inline-flex flex-col items-center gap-3 mx-auto px-6 py-3">
                         <div class="radio-widget-info justify-center">
                             <div class="radio-widget-dot"></div>
                             <p class="radio-widget-label text-xl font-bold grifter-font">GATE RADIO 24/7</p>
                         </div>
                         <a href="radio.html" class="btn-primary font-bold py-2 px-6 rounded-full text-sm inline-flex items-center gap-2">
-                            <i class="fas fa-radio"></i> ASCOLTA ORA
+                            <i class="fas fa-radio"></i> ${listenNow}
                         </a>
                     </div>
                 </div>`;
@@ -407,36 +414,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     function gestioneArtisti() {
         const artistsGrid = $('#artists-grid');
-        if (!artistsGrid || typeof streamsData === 'undefined') return;
+        if (!artistsGrid) return;
 
-        const allArtistInstances = streamsData.flatMap(stream => stream.artist.split(/\s*[,|]\s*/).map(name => name.trim()));
-        const uniqueArtistNames = [...new Set(allArtistInstances)].filter(name => name).sort((a, b) => a.localeCompare(b));
+        const residents = [
+            { name: 'ADAD', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
+            { name: 'ALIUS BENZ', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
+            { name: 'COUNTERCULTURE', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/counterculture.jpg', bio: 'Manuel López (Counterculture) is a Colombian DJ and live act based in Rome, focused on underground techno, modular live performance and hybrid sets combining vinyl, hardware and digital sources. A member of Gate Radio and resident of the Bugs collective, his sound is raw, hypnotic and functional for the dancefloor. He has performed at underground clubs and spaces in Rome such as Brancaleone and Hacienda, as well as independent venues, record stores and alternative organizations.', instagram: 'https://www.instagram.com/counterculturx/', soundcloud: 'https://soundcloud.com/counterculture666', mixcloud: '' },
+            { name: 'MRQS', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/mrqs.jpg', bio: 'MRQS brings together two worlds: that of a sound engineer and sound designer, and that of a DJ. This dual expertise is clearly reflected in his sets, which are meticulously crafted, powerful in impact, and surprising in their selections. He moves seamlessly from tribal hardgroove to techno atmospheres, all the way to UK garage grooves, maintaining constant attention to sound quality and the room\'s response. His experience has been shaped on stages such as Acrobax and through numerous events for various collectives. Beyond the decks, he is the founder and driving force behind Gate Radio.', instagram: 'https://www.instagram.com/romarcomani/', soundcloud: 'https://soundcloud.com/marco-romani-308872897', mixcloud: '' },
+            { name: 'MERLO', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
+            { name: 'PUG', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/pug.jpg', bio: 'Pug is a sound designer and producer of club and experimental music. His productions stand out for their use of synthesized sounds, creative sample processing, and polyrhythms. In addition to his DJ career, he performs live sets both solo and B2B, with an approach focused on techno and bass music. His track Cast Iron Plate is included in the compilation Nodi 001.', instagram: 'https://www.instagram.com/prod.pug/', soundcloud: 'https://soundcloud.com/user-66581760', mixcloud: '' },
+            { name: 'ROBBSS', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
+            { name: 'SOFFICE', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/soffice.jpg', bio: 'A key resident of Freenetica Crew, Soffice is a techno DJ shaped by the Roman underground scene. Her sound moves through percussive grooves and pulsing basslines, drawing inspiration from the energy of \'90s and 2000s dancefloors, reworked through a contemporary and dynamic vision. Evolving toward hypnotic, percussion-driven sounds, she delivers solid, dancefloor-focused sets. She has played at key venues such as Cieloterra, Forte Antenne, Warehouse 303, Gate Milano, and Serendipity with MRC.', instagram: 'https://www.instagram.com/s0ffice/', soundcloud: 'https://soundcloud.com/user-872402408', mixcloud: '' },
+        ];
 
-        const artistsData = uniqueArtistNames.map(name => {
-            const artistStreams = streamsData.filter(stream => new RegExp(`\\b${name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'i').test(stream.artist))
-                                           .sort((a, b) => new Date(b.date) - new Date(a.date));
-            return {
-                name: name,
-                streams: artistStreams,
-                mainImage: artistStreams.length > 0 ? artistStreams[0].imageUrl : 'assets/team_placeholder_1.jpg' 
-            };
-        });
+        const gridHTML = residents.map(artist => {
+            const socials = [
+                artist.instagram ? `<a href="${artist.instagram}" target="_blank" rel="noopener" class="resident-social-link" aria-label="Instagram di ${artist.name}"><i class="fab fa-instagram"></i></a>` : '',
+                artist.soundcloud ? `<a href="${artist.soundcloud}" target="_blank" rel="noopener" class="resident-social-link" aria-label="SoundCloud di ${artist.name}"><i class="fab fa-soundcloud"></i></a>` : '',
+                artist.mixcloud ? `<a href="${artist.mixcloud}" target="_blank" rel="noopener" class="resident-social-link" aria-label="Mixcloud di ${artist.name}"><i class="fab fa-mixcloud"></i></a>` : '',
+            ].filter(Boolean).join('');
 
-        const gridHTML = artistsData.map(artist => {
             return `
                 <div class="artist-card">
+                    <div class="artist-card-image-wrapper">
+                        <img src="${artist.image || 'assets/resident_placeholder.svg'}" alt="${artist.name}" class="artist-card-image" loading="lazy">
+                    </div>
                     <div class="artist-card-content">
                         <h3 class="artist-card-title">${artist.name}</h3>
-                        <p class="artist-card-stream-count">${artist.streams.length} ${artist.streams.length === 1 ? 'diretta' : 'dirette'}</p>
-                        <div class="artist-card-streams-list">
-                            ${artist.streams.slice(0, 3).map(stream => `
-                                <a href="#" class="artist-stream-link" data-stream-id="${stream.id}">
-                                    <i class="fas fa-play-circle fa-fw"></i>
-                                    <span>${new Date(stream.date).toLocaleDateString('it-IT', { year: '2-digit', month: 'short', day: 'numeric' })}</span>
-                                </a>
-                            `).join('')}
-                            ${artist.streams.length > 3 ? `<p class="text-xs text-[var(--text-secondary)] mt-2">...e ${artist.streams.length - 3} altre</p>` : ''}
-                        </div>
+                        <p class="artist-card-bio">${artist.bio || ''}</p>
+                        ${socials ? `<div class="resident-socials">${socials}</div>` : ''}
                     </div>
                 </div>
             `;
@@ -458,6 +464,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const lightbox = $('#lightbox');
         const lightboxImg = $('#lightbox-image');
 
+        const _evtLang = () => window.GateI18n ? window.GateI18n.getLang() : 'it';
+        const _evtLocale = () => _evtLang() === 'en' ? 'en-GB' : 'it-IT';
+
         const createEventCardHTML = (event) => {
             const eventDate = new Date(event.date);
             return `
@@ -465,19 +474,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="event-card-image-wrapper"><img src="${event.mainImage || 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png'}" alt="${event.title}" class="event-card-image" loading="lazy"></div>
                     <div class="event-card-content">
                         <h3 class="event-card-title">${event.title}</h3>
-                        <p class="event-card-date">${eventDate.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <p class="event-card-date">${eventDate.toLocaleDateString(_evtLocale(), { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
                 </div>`;
         };
-        
+
         const openModal = (eventId) => {
             const event = eventsData.find(e => e.id == eventId);
             if (!event) return;
-            $('#modal-event-title').textContent = event.title;
-            $('#modal-event-date').textContent = new Date(event.date).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            const lang = _evtLang();
+            const locale = _evtLocale();
+            $('#modal-event-title').textContent = (lang === 'en' && event.title_en) ? event.title_en : event.title;
+            $('#modal-event-date').textContent = new Date(event.date).toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
             $('#modal-event-location').textContent = event.location;
-            $('#modal-event-description').textContent = event.description;
-            $('#modal-event-details').textContent = event.details;
+            $('#modal-event-description').textContent = (lang === 'en' && event.description_en) ? event.description_en : event.description;
+            $('#modal-event-details').textContent = (lang === 'en' && event.details_en) ? event.details_en : event.details;
             $('#modal-event-tags').innerHTML = event.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
             
             const fallbackImg = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png';

@@ -82,31 +82,33 @@
             </div>
             <div class="hidden md:flex space-x-6 items-center">
                 <a href="/" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-home fa-fw"></i>HOME</a>
-                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i>ARCHIVIO</a> 
-                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i>PROGRAMMAZIONE</a> 
-                <a href="events.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i>EVENTI</a> 
-                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>ARTISTI</a> 
-                <a href="about.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i>CHI SIAMO</a> 
-                <a href="contact.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i>CONTATTI</a> 
-            </div> 
+                <a href="radio.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-radio fa-fw"></i>RADIO 24/7</a>
+                <a href="archive.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-box-archive fa-fw"></i><span data-i18n="nav.archive">ARCHIVIO</span></a>
+                <a href="programmazione.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-calendar-alt fa-fw"></i><span data-i18n="nav.schedule">PROGRAMMAZIONE</span></a>
+                <a href="events.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-ticket-alt fa-fw"></i><span data-i18n="nav.events">EVENTI</span></a>
+                <a href="artists.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-users fa-fw"></i>RESIDENT</a>
+                <a href="about.html" class="hover:text-[var(--accent)] transition-colors flex items-center gap-2"><i class="fas fa-info-circle fa-fw"></i><span data-i18n="nav.about">CHI SIAMO</span></a>
+                <a href="contact.html" class="text-[var(--accent)] font-bold flex items-center gap-2"><i class="fas fa-envelope fa-fw"></i><span data-i18n="nav.contact">CONTATTI</span></a>
+            </div>
             <button id="mobile-menu-button" aria-label="Apri menu" aria-expanded="false" class="md:hidden text-xl text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><i class="fas fa-bars"></i></button> 
         </nav> 
         <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-opacity-95 backdrop-blur-md border-b border-[var(--border-color)] p-6 space-y-4"> 
             <a href="/" class="block text-center hover:text-[var(--accent)] transition-colors">HOME</a>
-            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARCHIVIO</a> 
-            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors">PROGRAMMAZIONE</a> 
-            <a href="events.html" class="block text-center hover:text-[var(--accent)] transition-colors">EVENTI</a> 
-            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">ARTISTI</a> 
-            <a href="about.html" class="block text-center hover:text-[var(--accent)] transition-colors">CHI SIAMO</a> 
-            <a href="contact.html" class="block text-center text-[var(--accent)] font-bold">CONTATTI</a> 
-        </div> 
+            <a href="radio.html" class="block text-center hover:text-[var(--accent)] transition-colors">RADIO 24/7</a>
+            <a href="archive.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.archive">ARCHIVIO</span></a>
+            <a href="programmazione.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.schedule">PROGRAMMAZIONE</span></a>
+            <a href="events.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.events">EVENTI</span></a>
+            <a href="artists.html" class="block text-center hover:text-[var(--accent)] transition-colors">RESIDENT</a>
+            <a href="about.html" class="block text-center hover:text-[var(--accent)] transition-colors"><span data-i18n="nav.about">CHI SIAMO</span></a>
+            <a href="contact.html" class="block text-center text-[var(--accent)] font-bold"><span data-i18n="nav.contact">CONTATTI</span></a>
+        </div>
     </header>
 
     <main>
         <section class="contact-hero">
-            <h1 class="text-5xl md:text-6xl glow-text"><i class="fas fa-envelope-open-text mr-4"></i>ENTRA IN <span class="text-[var(--accent)]">CONTATTO</span></h1>
-            <p class="text-xl mt-4 max-w-2xl">Siamo qui per ascoltarti. Proposte, domande o saluti.</p>
-            <a href="#contact-form" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2 mt-8"><i class="fas fa-arrow-down"></i> Vai al Modulo</a>
+            <h1 class="text-5xl md:text-6xl glow-text" data-i18n-html="contact.hero"><i class="fas fa-envelope-open-text mr-4"></i>ENTRA IN <span class="text-[var(--accent)]">CONTATTO</span></h1>
+            <p class="text-xl mt-4 max-w-2xl" data-i18n="contact.herosub">Siamo qui per ascoltarti. Proposte, domande o saluti.</p>
+            <a href="#contact-form" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2 mt-8"><i class="fas fa-arrow-down"></i> <span data-i18n="contact.herocta">Vai al Modulo</span></a>
         </section>
 
          <section id="contact-form" class="py-24 px-6">
@@ -114,27 +116,27 @@
                 <div class="grid md:grid-cols-2 gap-10 lg:gap-16 p-8 md:p-12 rounded-xl border glow-border">
                     <div class="flex flex-col justify-between md:pl-6 lg:pl-8">
                         <div>
-                            <h3 class="text-3xl font-bold mb-8 text-[var(--accent)]">INFO DIRETTE</h3>
+                            <h3 class="text-3xl font-bold mb-8 text-[var(--accent)] " data-i18n="contact.info">INFO DIRETTE</h3>
                             <div class="contact-info-list space-y-8">
                                 <div class="info-item">
                                     <i class="info-icon fas fa-at"></i>
                                     <div class="info-text">
-                                        <h4>Email Generali</h4>
+                                        <h4 data-i18n="contact.genemail">Email Generali</h4>
                                         <a href="mailto:info@gateradio.example.com" class="text-lg">info@gateradio.example.com</a>
                                     </div>
                                 </div>
                                 <div class="info-item">
                                     <i class="info-icon fas fa-music"></i>
                                     <div class="info-text">
-                                        <h4>Proposte Artistiche</h4>
-                                        <a href="programmazione.html#artist-booking" class="text-lg">Vai al modulo di candidatura</a>
+                                        <h4 data-i18n="contact.artprop">Proposte Artistiche</h4>
+                                        <a href="programmazione.html#artist-booking" class="text-lg " data-i18n="contact.artlink">Vai al modulo di candidatura</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-12">
-                             <h4 class="text-lg font-bold uppercase text-[var(--text-secondary)] mb-4">SEGUICI SUI SOCIAL</h4>
+                             <h4 class="text-lg font-bold uppercase text-[var(--text-secondary)] mb-4 " data-i18n="contact.social">SEGUICI SUI SOCIAL</h4>
                              <div class="contact-info-list space-y-4">
                                 <a href="#" class="flex items-center gap-3 group text-white">
                                     <i class="fab fa-instagram text-2xl w-6 text-center"></i>
@@ -153,31 +155,31 @@
                     </div>
 
                     <div>
-                        <h3 class="text-3xl font-bold mb-8 text-[var(--accent)]">INVIA UN MESSAGGIO</h3>
+                        <h3 class="text-3xl font-bold mb-8 text-[var(--accent)] " data-i18n="contact.sendmsg">INVIA UN MESSAGGIO</h3>
                         <form action="#" method="POST" class="space-y-5">
                             <div>
                                 <label for="contact-name" class="sr-only">Nome</label>
-                                <input id="contact-name" name="name" type="text" placeholder="Il tuo nome" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black">
+                                <input id="contact-name" name="name" type="text" placeholder="Il tuo nome" data-i18n="contact.name" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black">
                             </div>
                             <div>
                                 <label for="contact-email" class="sr-only">Email</label>
-                                <input id="contact-email" name="email" type="email" placeholder="La tua email" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black">
+                                <input id="contact-email" name="email" type="email" placeholder="La tua email" data-i18n="contact.email" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black">
                             </div>
                             <div>
                                 <label for="contact-reason" class="sr-only">Motivo del contatto</label>
                                 <select id="contact-reason" name="reason" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black">
-                                    <option value="" disabled selected>Seleziona un motivo...</option>
-                                    <option value="info">Info Generali</option>
-                                    <option value="collaborazione">Proposta di Collaborazione</option>
-                                    <option value="supporto">Supporto Tecnico</option>
-                                    <option value="altro">Altro</option>
+                                    <option value="" disabled selected data-i18n="contact.reason">Seleziona un motivo...</option>
+                                    <option value="info " data-i18n="contact.opt1">Info Generali</option>
+                                    <option value="collaborazione " data-i18n="contact.opt2">Proposta di Collaborazione</option>
+                                    <option value="supporto " data-i18n="contact.opt3">Supporto Tecnico</option>
+                                    <option value="altro " data-i18n="contact.opt4">Altro</option>
                                 </select>
                             </div>
                             <div>
                                 <label for="contact-message" class="sr-only">Messaggio</label>
-                                <textarea id="contact-message" name="message" placeholder="Il tuo messaggio..." rows="5" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></textarea>
+                                <textarea id="contact-message" name="message" placeholder="Il tuo messaggio..." data-i18n="contact.msgph" rows="5" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></textarea>
                             </div>
-                            <button type="submit" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-paper-plane"></i> INVIA MESSAGGIO</button>
+                            <button type="submit" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-paper-plane"></i> <span data-i18n="contact.submit">INVIA MESSAGGIO</span></button>
                         </form>
                     </div>
                 </div>
@@ -189,26 +191,26 @@
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left py-16 px-6">
             
             <div>
-                <h4 class="text-lg font-bold">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
+                <h4 class="text-lg font-bold grifter-font">GATE <span class="text-[var(--accent)]">RADIO</span></h4>
                 <p class="text-sm text-[var(--text-secondary)] max-w-sm mx-auto md:mx-0">
-                    Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.
+                    <span data-i18n="footer.desc">Un portale sulla techno, scandito dal ritmo delle stagioni. Esploriamo le sfumature della musica elettronica e le condividiamo con la nostra community.</span>
                 </p>
             </div>
             
             <div class="md:text-center">
-                <h4 class="text-lg font-bold">LINK VELOCI</h4>
+                <h4 class="text-lg font-bold"><span data-i18n="footer.links">LINK VELOCI</span></h4>
                 <nav class="space-y-1 text-sm">
                     <a href="/" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Home</a>
-                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Archivio</a>
-                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Programmazione</a>
-                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Eventi</a>
-                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Artisti</a>
-                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Chi Siamo</a>
-                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Contatti</a>
+                    <a href="archive.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.archive">Archivio</span></a>
+                    <a href="programmazione.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.schedule">Programmazione</span></a>
+                    <a href="events.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.events">Eventi</span></a>
+                    <a href="artists.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">Resident</a>
+                    <a href="about.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.about">Chi Siamo</span></a>
+                    <a href="contact.html" class="block text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"><span data-i18n="footer.contact">Contatti</span></a>
                 </nav>
             </div>
             
-            <div class="md:text-center"> <h4 class="text-lg font-bold">SEGUICI</h4>
+            <div class="md:text-center"> <h4 class="text-lg font-bold"><span data-i18n="footer.follow">SEGUICI</span></h4>
                 <div class="flex justify-center md:justify-center space-x-4 text-2xl">
                     <a href="#" aria-label="Instagram" class="footer-social-link"><i class="fab fa-instagram"></i></a>
                     <a href="#" aria-label="SoundCloud" class="footer-social-link"><i class="fab fa-soundcloud"></i></a>
@@ -221,10 +223,11 @@
         </div>
     </div>
     <footer class="py-8 px-6 border-t border-black text-center text-[var(--text-secondary)] text-sm">
-        <p>© <span id="footer-year"></span> GATE RADIO | Tutti i diritti riservati</p>
+        <p>© <span id="footer-year"></span> <span class="grifter-font">GATE RADIO</span> | <span data-i18n="footer.rights">Tutti i diritti riservati</span></p>
     </footer>
 
     <script src="js/firebase-data.js" defer></script>
+    <script src="js/i18n.js" defer></script>
     <script src="js/script.js"        defer></script>
 </body>
 </html>
