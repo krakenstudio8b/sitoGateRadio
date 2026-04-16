@@ -38,106 +38,160 @@ document.addEventListener('DOMContentLoaded', async () => {
         return `${year}-${month}-${day}`;
     }
     
-    // --- GESTIONE GLOBALE MODALE ARCHIVIO ---
-    const archiveModal = $('#archive-modal');
-    let openArchiveModal; 
+    // --- MODALE GALLERIA UNIFICATO (eventi, streaming, calendario) ---
+    const galleryModal = $('#event-gallery-modal');
+    const galleryModalContent = galleryModal?.querySelector('.event-modal-content');
+    const galleryContainerEl = $('#gallery-container');
+    const galleryLightbox = $('#lightbox');
+    const galleryLightboxImg = $('#lightbox-image');
+    const FALLBACK_IMG = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png';
+    const SEASON_CLASSES = ['winter', 'spring', 'summer', 'autumn'];
 
-    if (archiveModal) {
-        const archiveModalBody = $('#archive-modal-body');
-        const archiveModalCloseBtn = $('#archive-modal-close-btn');
+    function openGalleryModal({ title = '', dateStr = '', location = '', description = '', details = '', tags = [], images = [], actionsHTML = '', seasonClass = '' } = {}) {
+        if (!galleryModal || !galleryModalContent || !galleryContainerEl) return;
 
-        openArchiveModal = (streamId) => {
-            // Cerca sia in streams che in eventi normalizzati per archivio
-            const stream = (window._allArchiveItems || streamsData || []).find(s => s.id == streamId);
-            if (!stream) return;
+        galleryModal.classList.remove(...SEASON_CLASSES);
+        if (seasonClass) galleryModal.classList.add(seasonClass);
 
-            archiveModal.classList.remove('winter', 'spring', 'summer', 'autumn');
-            if (stream.season) {
-                archiveModal.classList.add(stream.season);
-            }
+        $('#modal-event-title').textContent = title;
+        $('#modal-event-date').textContent = dateStr;
+        $('#modal-event-location').textContent = location;
+        const dateLocEl = galleryModal.querySelector('.modal-event-date-location');
+        if (dateLocEl) dateLocEl.style.display = (dateStr || location) ? '' : 'none';
 
-            const tagsHTML = stream.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
-            
-            const actionButton = stream.soundcloudUrl && stream.soundcloudUrl !== '#' 
-                ? `<a href="${stream.soundcloudUrl}" target="_blank" class="btn-primary inline-block px-8 py-2 rounded-lg mt-1 font-bold"><i class="fas fa-play-circle mr-2"></i>GUARDA LA STREAMING</a>`
-                : '';
+        const descEl = $('#modal-event-description');
+        if (descEl) {
+            descEl.textContent = description;
+            descEl.style.display = description ? '' : 'none';
+        }
+        const detailsEl = $('#modal-event-details');
+        if (detailsEl) {
+            detailsEl.textContent = details;
+            detailsEl.style.display = details ? '' : 'none';
+        }
+        $('#modal-event-tags').innerHTML = tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
+        const actionsEl = $('#modal-event-actions');
+        if (actionsEl) actionsEl.innerHTML = actionsHTML || '';
 
-            // Gallery intelligente: layout diverso in base al numero di immagini
-            const images = stream.galleryImages && stream.galleryImages.length > 0
-                ? stream.galleryImages
-                : [stream.imageUrl];
-            const count = images.length;
+        const imgs = images && images.length > 0 ? images : [FALLBACK_IMG];
+        galleryModalContent.classList.remove('single-image-mode');
+        if (imgs.length === 1) {
+            galleryModalContent.classList.add('single-image-mode');
+            galleryContainerEl.innerHTML = `<div class="single-image-wrapper"><img src="${imgs[0]}" alt="${title}" loading="lazy"></div>`;
+        } else if (imgs.length === 2) {
+            galleryContainerEl.innerHTML = `<div class="gallery-grid gallery-grid-2">${imgs.map(src => `<div class="gallery-item"><img src="${src}" alt="${title}" loading="lazy"></div>`).join('')}</div>`;
+        } else if (imgs.length === 3) {
+            galleryContainerEl.innerHTML = `<div class="gallery-grid gallery-grid-3"><div class="gallery-item gallery-item-big"><img src="${imgs[0]}" alt="${title}" loading="lazy"></div><div class="gallery-item"><img src="${imgs[1]}" alt="${title}" loading="lazy"></div><div class="gallery-item"><img src="${imgs[2]}" alt="${title}" loading="lazy"></div></div>`;
+        } else {
+            const half = Math.ceil(imgs.length / 2);
+            const row1 = imgs.slice(0, half);
+            const row2 = imgs.slice(half);
+            galleryContainerEl.innerHTML = `
+                <div class="gallery-row">${row1.map(src => `<div class="gallery-item"><img src="${src}" alt="${title}" loading="lazy"></div>`).join('')}</div>
+                <div class="gallery-row posts-row">${row2.map(src => `<div class="gallery-item"><img src="${src}" alt="${title}" loading="lazy"></div>`).join('')}</div>`;
+        }
 
-            const modalContent = document.getElementById('archive-modal-content');
-            // Allarga il modale se ci sono più immagini
-            modalContent.className = modalContent.className.replace(/max-w-\S+/g, '');
-            modalContent.classList.add(count > 1 ? 'max-w-3xl' : 'max-w-sm');
+        if (galleryLightbox && galleryLightboxImg) {
+            $$('.gallery-item img, .single-image-wrapper img').forEach(img => {
+                img.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    galleryLightboxImg.src = img.src;
+                    galleryLightbox.classList.remove('hidden');
+                });
+            });
+        }
 
-            let imagesHTML = '';
-            if (count === 1) {
-                imagesHTML = `<div class="archive-modal-image-wrapper flex-shrink-0">
-                    <img src="${images[0]}" alt="${stream.title}" loading="lazy" class="w-full h-auto rounded-t-xl object-contain max-h-[60vh]">
-                </div>`;
-            } else if (count === 2) {
-                imagesHTML = `<div class="grid grid-cols-2 gap-1 rounded-t-xl overflow-hidden">
-                    ${images.map(img => `<img src="${img}" alt="${stream.title}" loading="lazy" class="w-full h-full object-cover aspect-square">`).join('')}
-                </div>`;
-            } else if (count === 3) {
-                imagesHTML = `<div class="grid grid-cols-2 gap-1 rounded-t-xl overflow-hidden" style="grid-template-rows: 1fr 1fr;">
-                    <img src="${images[0]}" alt="${stream.title}" loading="lazy" class="w-full h-full object-cover row-span-2">
-                    <img src="${images[1]}" alt="${stream.title}" loading="lazy" class="w-full h-full object-cover">
-                    <img src="${images[2]}" alt="${stream.title}" loading="lazy" class="w-full h-full object-cover">
-                </div>`;
-            } else {
-                // 4+ immagini: griglia 2 colonne
-                imagesHTML = `<div class="grid grid-cols-2 gap-1 rounded-t-xl overflow-hidden">
-                    ${images.map(img => `<img src="${img}" alt="${stream.title}" loading="lazy" class="w-full aspect-square object-cover">`).join('')}
-                </div>`;
-            }
-
-            archiveModalBody.innerHTML = `
-                ${imagesHTML}
-                <div class="p-6 text-center overflow-y-auto">
-                    <h3 class="text-2xl font-bold text-[var(--accent)] mb-1">${stream.artist}</h3>
-                    <p class="text-md text-[var(--text-secondary)] mb-4">${stream.title}</p>
-                    <div class="flex flex-wrap gap-2 justify-center mb-6">${tagsHTML}</div>
-                    ${actionButton}
-                </div>
-            `;
-            archiveModal.classList.remove('hidden');
-            archiveModal.classList.add('flex');
-        };
-
-        const closeArchiveModal = () => {
-            if(archiveModal) {
-                archiveModal.classList.add('hidden');
-                archiveModal.classList.remove('flex');
-                setTimeout(() => {
-                    archiveModal.classList.remove('winter', 'spring', 'summer', 'autumn');
-                }, 300);
-            }
-        };
-
-        archiveModalCloseBtn.addEventListener('click', closeArchiveModal);
-        archiveModal.addEventListener('click', (e) => {
-            if (e.target === archiveModal) closeArchiveModal();
-        });
+        galleryModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 
-    // LISTENER GLOBALE PER I CLICK CHE APRONO IL MODALE ARCHIVIO
-    document.body.addEventListener('click', function(event) {
-        // Se il click avviene sul bottone/link play, non aprire il modale
-        if (event.target.closest('.card-play-button-link')) {
-            return;
+    function closeGalleryModal() {
+        if (!galleryModal) return;
+        galleryModal.classList.add('hidden');
+        galleryModal.classList.remove(...SEASON_CLASSES);
+        document.body.style.overflow = '';
+    }
+
+    if (galleryModal) {
+        $('#event-modal-close')?.addEventListener('click', closeGalleryModal);
+        galleryModal.querySelector('.event-modal-backdrop')?.addEventListener('click', closeGalleryModal);
+        if (galleryLightbox) {
+            galleryLightbox.addEventListener('click', () => galleryLightbox.classList.add('hidden'));
         }
+    }
+
+    // --- APERTURA MODALE STREAMING (archivio + artisti + calendario) ---
+    const _glLang = () => window.GateI18n ? window.GateI18n.getLang() : 'it';
+    const _glLocale = () => _glLang() === 'en' ? 'en-GB' : 'it-IT';
+
+    const openArchiveModal = (streamId) => {
+        const stream = (window._allArchiveItems || (typeof streamsData !== 'undefined' ? streamsData : []) || []).find(s => s.id == streamId);
+        if (!stream) return;
+
+        const dateStr = stream.date
+            ? new Date(stream.date).toLocaleDateString(_glLocale(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+            : '';
+        const timeStr = stream.timeStart
+            ? `${stream.timeStart}${stream.timeEnd ? ' → ' + stream.timeEnd : ''}`
+            : '';
+        const isFuture = stream.date && new Date(stream.date) >= new Date(new Date().setHours(0,0,0,0));
+        const location = timeStr || (isFuture ? 'PROSSIMA DIRETTA' : 'DIRETTA ARCHIVIATA');
+
+        const images = stream.galleryImages && stream.galleryImages.length > 0
+            ? stream.galleryImages
+            : (stream.imageUrl ? [stream.imageUrl] : []);
+
+        let actionsHTML = '';
+        if (stream.soundcloudUrl && stream.soundcloudUrl !== '#') {
+            actionsHTML = `<a href="${stream.soundcloudUrl}" target="_blank" rel="noopener" class="archive-modal-soundcloud-btn"><i class="fas fa-play-circle mr-2"></i>GUARDA LA STREAMING</a>`;
+        } else if (isFuture) {
+            actionsHTML = `<p class="text-sm text-[var(--text-secondary)]">Resta sintonizzato.</p>`;
+        }
+
+        openGalleryModal({
+            title: stream.artist || stream.title || '',
+            dateStr,
+            location,
+            description: stream.title || '',
+            tags: stream.tags || [],
+            images,
+            actionsHTML,
+            seasonClass: stream.season || '',
+        });
+    };
+
+    // --- APERTURA MODALE EVENTO (eventi sul sito + calendario) ---
+    const openEventModal = (event) => {
+        if (!event) return;
+        const lang = _glLang();
+        const locale = _glLocale();
+        const dateStr = event.date
+            ? new Date(event.date).toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+            : '';
+        const images = event.galleryImages && event.galleryImages.length > 0
+            ? event.galleryImages
+            : (event.mainImage ? [event.mainImage] : []);
+        openGalleryModal({
+            title: (lang === 'en' && event.title_en) ? event.title_en : event.title,
+            dateStr,
+            location: event.location || '',
+            description: (lang === 'en' && event.description_en) ? event.description_en : (event.description || ''),
+            details: (lang === 'en' && event.details_en) ? event.details_en : (event.details || ''),
+            tags: event.tags || [],
+            images,
+        });
+    };
+
+    // LISTENER GLOBALE PER I CLICK CHE APRONO IL MODALE STREAMING
+    document.body.addEventListener('click', function(event) {
+        if (event.target.closest('.card-play-button-link')) return;
 
         const archiveCard = event.target.closest('.archive-card[data-stream-id]');
         const artistStreamLink = event.target.closest('.artist-stream-link');
 
-        if (archiveCard && typeof openArchiveModal === 'function') {
+        if (archiveCard) {
             openArchiveModal(archiveCard.dataset.streamId);
-        } 
-        else if (artistStreamLink && typeof openArchiveModal === 'function') {
+        } else if (artistStreamLink) {
             event.preventDefault();
             openArchiveModal(artistStreamLink.dataset.streamId);
         }
@@ -500,119 +554,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         const eventsPreviewGrid = $('#events-grid-preview');
         if ((!eventsGrid && !eventsPreviewGrid) || typeof eventsData === 'undefined') return;
 
-        const modal = $('#event-gallery-modal');
-        if (!modal) return;
-        
-        const modalContent = modal.querySelector('.event-modal-content');
-        const modalCloseBtn = $('#event-modal-close');
-        const galleryContainer = $('#gallery-container');
-        const lightbox = $('#lightbox');
-        const lightboxImg = $('#lightbox-image');
-
-        const _evtLang = () => window.GateI18n ? window.GateI18n.getLang() : 'it';
-        const _evtLocale = () => _evtLang() === 'en' ? 'en-GB' : 'it-IT';
-
         const createEventCardHTML = (event) => {
             const eventDate = new Date(event.date);
             return `
                 <div class="event-card group" data-event-id="${event.id}" style="cursor: pointer;">
-                    <div class="event-card-image-wrapper"><img src="${event.mainImage || 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png'}" alt="${event.title}" class="event-card-image" loading="lazy"></div>
+                    <div class="event-card-image-wrapper"><img src="${event.mainImage || FALLBACK_IMG}" alt="${event.title}" class="event-card-image" loading="lazy"></div>
                     <div class="event-card-content">
                         <h3 class="event-card-title">${event.title}</h3>
-                        <p class="event-card-date">${eventDate.toLocaleDateString(_evtLocale(), { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <p class="event-card-date">${eventDate.toLocaleDateString(_glLocale(), { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     </div>
                 </div>`;
         };
 
-        const openModal = (eventId) => {
-            const event = eventsData.find(e => e.id == eventId);
-            if (!event) return;
-            const lang = _evtLang();
-            const locale = _evtLocale();
-            $('#modal-event-title').textContent = (lang === 'en' && event.title_en) ? event.title_en : event.title;
-            $('#modal-event-date').textContent = new Date(event.date).toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-            $('#modal-event-location').textContent = event.location;
-            $('#modal-event-description').textContent = (lang === 'en' && event.description_en) ? event.description_en : event.description;
-            $('#modal-event-details').textContent = (lang === 'en' && event.details_en) ? event.details_en : event.details;
-            $('#modal-event-tags').innerHTML = event.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
-            
-            const fallbackImg = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png';
-            const rawImgs = event.galleryImages && event.galleryImages.length > 0 ? event.galleryImages : (event.mainImage ? [event.mainImage] : [fallbackImg]);
-            const imgs = rawImgs;
-            modalContent.classList.remove('single-image-mode');
-            if (imgs.length === 1) {
-                modalContent.classList.add('single-image-mode');
-                galleryContainer.innerHTML = `<div class="single-image-wrapper"><img src="${imgs[0]}" alt="${event.title}" loading="lazy"></div>`;
-            } else if (imgs.length === 2) {
-                galleryContainer.innerHTML = `<div class="gallery-grid gallery-grid-2">${imgs.map(src => `<div class="gallery-item"><img src="${src}" alt="${event.title}" loading="lazy"></div>`).join('')}</div>`;
-            } else if (imgs.length === 3) {
-                galleryContainer.innerHTML = `<div class="gallery-grid gallery-grid-3"><div class="gallery-item gallery-item-big"><img src="${imgs[0]}" alt="${event.title}" loading="lazy"></div><div class="gallery-item"><img src="${imgs[1]}" alt="${event.title}" loading="lazy"></div><div class="gallery-item"><img src="${imgs[2]}" alt="${event.title}" loading="lazy"></div></div>`;
-            } else if (imgs.length >= 4) {
-                // Prima riga: immagini più grandi, seconda riga: più piccole
-                const half = Math.ceil(imgs.length / 2);
-                const row1 = imgs.slice(0, half);
-                const row2 = imgs.slice(half);
-                galleryContainer.innerHTML = `
-                    <div class="gallery-row">${row1.map(src => `<div class="gallery-item"><img src="${src}" alt="${event.title}" loading="lazy"></div>`).join('')}</div>
-                    <div class="gallery-row posts-row">${row2.map(src => `<div class="gallery-item"><img src="${src}" alt="${event.title}" loading="lazy"></div>`).join('')}</div>`;
-            } else {
-                galleryContainer.innerHTML = '';
-            }
-            
-            $$('.gallery-item img, .single-image-wrapper img').forEach(img => {
-                img.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    lightboxImg.src = img.src;
-                    lightbox.classList.remove('hidden');
-                });
-            });
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        };
-        const closeModal = () => {
-            modal.classList.add('hidden');
-            document.body.style.overflow = '';
-        };
-        
         const sortedEvents = [...eventsData].sort((a, b) => new Date(b.date) - new Date(a.date));
         if (eventsGrid) { eventsGrid.innerHTML = sortedEvents.map(createEventCardHTML).join(''); }
         if (eventsPreviewGrid) { eventsPreviewGrid.innerHTML = sortedEvents.slice(0, 3).map(createEventCardHTML).join(''); }
-        
-        document.body.addEventListener('click', function(event) {
-            const clickedCard = event.target.closest('.event-card');
-            if(clickedCard) { openModal(clickedCard.dataset.eventId); }
+
+        document.body.addEventListener('click', function(e) {
+            const clickedCard = e.target.closest('.event-card');
+            if (clickedCard) {
+                const ev = eventsData.find(x => x.id == clickedCard.dataset.eventId);
+                openEventModal(ev);
+            }
         });
-        
-        modalCloseBtn.addEventListener('click', closeModal);
-        $('.event-modal-backdrop')?.addEventListener('click', closeModal);
     }
     
     function gestioneCalendario() {
         const calendarGrid = $('#calendar-grid');
-        if (!calendarGrid) return; 
+        if (!calendarGrid) return;
 
         const monthYearHeader = $('#month-year-header');
         const prevMonthBtn = $('#prev-month-btn');
         const nextMonthBtn = $('#next-month-btn');
-        const modal = $('#event-modal');
-        const modalBody = $('#modal-body');
-        const modalCloseBtn = $('#modal-close-btn');
         const allEvents = [...(streamsData || []).map(s => ({...s, type: 'stream'})), ...(eventsData || []).map(e => ({...e, type: 'event'}))];
         let currentDate = new Date();
-        
-        const openInfoModal = (event) => {
-            const isFuture = new Date(event.date) >= new Date(new Date().setHours(0,0,0,0));
-            let contentHTML = '';
-            
-            if (event.type === 'stream') {
-                const buttonHTML = isFuture ? `<p class="text-sm text-[var(--text-secondary)] mt-4">Resta sintonizzato.</p>` : `<button data-stream-id="${event.id}" class="btn-primary inline-block px-8 py-2 rounded-lg mt-4 font-bold open-archive-from-calendar"><i class="fas fa-play-circle mr-2"></i>GUARDA LA STREAMING</button>`;
-                contentHTML = `<div class="w-full bg-black rounded-t-xl overflow-hidden"><img src="${event.imageUrl}" alt="${event.artist}" class="w-full h-auto block" loading="lazy"></div><div class="p-4 text-center"><span class="card-tag bg-[var(--accent)] !text-black mb-2">${isFuture ? 'PROSSIMA DIRETTA' : 'DIRETTA ARCHIVIATA'}</span><h3 class="text-2xl font-bold mt-2">${event.artist}</h3>${!isFuture ? `<p class="text-md text-[var(--text-secondary)] mb-4">${event.title}</p>` : ''}${buttonHTML}</div>`;
-            } else {
-                contentHTML = `<div class="w-full bg-black rounded-t-xl overflow-hidden"><img src="${event.mainImage}" alt="${event.title}" class="w-full h-auto block" loading="lazy"></div><div class="p-4 text-center"><span class="card-tag bg-[var(--accent-event)] !text-white mb-2">${isFuture ? 'PROSSIMO EVENTO' : 'EVENTO PASSATO'}</span><h3 class="text-2xl font-bold mt-2">${event.title}</h3><p class="text-sm text-[var(--text-secondary)] mb-4"><i class="fas fa-map-marker-alt mr-1"></i> ${event.location}</p><p class="text-sm">${event.description}</p></div>`;
-            }
-            modalBody.innerHTML = contentHTML;
-            modal.classList.add('is-open');
-        };
 
         const renderCalendar = () => {
             monthYearHeader.textContent = currentDate.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' }).toUpperCase();
@@ -631,38 +606,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             calendarGrid.innerHTML = gridHTML;
         };
-        
+
         calendarGrid.addEventListener('click', (e) => {
             const dayCell = e.target.closest('.has-event');
-            if (dayCell) {
-                const firstEvent = JSON.parse(decodeURIComponent(dayCell.dataset.events))[0];
-                const isPastStream = firstEvent.type === 'stream' && new Date(firstEvent.date) < new Date(new Date().setHours(0,0,0,0));
-                
-                if (isPastStream) {
-                    if(typeof openArchiveModal === 'function') openArchiveModal(firstEvent.id);
-                } else {
-                    openInfoModal(firstEvent);
-                }
-            }
-        });
-        
-        modal.addEventListener('click', function(event) {
-            const calendarButton = event.target.closest('.open-archive-from-calendar');
-            if (calendarButton) {
-                const streamId = calendarButton.dataset.streamId;
-                if (streamId && typeof openArchiveModal === 'function') {
-                    modal.classList.remove('is-open');
-                    setTimeout(() => openArchiveModal(streamId), 150);
-                }
+            if (!dayCell) return;
+            const firstEvent = JSON.parse(decodeURIComponent(dayCell.dataset.events))[0];
+            if (firstEvent.type === 'stream') {
+                openArchiveModal(firstEvent.id);
+            } else {
+                openEventModal(firstEvent);
             }
         });
 
         renderCalendar();
         prevMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
         nextMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
-        modalCloseBtn.addEventListener('click', () => modal.classList.remove('is-open'));
-        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('is-open'); });
-        
+
         $$('#calendar-filters .filter-btn').forEach(button => {
             button.addEventListener('click', () => {
                 $('#calendar-filters .filter-btn.active').classList.remove('active');

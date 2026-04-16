@@ -160,14 +160,30 @@
         <p>© <span id="footer-year"></span> <span class="grifter-font">GATE RADIO</span> | <span data-i18n="footer.rights">Tutti i diritti riservati</span></p>
     </footer>
 
-    <div id="archive-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden p-4 transition-opacity duration-300 items-center justify-center">
-        <div id="archive-modal-content" class="bg-[#0d0d0d] rounded-xl border glow-border max-w-sm w-full relative transition-transform duration-300 scale-95">
-            <button id="archive-modal-close-btn" aria-label="Chiudi finestra" class="absolute -top-3 -right-3 text-black bg-[var(--accent)] rounded-full h-9 w-9 flex items-center justify-center text-2xl font-bold leading-none hover:scale-110 transition-transform">&times;</button>
-            <div id="archive-modal-body"></div>
+    <div id="event-gallery-modal" class="event-modal-container hidden">
+        <div class="event-modal-backdrop"></div>
+        <div class="event-modal-content">
+            <button id="event-modal-close" class="event-modal-close-btn">&times;</button>
+            <div class="event-modal-body">
+                <div id="gallery-container" class="gallery-column"></div>
+                <div class="event-details">
+                    <h3 id="modal-event-title" class="modal-event-title"></h3>
+                    <p class="modal-event-date-location">
+                        <span id="modal-event-date"></span> &bull; <span id="modal-event-location"></span>
+                    </p>
+                    <p id="modal-event-description" class="modal-event-description"></p>
+                    <p id="modal-event-details" class="modal-event-details"></p>
+                    <div id="modal-event-tags" class="mt-4 flex flex-wrap gap-2"></div>
+                    <div id="modal-event-actions" class="modal-event-actions"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-
+    <div id="lightbox" class="lightbox-container hidden">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-image">
+    </div>
 
     <script src="js/config.js" defer></script>
     <script src="js/streams-data.js" defer></script>

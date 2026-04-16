@@ -334,8 +334,6 @@ header .hidden.md\:flex a:hover::after {
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.5);
 }
-#event-modal.is-open { display: flex; opacity: 1; }
-#event-modal.is-open #modal-content { transform: scale(1); }
 .footer-social-icon { color: var(--text-secondary); transition: color 0.3s ease, transform 0.3s ease; }
 .footer-social-icon:hover { color: var(--accent); transform: scale(1.1); }
 
@@ -631,6 +629,12 @@ header .hidden.md\:flex a:hover::after {
     border-left: 3px solid var(--accent-event);
     padding-left: 1rem; margin-top: 1.5rem;
 }
+.modal-event-actions {
+    margin-top: 1.5rem;
+    display: flex; flex-wrap: wrap; gap: 0.75rem;
+    align-items: center;
+}
+.modal-event-actions:empty { display: none; }
 
 @media (max-width: 1024px) {
     .event-modal-content { flex-direction: column; }
@@ -720,43 +724,6 @@ header .hidden.md\:flex a:hover::after {
 /* ========== STILI PER MODAL ARCHIVIO ========== */
 /* ============================================= */
 
-#archive-modal {
-    display: flex; /* Aggiunto per forzare il comportamento flex */
-    align-items: center; /* Aggiunto per centrare verticalmente */
-    justify-content: center; /* Aggiunto per centrare orizzontalmente */
-}
-
-/* Nasconde il modal con opacità 0 e pointer-events none per le transizioni */
-#archive-modal.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-
-
-/* Sovrascrive la regola per il contenitore dell'immagine */
-.archive-modal-image-wrapper {
-    padding-top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 1;
-    min-height: 0;
-}
-
-/* Immagine singola nel modale */
-.archive-modal-image-wrapper img {
-    position: static;
-    height: auto;
-    width: 100%;
-    max-height: 60vh;
-    object-fit: contain;
-}
-
-/* Grid gallery: la prima immagine su 3 occupa 2 righe */
-#archive-modal-body .grid .row-span-2 {
-    grid-row: span 2;
-}
 .archive-modal-soundcloud-btn {
     display: inline-block;
     background-color: #ff5500;
