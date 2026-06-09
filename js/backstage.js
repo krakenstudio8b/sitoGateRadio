@@ -187,12 +187,17 @@ function initEvents() {
             return;
         }
         const items = Object.entries(data).sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
-        container.innerHTML = items.map(([key, ev]) => `
-            <div class="list-item">
+        container.innerHTML = items.map(([key, ev]) => {
+            const hidden = ev.published === false;
+            return `
+            <div class="list-item" ${hidden ? 'style="opacity:.55;"' : ''}>
                 <div class="flex items-center gap-3 min-w-0">
                     ${ev.mainImage ? `<img src="${ev.mainImage}" alt="" class="resident-thumb" style="width:48px;height:48px;">` : ''}
                     <div class="min-w-0">
-                        <div class="font-semibold truncate">${escapeHtml(ev.title || '')}</div>
+                        <div class="font-semibold truncate">
+                            ${escapeHtml(ev.title || '')}
+                            ${hidden ? '<span class="badge ml-2" style="background:rgba(239,68,68,.12);color:var(--danger);border:1px solid rgba(239,68,68,.3);">NASCOSTO</span>' : ''}
+                        </div>
                         <div class="text-xs" style="color: var(--text-dim);">
                             <span class="mono">${ev.date || ''}</span>
                             ${ev.location ? ' · ' + escapeHtml(ev.location) : ''}
@@ -200,6 +205,11 @@ function initEvents() {
                     </div>
                 </div>
                 <div class="flex gap-2 flex-shrink-0">
+                    <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;"
+                        data-action="toggle-event" data-key="${key}"
+                        title="${hidden ? 'Mostra sul sito' : 'Nascondi dal sito'}">
+                        <i class="fas ${hidden ? 'fa-eye-slash' : 'fa-eye'}"></i>
+                    </button>
                     <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;"
                         data-action="edit-event" data-key="${key}">
                         <i class="fas fa-pen"></i> Modifica
@@ -209,8 +219,8 @@ function initEvents() {
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
     });
 
     $('#event-form').addEventListener('submit', async e => {
@@ -232,6 +242,7 @@ function initEvents() {
                 mainImage:      mainImage,
                 galleryImages:  mainImage ? [mainImage] : [],
                 tags:           $('#ev-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+                published:      true,
             };
             await push(eventsRef, event);
             feedback('event-feedback', '✓ Evento pubblicato!');
@@ -250,6 +261,13 @@ function initEvents() {
         const key = btn.dataset.key;
         if (btn.dataset.action === 'edit-event') openEditModal('event', key);
         if (btn.dataset.action === 'delete-event') deleteItem(`gateRadio/events/${key}`, btn.dataset.label);
+        if (btn.dataset.action === 'toggle-event') {
+            get(ref(database, `gateRadio/events/${key}/published`)).then(s => {
+                const currentlyVisible = s.val() !== false;
+                update(ref(database, `gateRadio/events/${key}`), { published: !currentlyVisible })
+                    .catch(err => alert('Errore: ' + err.message));
+            });
+        }
     });
 }
 
@@ -299,6 +317,11 @@ function initStreams() {
                         data-action="publish-as-event" data-key="${key}" title="Crea anche una scheda Evento">
                         <i class="fas fa-calendar-day"></i> Come Evento
                     </button>` : ''}
+                    ${!isPending ? `
+                    <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;"
+                        data-action="hide-stream" data-key="${key}" title="Nascondi dal sito">
+                        <i class="fas fa-eye"></i>
+                    </button>` : ''}
                     <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;"
                         data-action="edit-stream" data-key="${key}">
                         <i class="fas fa-pen"></i> Modifica
@@ -313,7 +336,7 @@ function initStreams() {
         let html = '';
         if (pending.length) {
             html += `<div class="mb-2 text-sm font-semibold" style="color: var(--accent);">
-                <i class="fas fa-hourglass-half mr-1"></i> ${pending.length} live in attesa di approvazione
+                <i class="fas fa-hourglass-half mr-1"></i> ${pending.length} live non pubblicate (in attesa o nascoste)
             </div>`;
             html += pending.map(it => renderRow(it, true)).join('');
             html += `<div class="mt-5 mb-2 text-sm font-semibold" style="color: var(--text-dim);">Pubblicate sul sito</div>`;
@@ -364,6 +387,10 @@ function initStreams() {
                 .catch(err => alert('Errore: ' + err.message));
         }
         if (btn.dataset.action === 'publish-as-event') publishStreamAsEvent(key);
+        if (btn.dataset.action === 'hide-stream') {
+            update(ref(database, `gateRadio/streams/${key}`), { published: false })
+                .catch(err => alert('Errore: ' + err.message));
+        }
     });
 }
 

@@ -25,8 +25,13 @@ window.gateRadioDataPromise = (async function fetchGateRadioData() {
                 .filter(s => s.published !== false)
             : null;
 
+        // Come per le live: gli eventi con published:false (nascosti dall'admin
+        // con l'occhio nel backstage) non vengono mostrati. Quelli senza il campo
+        // restano visibili.
         const events = eventsObj && typeof eventsObj === 'object'
-            ? Object.entries(eventsObj).map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
+            ? Object.entries(eventsObj)
+                .map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
+                .filter(e => e.published !== false)
             : null;
 
         if (streams) console.log(`[GateRadio] ${streams.length} stream caricati da Firebase.`);
