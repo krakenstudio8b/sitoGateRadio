@@ -3,35 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kraken Studio — Logo animato (movimento)</title>
+<title>Kraken Studio — Logo animato</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:#000;color:#eee;font-family:system-ui,sans-serif;min-height:100vh;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:32px;}
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:32px;}
   h1{font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:#888;font-weight:400;text-align:center;}
-  .row{display:flex;flex-wrap:wrap;gap:32px;justify-content:center;align-items:flex-start;}
-  .item{display:flex;flex-direction:column;gap:10px;align-items:center;}
-  .item video{width:380px;max-width:90vw;border:1px solid #222;border-radius:12px;background:#000;display:block;}
-  .item .label{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#FFF200;}
-  .item .desc{font-size:12px;color:#999;max-width:380px;text-align:center;line-height:1.5;}
-  .note{font-size:11px;color:#666;max-width:760px;text-align:center;line-height:1.6;}
+  .hero{display:flex;flex-direction:column;gap:10px;align-items:center;}
+  .hero video{width:460px;max-width:92vw;border:1px solid #FFF20033;border-radius:14px;background:#000;display:block;}
+  .hero .label{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#FFF200;}
+  .hero .desc{font-size:13px;color:#bbb;max-width:460px;text-align:center;line-height:1.55;}
+  .row{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;align-items:flex-start;margin-top:8px;}
+  .item{display:flex;flex-direction:column;gap:8px;align-items:center;}
+  .item video{width:240px;max-width:90vw;border:1px solid #222;border-radius:10px;background:#000;display:block;}
+  .item .label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#777;}
+  .note{font-size:11px;color:#666;max-width:780px;text-align:center;line-height:1.7;}
+  .replay{font-size:11px;color:#FFF200;cursor:pointer;border:1px solid #FFF20055;border-radius:6px;padding:4px 12px;background:none;}
 </style>
 </head>
 <body>
-  <h1>Kraken Studio · logo che si muove</h1>
+  <h1>Kraken Studio · logo animato</h1>
+
+  <div class="hero">
+    <video id="main" src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logo/kraken_reform.mp4" autoplay muted loop playsinline></video>
+    <div class="label">Concept “The Crack” — le due metà del disco (K + S) si uniscono</div>
+    <div class="desc">Il marchio nasce dal vinile spezzato: le due metà si scontrano, flash di luce, e si assesta sul Kraken completo con alone giallo. Reveal con una logica, non un filtro.</div>
+    <button class="replay" onclick="document.getElementById('main').currentTime=0">↻ rivedi dall'inizio</button>
+  </div>
+
   <div class="row">
     <div class="item">
       <video src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logo/kraken_alive.mp4" autoplay muted loop playsinline></video>
-      <div class="label">A · Ogni pezzo si muove</div>
-      <div class="desc">Le due spirali ruotano in controfase, i tentacoli centrali ondeggiano, la testa dondola. Ogni zona ha il suo movimento.</div>
-    </div>
-    <div class="item">
-      <video src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logo/kraken_swim2.mp4" autoplay muted loop playsinline></video>
-      <div class="label">B · Swim + glow</div>
-      <div class="desc">Ondeggio unico “sott'acqua” con alone giallo che pulsa. Più morbido/uniforme.</div>
+      <div class="label">ambient · ogni pezzo ondeggia</div>
     </div>
   </div>
-  <div class="note">Bozze procedurali (deformazione a mappa). Posso regolare ogni parte singolarmente: quanto ruotano le spirali, quanto ondeggiano i tentacoli, far pulsare gli occhi, aggiungere i tentacoli-uncino in alto, ecc.</div>
+
+  <div class="note">Questa è la base. Posso spingerla: il disco che <b>gira intero</b> e poi si spezza, il Kraken che <b>emerge</b> dal centro, scia di luce sul flash, scritta “KRAKEN 8B STUDIO” che compare alla fine, formato 9:16/16:9. Per la versione “cinematica” al massimo della qualità mi servirebbe il logo a <b>livelli separati / vettoriale</b> (file del grafico: .ai / .svg / .psd, o kraken e vinile come PNG distinti).</div>
 </body>
 </html>
