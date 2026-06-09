@@ -15,8 +15,14 @@ window.gateRadioDataPromise = (async function fetchGateRadioData() {
 
         // Firebase restituisce oggetti con push key → converti in array
         // Usa la push key come `id` per compatibilità con il codice del sito
+        // Mostra solo le live approvate: quelle senza il campo `published`
+        // (vecchie o create a mano nel backstage) restano visibili; quelle
+        // sincronizzate dal Google Sheet arrivano con published:false e
+        // compaiono solo dopo l'approvazione dell'admin dal backstage.
         const streams = streamsObj && typeof streamsObj === 'object'
-            ? Object.entries(streamsObj).map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
+            ? Object.entries(streamsObj)
+                .map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
+                .filter(s => s.published !== false)
             : null;
 
         const events = eventsObj && typeof eventsObj === 'object'

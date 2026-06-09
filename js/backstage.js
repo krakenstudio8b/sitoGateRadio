@@ -42,6 +42,52 @@ function feedback(id, msg, ok = true) {
 function show(el) { el.classList.remove('hidden'); }
 function hide(el) { el.classList.add('hidden'); }
 
+// ── Upload immagini su R2 ────────────────────────────────────────────────────
+// La route /api/upload è servita dallo stesso worker del sito (vedi _worker.js).
+// La key è esposta nel client: accettabile perché il backstage è già dietro auth
+// Firebase admin e il bucket è isolato.
+const UPLOAD_API_URL = '/api/upload';
+const UPLOAD_API_KEY = 'bbf0fd442d45f31f886d94f9fe28b5ba822be664854fa942';
+
+async function uploadFile(file, folder) {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('folder', folder);
+    const res = await fetch(UPLOAD_API_URL, {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + UPLOAD_API_KEY },
+        body: fd,
+    });
+    let data = {};
+    try { data = await res.json(); } catch { /* ignore */ }
+    if (!res.ok) throw new Error(data.error || `Upload fallito (HTTP ${res.status})`);
+    return data.url;
+}
+
+// Collega un <input type="file"> a un <input type="text/url">: al cambio file
+// carica su R2 e scrive l'URL pubblico nel campo. onDone(url) opzionale.
+function wireUploader(fileInputId, urlInputId, folder, feedbackId, onDone) {
+    const fileInput = document.getElementById(fileInputId);
+    if (!fileInput || fileInput.dataset.wired) return;
+    fileInput.dataset.wired = '1';
+    fileInput.addEventListener('change', async () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+        if (feedbackId) feedback(feedbackId, 'Caricamento immagine…');
+        try {
+            const url = await uploadFile(file, folder);
+            const urlInput = urlInputId && document.getElementById(urlInputId);
+            if (urlInput) urlInput.value = url;
+            if (feedbackId) feedback(feedbackId, '✓ Immagine caricata');
+            if (onDone) onDone(url);
+        } catch (err) {
+            if (feedbackId) feedback(feedbackId, 'Errore upload: ' + err.message, false);
+        } finally {
+            fileInput.value = '';
+        }
+    });
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // AUTH
 // ═══════════════════════════════════════════════════════════════════════════
@@ -114,6 +160,16 @@ function initApp() {
     initEvents();
     initStreams();
     initResidents();
+
+    // Uploader immagini diretti dai form (file → R2 → URL)
+    wireUploader('ev-image-file',  'ev-image',  'Eventi Gate',   'event-feedback');
+    wireUploader('st-image-file',  'st-image',  'Grafiche Gate', 'stream-feedback');
+    wireUploader('res-image-file', 'res-image', 'residents',     'resident-feedback');
+    // Nel modale di modifica il file caricato viene aggiunto alla gallery
+    wireUploader('edit-image-file', null, 'Grafiche Gate', 'edit-image-feedback', (url) => {
+        editGallery.push(url);
+        renderEditGallery();
+    });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -212,12 +268,20 @@ function initStreams() {
             return;
         }
         const items = Object.entries(data).sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
-        container.innerHTML = items.map(([key, s]) => `
-            <div class="list-item">
+        // published === false → live in attesa di approvazione (arrivata dal Sheet).
+        // Tutto il resto (senza il campo, o true) è già pubblicato sul sito.
+        const pending = items.filter(([, s]) => s.published === false);
+        const live    = items.filter(([, s]) => s.published !== false);
+
+        const renderRow = ([key, s], isPending) => `
+            <div class="list-item" ${isPending ? 'style="border-color: var(--accent);"' : ''}>
                 <div class="flex items-center gap-3 min-w-0">
                     ${s.imageUrl ? `<img src="${s.imageUrl}" alt="" class="resident-thumb" style="width:48px;height:48px;">` : ''}
                     <div class="min-w-0">
-                        <div class="font-semibold truncate">${escapeHtml(s.artist || '')}</div>
+                        <div class="font-semibold truncate">
+                            ${escapeHtml(s.artist || '')}
+                            ${isPending ? '<span class="badge ml-2" style="background:rgba(255,242,0,.15);color:var(--accent);border:1px solid rgba(255,242,0,.3);">IN ATTESA</span>' : ''}
+                        </div>
                         <div class="text-xs" style="color: var(--text-dim);">
                             <span class="mono">${s.date || ''}</span>
                             <span class="badge badge-season ml-2">${s.season || ''}</span>
@@ -225,6 +289,11 @@ function initStreams() {
                     </div>
                 </div>
                 <div class="flex gap-2 flex-shrink-0">
+                    ${isPending ? `
+                    <button class="btn" style="padding:6px 12px;font-size:12px;background:var(--ok);color:#000;"
+                        data-action="publish-stream" data-key="${key}">
+                        <i class="fas fa-check"></i> Pubblica
+                    </button>` : ''}
                     <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;"
                         data-action="edit-stream" data-key="${key}">
                         <i class="fas fa-pen"></i> Modifica
@@ -234,8 +303,20 @@ function initStreams() {
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+
+        let html = '';
+        if (pending.length) {
+            html += `<div class="mb-2 text-sm font-semibold" style="color: var(--accent);">
+                <i class="fas fa-hourglass-half mr-1"></i> ${pending.length} live in attesa di approvazione
+            </div>`;
+            html += pending.map(it => renderRow(it, true)).join('');
+            html += `<div class="mt-5 mb-2 text-sm font-semibold" style="color: var(--text-dim);">Pubblicate sul sito</div>`;
+        }
+        html += live.length
+            ? live.map(it => renderRow(it, false)).join('')
+            : (pending.length ? '' : '<p class="text-sm" style="color: var(--text-dim);">Nessuna live pubblicata.</p>');
+        container.innerHTML = html;
     });
 
     $('#stream-form').addEventListener('submit', async e => {
@@ -254,6 +335,7 @@ function initStreams() {
                 soundcloudUrl: $('#st-url').value.trim() || '#',
                 imageUrl:      $('#st-image').value.trim(),
                 tags:          $('#st-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+                published:     true, // creata a mano → online subito
             };
             await push(streamsRef, stream);
             feedback('stream-feedback', '✓ Live pubblicata!');
@@ -272,6 +354,10 @@ function initStreams() {
         const key = btn.dataset.key;
         if (btn.dataset.action === 'edit-stream') openEditModal('stream', key);
         if (btn.dataset.action === 'delete-stream') deleteItem(`gateRadio/streams/${key}`, btn.dataset.label);
+        if (btn.dataset.action === 'publish-stream') {
+            update(ref(database, `gateRadio/streams/${key}`), { published: true })
+                .catch(err => alert('Errore: ' + err.message));
+        }
     });
 }
 

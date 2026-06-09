@@ -207,8 +207,9 @@
                             <textarea id="ev-details-en" rows="2" class="form-input" placeholder="Extra info (optional)..."></textarea>
                         </div>
                         <div class="col-span-2">
-                            <label class="field-label">Locandina (URL immagine)</label>
-                            <input id="ev-image" type="url" class="form-input" placeholder="https://pub-xxx.r2.dev/Eventi%20Gate/...">
+                            <label class="field-label">Locandina</label>
+                            <input id="ev-image-file" type="file" accept="image/*" class="form-input mb-2">
+                            <input id="ev-image" type="url" class="form-input" placeholder="…oppure incolla un URL immagine">
                         </div>
                         <div class="col-span-2">
                             <label class="field-label">Tag (separati da virgola)</label>
@@ -270,8 +271,9 @@
                             <input id="st-url" type="text" class="form-input" placeholder="Lascia vuoto se non disponibile">
                         </div>
                         <div class="col-span-2">
-                            <label class="field-label">Copertina (URL immagine)</label>
-                            <input id="st-image" type="url" class="form-input" placeholder="https://pub-xxx.r2.dev/Grafiche%20Gate/...">
+                            <label class="field-label">Copertina</label>
+                            <input id="st-image-file" type="file" accept="image/*" class="form-input mb-2">
+                            <input id="st-image" type="url" class="form-input" placeholder="…oppure incolla un URL immagine">
                         </div>
                         <div class="col-span-2">
                             <label class="field-label">Tag (separati da virgola)</label>
@@ -396,8 +398,9 @@
                 <div class="col-span-2">
                     <label class="field-label">Immagini</label>
                     <div id="edit-gallery" class="flex flex-wrap gap-3 mb-3"></div>
+                    <input id="edit-image-file" type="file" accept="image/*" class="form-input mb-2">
                     <div class="flex gap-2">
-                        <input id="edit-new-image-url" type="url" class="form-input" placeholder="Incolla URL immagine">
+                        <input id="edit-new-image-url" type="url" class="form-input" placeholder="…oppure incolla URL immagine">
                         <button type="button" onclick="addEditImage()" class="btn btn-ghost" style="white-space: nowrap;">+ Aggiungi</button>
                     </div>
                     <span id="edit-image-feedback" class="feedback mt-1 block"></span>
@@ -433,8 +436,9 @@
                     <input id="res-order" type="number" min="0" max="99" class="form-input" value="0">
                 </div>
                 <div class="col-span-2">
-                    <label class="field-label">Foto (URL immagine)</label>
-                    <input id="res-image" type="url" class="form-input" placeholder="https://pub-xxx.r2.dev/residents/...">
+                    <label class="field-label">Foto</label>
+                    <input id="res-image-file" type="file" accept="image/*" class="form-input mb-2">
+                    <input id="res-image" type="url" class="form-input" placeholder="…oppure incolla un URL immagine">
                 </div>
                 <div class="col-span-2">
                     <label class="field-label">Bio</label>

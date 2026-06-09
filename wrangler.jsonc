@@ -12,6 +12,9 @@
     "binding": "ASSETS",
     "run_worker_first": true,
   },
+  "r2_buckets": [
+    { "binding": "R2_BUCKET", "bucket_name": "gate-radio-assets" }
+  ],
   "compatibility_flags": [
     "nodejs_compat"
   ],
