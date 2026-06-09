@@ -294,6 +294,11 @@ function initStreams() {
                         data-action="publish-stream" data-key="${key}">
                         <i class="fas fa-check"></i> Pubblica
                     </button>` : ''}
+                    ${isPending && ['SHOWCASE', 'EVENT'].includes(s.title) ? `
+                    <button class="btn" style="padding:6px 12px;font-size:12px;background:var(--accent);color:#000;"
+                        data-action="publish-as-event" data-key="${key}" title="Crea anche una scheda Evento">
+                        <i class="fas fa-calendar-day"></i> Come Evento
+                    </button>` : ''}
                     <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;"
                         data-action="edit-stream" data-key="${key}">
                         <i class="fas fa-pen"></i> Modifica
@@ -358,7 +363,60 @@ function initStreams() {
             update(ref(database, `gateRadio/streams/${key}`), { published: true })
                 .catch(err => alert('Errore: ' + err.message));
         }
+        if (btn.dataset.action === 'publish-as-event') publishStreamAsEvent(key);
     });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SHOWCASE → EVENTO
+// Converte una live "in attesa" (riconosciuta come SHOWCASE/EVENT dal sync) in
+// una scheda Evento, lasciandola anche tra le Live (published:true).
+// La scheda evento nasce da quel che c'è sulla live; va poi rifinita nel tab Eventi.
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function publishStreamAsEvent(key) {
+    try {
+        const snap = await get(ref(database, `gateRadio/streams/${key}`));
+        const s = snap.val();
+        if (!s) return alert('Live non trovata');
+
+        const isShowcase = s.title === 'SHOWCASE';
+        const artist = (s.artist || '').trim();
+        const eventTitle = isShowcase
+            ? (artist ? `SHOWCASE — ${artist}` : 'SHOWCASE')
+            : (artist || 'EVENTO');
+
+        if (!confirm(`Pubblicare "${eventTitle}" come Evento?\nApparirà tra gli Eventi e resterà anche nelle Live. Potrai rifinirlo nel tab Eventi.`)) return;
+
+        const details = [];
+        if (s.timeStart) details.push(`Orario: ${s.timeStart}${s.timeEnd ? '–' + s.timeEnd : ''}`);
+        details.push('Ingresso libero allo studio');
+        if (s.note) details.push(s.note);
+
+        const ev = {
+            title:          eventTitle,
+            title_en:       '',
+            date:           s.date || '',
+            location:       '',
+            description:    s.bio || '',
+            description_en: '',
+            details:        details.join(' · '),
+            details_en:     '',
+            mainImage:      s.imageUrl || '',
+            galleryImages:  s.imageUrl ? [s.imageUrl] : [],
+            tags:           Array.isArray(s.tags) ? s.tags : [],
+            source:         'showcase-from-live',
+        };
+
+        const evKey = push(ref(database, 'gateRadio/events')).key;
+        await update(ref(database), {
+            [`gateRadio/events/${evKey}`]: ev,
+            [`gateRadio/streams/${key}/published`]: true,
+        });
+        feedback('stream-feedback', '✓ Creato Evento + Live pubblicata. Rifiniscilo nel tab Eventi.');
+    } catch (err) {
+        alert('Errore: ' + err.message);
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
