@@ -267,8 +267,12 @@
                             <input id="st-time-end" type="time" class="form-input" value="19:00">
                         </div>
                         <div class="col-span-2">
-                            <label class="field-label">URL YouTube / SoundCloud (opzionale)</label>
-                            <input id="st-url" type="text" class="form-input" placeholder="Lascia vuoto se non disponibile">
+                            <label class="field-label">Link della live (uno per riga)</label>
+                            <textarea id="st-url" rows="3" class="form-input" placeholder="https://www.youtube.com/watch?v=..."></textarea>
+                            <p class="text-xs mt-1" style="color:var(--text-dim)">
+                                Se la serata è spezzata in più dirette, scrivi una riga per artista:
+                                <span class="mono">NOME ARTISTA | link</span>
+                            </p>
                         </div>
                         <div class="col-span-2">
                             <label class="field-label">Copertina</label>
@@ -385,8 +389,12 @@
                     <input id="edit-time-end" type="time" class="form-input">
                 </div>
                 <div class="col-span-2 edit-stream-only">
-                    <label class="field-label">URL YouTube / SoundCloud (opzionale)</label>
-                    <input id="edit-url" type="text" class="form-input">
+                    <label class="field-label">Link della live (uno per riga)</label>
+                    <textarea id="edit-url" rows="3" class="form-input"></textarea>
+                    <p class="text-xs mt-1" style="color:var(--text-dim)">
+                        Serata spezzata in più dirette? Una riga per artista:
+                        <span class="mono">NOME ARTISTA | link</span>
+                    </p>
                 </div>
 
                 <div class="col-span-2">

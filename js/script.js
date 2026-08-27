@@ -124,6 +124,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const _glLang = () => window.GateI18n ? window.GateI18n.getLang() : 'it';
     const _glLocale = () => _glLang() === 'en' ? 'en-GB' : 'it-IT';
 
+    // Una serata può essere spezzata in più dirette YouTube (una per artista):
+    // liveLinks è l'elenco completo, soundcloudUrl resta per le live a link singolo.
+    const _escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
+        c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    const getLiveLinks = (item) => {
+        if (!item) return [];
+        if (Array.isArray(item.liveLinks)) {
+            const out = item.liveLinks
+                .filter(l => l && typeof l.url === 'string' && l.url.trim() && l.url.trim() !== '#')
+                .map(l => ({ label: (l.label || '').trim(), url: l.url.trim() }));
+            if (out.length) return out;
+        }
+        if (item.soundcloudUrl && item.soundcloudUrl !== '#') {
+            return [{ label: '', url: item.soundcloudUrl }];
+        }
+        return [];
+    };
+
     const openArchiveModal = (streamId) => {
         const stream = (window._allArchiveItems || (typeof streamsData !== 'undefined' ? streamsData : []) || []).find(s => s.id == streamId);
         if (!stream) return;
@@ -142,8 +161,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             : (stream.imageUrl ? [stream.imageUrl] : []);
 
         let actionsHTML = '';
-        if (stream.soundcloudUrl && stream.soundcloudUrl !== '#') {
-            actionsHTML = `<a href="${stream.soundcloudUrl}" target="_blank" rel="noopener" class="archive-modal-soundcloud-btn"><i class="fas fa-play-circle mr-2"></i>GUARDA LA STREAMING</a>`;
+        const liveLinks = getLiveLinks(stream);
+        if (liveLinks.length === 1) {
+            actionsHTML = `<a href="${_escHtml(liveLinks[0].url)}" target="_blank" rel="noopener" class="archive-modal-soundcloud-btn"><i class="fas fa-play-circle mr-2"></i>GUARDA LA STREAMING</a>`;
+        } else if (liveLinks.length > 1) {
+            const label = _glLang() === 'en' ? 'This night is split in' : 'Questa serata è divisa in';
+            const setsWord = _glLang() === 'en' ? 'separate streams' : 'dirette separate';
+            actionsHTML = `<p class="live-links-intro">${label} ${liveLinks.length} ${setsWord}:</p>
+                <div class="live-links-group">${liveLinks.map((l, i) => `
+                    <a href="${_escHtml(l.url)}" target="_blank" rel="noopener" class="archive-modal-soundcloud-btn live-link-multi">
+                        <i class="fas fa-play-circle"></i><span>${_escHtml(l.label || `PARTE ${i + 1}`)}</span>
+                    </a>`).join('')}</div>`;
         } else if (isFuture) {
             actionsHTML = `<p class="text-sm text-[var(--text-secondary)]">Resta sintonizzato.</p>`;
         }
@@ -195,6 +223,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             event.preventDefault();
             openArchiveModal(artistStreamLink.dataset.streamId);
         }
+    });
+
+    // Tasto play "multi" raggiungibile da tastiera (Invio / Spazio)
+    document.body.addEventListener('keydown', function(event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        const multiBtn = event.target.closest('.card-play-button-multi');
+        if (!multiBtn) return;
+        const card = multiBtn.closest('.archive-card[data-stream-id]');
+        if (!card) return;
+        event.preventDefault();
+        openArchiveModal(card.dataset.streamId);
     });
 
 
@@ -367,10 +406,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             const iconHTML = `<i class="${iconClass} fa-fw text-xs"></i>`;
             const seasonTagHTML = `<span class="card-tag font-bold border-[var(--accent)] text-[var(--accent)] h-8 w-8 flex items-center justify-center">${iconHTML}</span>`;
             
-            const playButtonHTML = (item.soundcloudUrl && item.soundcloudUrl !== '#')
-                ? `<a href="${item.soundcloudUrl}" target="_blank" rel="noopener noreferrer" class="card-play-button-link" aria-label="Guarda la diretta su YouTube">
-                       <svg class="icon-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>
+            // Un solo link: si va dritti su YouTube. Più link: il tasto apre la scheda,
+            // dove ci sono i bottoni di ogni artista (il click sale alla card).
+            const cardLinks = getLiveLinks(item);
+            const playIconSVG = '<svg class="icon-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>';
+            const playButtonHTML = cardLinks.length === 1
+                ? `<a href="${_escHtml(cardLinks[0].url)}" target="_blank" rel="noopener noreferrer" class="card-play-button-link" aria-label="Guarda la diretta su YouTube">
+                       ${playIconSVG}
                    </a>`
+                : cardLinks.length > 1
+                ? `<span class="card-play-button-multi" role="button" tabindex="0" aria-label="${cardLinks.length} dirette disponibili">
+                       ${playIconSVG}<span class="card-play-count">${cardLinks.length}</span>
+                   </span>`
                 : '';
 
             return `<div class="archive-card rounded-xl overflow-hidden border border-[var(--border-color)] flex flex-col group ${seasonClass}" data-stream-id="${item.id}">
@@ -435,6 +482,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     timeEnd: s.timeEnd,
                     imageUrl: matchingEvent.mainImage || s.imageUrl,
                     soundcloudUrl: s.soundcloudUrl || null,
+                    liveLinks: s.liveLinks || null,
                     season: matchingEvent.season || s.season || seasonFromDate(s.date),
                     tags: matchingEvent.tags || s.tags || [],
                     galleryImages: matchingEvent.galleryImages || [],
@@ -455,6 +503,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     date: ev.date,
                     imageUrl: ev.mainImage || '',
                     soundcloudUrl: null,
+                    liveLinks: null,
                     season: ev.season || seasonFromDate(ev.date),
                     tags: ev.tags || [],
                     galleryImages: ev.galleryImages || [],

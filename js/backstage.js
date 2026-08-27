@@ -353,6 +353,7 @@ function initStreams() {
         btn.disabled = true;
         try {
             feedback('stream-feedback', 'Salvataggio...');
+            const stLinks = parseLiveLinks($('#st-url').value);
             const stream = {
                 artist:        $('#st-artist').value.trim(),
                 title:         $('#st-title').value.trim() || 'LIVE STREAMING',
@@ -360,7 +361,8 @@ function initStreams() {
                 timeStart:     $('#st-time-start').value || '18:00',
                 timeEnd:       $('#st-time-end').value || '19:00',
                 season:        $('#st-season').value,
-                soundcloudUrl: $('#st-url').value.trim() || '#',
+                soundcloudUrl: stLinks.length ? stLinks[0].url : '#',
+                liveLinks:     stLinks.length > 1 ? stLinks : null,
                 imageUrl:      $('#st-image').value.trim(),
                 tags:          $('#st-tags').value.split(',').map(t => t.trim()).filter(Boolean),
                 published:     true, // creata a mano → online subito
@@ -487,7 +489,7 @@ function openEditModal(type, key) {
             $('#edit-season').value = data.season || 'winter';
             $('#edit-time-start').value = data.timeStart || '18:00';
             $('#edit-time-end').value = data.timeEnd || '19:00';
-            $('#edit-url').value = data.soundcloudUrl && data.soundcloudUrl !== '#' ? data.soundcloudUrl : '';
+            $('#edit-url').value = liveLinksToText(data);
             editGallery = data.imageUrl ? [data.imageUrl] : [];
         }
 
@@ -549,6 +551,7 @@ $('#edit-form').addEventListener('submit', async e => {
         let updates;
 
         if (type === 'stream') {
+            const editLinks = parseLiveLinks($('#edit-url').value);
             updates = {
                 title:         $('#edit-title').value.trim(),
                 artist:        $('#edit-artist').value.trim(),
@@ -556,7 +559,8 @@ $('#edit-form').addEventListener('submit', async e => {
                 timeStart:     $('#edit-time-start').value || '18:00',
                 timeEnd:       $('#edit-time-end').value || '19:00',
                 season:        $('#edit-season').value,
-                soundcloudUrl: $('#edit-url').value.trim() || '#',
+                soundcloudUrl: editLinks.length ? editLinks[0].url : '#',
+                liveLinks:     editLinks.length > 1 ? editLinks : null,
                 imageUrl:      editGallery[0] || '',
                 tags,
             };
@@ -729,6 +733,28 @@ function deleteItem(path, label) {
 // ═══════════════════════════════════════════════════════════════════════════
 // UTILS
 // ═══════════════════════════════════════════════════════════════════════════
+
+// Una serata può essere spezzata in più dirette YouTube.
+// Nel form si scrive una riga per diretta: "NOME ARTISTA | link" (o solo il link).
+function parseLiveLinks(text) {
+    return String(text || '')
+        .split('\n')
+        .map(r => r.trim())
+        .filter(Boolean)
+        .map(row => {
+            const i = row.lastIndexOf('|');
+            if (i === -1) return { label: '', url: row };
+            return { label: row.slice(0, i).trim(), url: row.slice(i + 1).trim() };
+        })
+        .filter(l => l.url && l.url !== '#');
+}
+
+function liveLinksToText(data) {
+    if (Array.isArray(data.liveLinks) && data.liveLinks.length) {
+        return data.liveLinks.map(l => (l.label ? l.label + ' | ' : '') + l.url).join('\n');
+    }
+    return (data.soundcloudUrl && data.soundcloudUrl !== '#') ? data.soundcloudUrl : '';
+}
 
 function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({

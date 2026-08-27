@@ -738,6 +738,32 @@ header .hidden.md\:flex a:hover::after {
     transform: scale(1.05);
 }
 
+/* Serate spezzate in più dirette: un bottone per artista */
+.live-links-intro {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.6rem;
+}
+.live-links-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.archive-modal-soundcloud-btn.live-link-multi {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    max-width: 100%;
+}
+.archive-modal-soundcloud-btn.live-link-multi span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /*
 ===================================================================
  COLORI PERSONALIZZATI PER I FILTRI STAGIONE IN ARCHIVIO
@@ -997,6 +1023,35 @@ footer, .footer-main-area {
 
 .card-play-button-link:hover {
     transform: scale(1.1);
+}
+
+/* Variante per le serate con più dirette: mostra quante sono e apre la scheda */
+.card-play-button-multi {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 32px;
+    padding: 0 0.6rem 0 0.5rem;
+    background-color: var(--accent);
+    color: #000;
+    border-radius: 9999px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+.card-play-button-multi:hover {
+    transform: scale(1.1);
+}
+.card-play-button-multi svg {
+    width: 14px;
+    height: 14px;
+}
+.card-play-count {
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    font-family: 'Roboto Mono', monospace;
 }
 
 /* Icona SVG ridimensionata */
