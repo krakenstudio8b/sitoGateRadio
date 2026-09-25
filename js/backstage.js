@@ -9,7 +9,8 @@ import {
     getDatabase, ref, onValue, push, update, remove, get, set
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 import {
-    getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+    getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
+    sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -133,6 +134,36 @@ $('#login-form').addEventListener('submit', async (e) => {
             : ('Errore: ' + err.message);
         show(errEl);
     }
+});
+
+// Reset password: manda la mail di recupero all'indirizzo scritto nel campo email.
+// Il messaggio di conferma è volutamente identico anche se l'utente non esiste,
+// così la pagina non rivela quali email sono registrate.
+$('#forgot-btn').addEventListener('click', async () => {
+    const email = $('#login-email').value.trim();
+    const errEl = $('#login-error');
+    const infoEl = $('#login-info');
+    hide(errEl); hide(infoEl);
+
+    if (!email) {
+        errEl.textContent = 'Scrivi prima la tua email qui sopra, poi ripremi.';
+        show(errEl);
+        $('#login-email').focus();
+        return;
+    }
+
+    try {
+        await sendPasswordResetEmail(auth, email);
+    } catch (err) {
+        // auth/user-not-found e auth/invalid-email non li distinguiamo all'utente
+        if (err.code !== 'auth/user-not-found' && err.code !== 'auth/invalid-email') {
+            errEl.textContent = 'Errore: ' + err.message;
+            show(errEl);
+            return;
+        }
+    }
+    infoEl.textContent = 'Se l\'indirizzo è registrato, ti è arrivata la mail per reimpostare la password. Controlla anche lo spam.';
+    show(infoEl);
 });
 
 $('#logout-btn').addEventListener('click', () => signOut(auth));
