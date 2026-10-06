@@ -623,9 +623,11 @@ header .hidden.md\:flex a:hover::after {
 }
 .modal-event-description {
     color: var(--text-primary); line-height: 1.6; margin-bottom: 1rem;
+    white-space: pre-line; /* rispetta gli a capo scritti nel backstage */
 }
 .modal-event-details {
     font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;
+    white-space: pre-line;
     border-left: 3px solid var(--accent-event);
     padding-left: 1rem; margin-top: 1.5rem;
 }
