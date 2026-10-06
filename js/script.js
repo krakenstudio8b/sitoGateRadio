@@ -162,11 +162,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const actionsHTML = buildLiveActionsHTML(getLiveLinks(stream), isFuture);
 
+        // Descrizione presa dal video YouTube (IT/EN); se manca, resta il tipo di live
+        const liveDesc = (_glLang() === 'en' && stream.description_en) ? stream.description_en : (stream.description || '');
+
         openGalleryModal({
             title: stream.artist || stream.title || '',
             dateStr,
             location,
-            description: stream.title || '',
+            description: liveDesc || stream.title || '',
+            details: liveDesc ? (stream.title || '') : '',
             tags: stream.tags || [],
             images,
             actionsHTML,
