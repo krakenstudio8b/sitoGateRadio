@@ -383,18 +383,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             const eventDate    = new Date(nextStream.date);
             const dateLocale   = _lang === 'en' ? 'en-GB' : 'it-IT';
             const formattedDate = eventDate.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
-            const eventTime    = (nextStream.timeStart && nextStream.timeEnd) ? `${nextStream.timeStart} -> ${nextStream.timeEnd}` : "18:00 -> 19:00";
+            const eventTime    = nextStream.timeStart
+                ? `${nextStream.timeStart}${nextStream.timeEnd ? ' → ' + nextStream.timeEnd : ''}`
+                : '';
 
-            const eventImage = nextStream.imageUrl || 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png';
+            // Senza locandina (il grafico non l'ha ancora fatta) mostriamo un blocco
+            // tipografico col nome, invece del logo generico.
+            const nextName  = _escHtml(nextStream.artist || '');
+            const nextKind  = _escHtml(nextStream.title || '');
+            const posterHTML = nextStream.imageUrl
+                ? `<img src="${_escHtml(nextStream.imageUrl)}" alt="${nextName}" class="w-full h-auto" loading="lazy">`
+                : `<div class="next-event-noposter"><span>${nextName}</span></div>`;
+            const nextLabel = _lang === 'en' ? 'NEXT LIVE' : 'PROSSIMA LIVE';
             liveContainer.innerHTML = `
                 <div class="coming-soon-container text-center flex flex-col items-center">
                     <div class="w-full">${buildRadioWidget()}</div>
-                    <div class="inline-block bg-black rounded-xl px-8 pt-20 pb-8 mt-20">
-                        <h2 class="coming-soon-title grifter-font mb-16" style="font-size: 2rem;">COMING SOON</h2>
-                        <div class="next-event-card mb-6 mx-auto">
-                            <img src="${eventImage}" alt="${nextStream.title}" class="w-full h-auto" loading="lazy">
-                        </div>
-                        <p class="next-event-date">${formattedDate} - ${eventTime}</p>
+                    <div class="inline-block bg-black rounded-xl px-8 pt-16 pb-8 mt-20">
+                        <h2 class="coming-soon-title grifter-font mb-10" style="font-size: 2rem;">${nextLabel}</h2>
+                        <div class="next-event-card mb-6 mx-auto">${posterHTML}</div>
+                        <p class="next-event-artist">${nextName}</p>
+                        ${nextKind && nextKind !== nextName ? `<p class="next-event-kind">${nextKind}</p>` : ''}
+                        <p class="next-event-date">${formattedDate}${eventTime ? ' · ' + eventTime : ''}</p>
                     </div>
                 </div>`;
         } else {
