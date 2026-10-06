@@ -734,6 +734,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- ESECUZIONE DI TUTTE LE FUNZIONI ---
     gestioneMenuMobile();
     aggiornaAnnoFooter();
+    gestioneModuloContatti();
+
+    // Modulo contatti: non c'è un server che spedisce mail, quindi apriamo
+    // il programma di posta di chi scrive con tutto già compilato.
+    function gestioneModuloContatti() {
+        const form = $('#contact-mail-form');
+        if (!form) return;
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const val = (id) => ($(`#${id}`)?.value || '').trim();
+            const reasonEl = $('#contact-reason');
+            const reason = reasonEl?.selectedOptions[0]?.textContent.trim() || '';
+            const subject = `[Sito] ${reason} — ${val('contact-name')}`;
+            const body = `${val('contact-message')}\n\n—\n${val('contact-name')}\n${val('contact-email')}`;
+            window.location.href = `mailto:gateradiorm@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        });
+    }
     initLivePlayer();
     gestioneArchivio();
     gestioneArtisti();

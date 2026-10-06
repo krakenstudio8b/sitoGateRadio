@@ -12,6 +12,33 @@ function uploadCorsHeaders(request) {
     };
 }
 
+// Chi carica deve essere loggato nel backstage con ruolo admin.
+// Il browser manda il "token" di login Firebase; qui lo facciamo verificare
+// a Firebase stesso (niente chiavi segrete scritte nel codice pubblico).
+const FIREBASE_WEB_API_KEY = 'AIzaSyBtQZkX6r4F2W0BsIo6nsD27dUZHv3e8RU'; // chiave pubblica del progetto, è già nel backstage
+const FIREBASE_DB_URL = 'https://studio-kraken-gate-default-rtdb.firebaseio.com';
+const ALLOWED_UPLOAD_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+
+async function isAdminToken(idToken) {
+    try {
+        // 1) il token è valido? Firebase ci dice di chi è
+        const lookup = await fetch(
+            `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_WEB_API_KEY}`,
+            { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) }
+        );
+        if (!lookup.ok) return false;
+        const uid = (await lookup.json()).users?.[0]?.localId;
+        if (!uid) return false;
+        // 2) quell'utente è admin? (stesso controllo che fa il backstage)
+        const roleRes = await fetch(`${FIREBASE_DB_URL}/users/${encodeURIComponent(uid)}/role.json?auth=${encodeURIComponent(idToken)}`);
+        if (!roleRes.ok) return false;
+        return (await roleRes.json()) === 'admin';
+    } catch {
+        return false;
+    }
+}
+
 // Upload immagini su R2. Route gestita qui nel worker perché
 // run_worker_first:true scavalca le Pages Functions (functions/api/upload.js morto).
 async function handleUpload(request, env) {
@@ -20,8 +47,8 @@ async function handleUpload(request, env) {
         status, headers: { ...cors, 'Content-Type': 'application/json' }
     });
 
-    const authKey = (request.headers.get('Authorization') || '').replace('Bearer ', '');
-    if (!authKey || authKey !== env.UPLOAD_API_KEY) {
+    const idToken = (request.headers.get('Authorization') || '').replace('Bearer ', '').trim();
+    if (!idToken || !(await isAdminToken(idToken))) {
         return json({ error: 'Non autorizzato' }, 401);
     }
     if (!env.R2_BUCKET) {
@@ -35,6 +62,12 @@ async function handleUpload(request, env) {
 
         if (!file || !file.name) {
             return json({ error: 'Nessun file ricevuto' }, 400);
+        }
+        if (!ALLOWED_UPLOAD_TYPES.includes(file.type)) {
+            return json({ error: 'Formato non ammesso: solo immagini JPG, PNG, WebP o GIF' }, 400);
+        }
+        if (file.size > MAX_UPLOAD_BYTES) {
+            return json({ error: 'File troppo grande (massimo 10 MB)' }, 400);
         }
 
         const timestamp = Date.now();

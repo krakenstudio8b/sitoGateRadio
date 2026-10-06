@@ -8,3 +8,19 @@ functions/
 .wrangler/
 .zencoder/
 .zenflow/
+# file di prova / interni: non vanno pubblicati
+old/
+reegliette.mp4
+*-texture.html
+texture-preview.html
+home-preview*.html
+hero-preview.html
+kraken-logo-preview.html
+migrate-to-firebase.html
+wrangler.jsonc
+_worker.js
+.gitignore
+.assetsignore
+sfondochisiamo2.jpg
+assets/texture*.png
+assets/texture*.webp

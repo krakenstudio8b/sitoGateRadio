@@ -45,18 +45,19 @@ function hide(el) { el.classList.add('hidden'); }
 
 // ── Upload immagini su R2 ────────────────────────────────────────────────────
 // La route /api/upload è servita dallo stesso worker del sito (vedi _worker.js).
-// La key è esposta nel client: accettabile perché il backstage è già dietro auth
-// Firebase admin e il bucket è isolato.
+// Niente chiavi nel codice: mandiamo il token di login Firebase dell'admin,
+// il worker lo verifica e controlla che l'utente abbia ruolo admin.
 const UPLOAD_API_URL = '/api/upload';
-const UPLOAD_API_KEY = 'bbf0fd442d45f31f886d94f9fe28b5ba822be664854fa942';
 
 async function uploadFile(file, folder) {
+    if (!auth.currentUser) throw new Error('Sessione scaduta: rifai il login');
+    const idToken = await auth.currentUser.getIdToken();
     const fd = new FormData();
     fd.append('file', file);
     fd.append('folder', folder);
     const res = await fetch(UPLOAD_API_URL, {
         method: 'POST',
-        headers: { Authorization: 'Bearer ' + UPLOAD_API_KEY },
+        headers: { Authorization: 'Bearer ' + idToken },
         body: fd,
     });
     let data = {};

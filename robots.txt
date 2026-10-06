@@ -4,7 +4,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://www.gateradio.com/sitemap.xml
+Sitemap: https://gateradiorm.com/sitemap.xml
 
 # Disallow development folders
 Disallow: /old/
