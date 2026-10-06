@@ -285,11 +285,14 @@
         const set    = (id, val) => { const el = $(id); if (el) el.textContent = val; };
         const setSrc = (id, src, alt) => { const el = $(id); if (el) { el.src = src; el.alt = alt || ''; } };
 
+        // Se titolo e artista sono identici (capita coi video senza scheda sul sito)
+        // non ripetiamo la stessa riga due volte.
+        const same = (a, b) => String(a || '').trim().toUpperCase() === String(b || '').trim().toUpperCase();
         set('radio-artist',      current.artist);
-        set('radio-title',       current.title);
+        set('radio-title',       same(current.title, current.artist) ? '' : current.title);
         set('radio-duration',    formatTime(current.duration));
         set('radio-next-artist', next.artist);
-        set('radio-next-title',  next.title);
+        set('radio-next-title',  same(next.title, next.artist) ? '' : next.title);
         setSrc('radio-artwork',      current.imageUrl, current.artist);
         setSrc('radio-next-artwork', next.imageUrl,    next.artist);
 
