@@ -160,8 +160,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             ? stream.galleryImages
             : (stream.imageUrl ? [stream.imageUrl] : []);
 
+        const actionsHTML = buildLiveActionsHTML(getLiveLinks(stream), isFuture);
+
+        openGalleryModal({
+            title: stream.artist || stream.title || '',
+            dateStr,
+            location,
+            description: stream.title || '',
+            tags: stream.tags || [],
+            images,
+            actionsHTML,
+            seasonClass: stream.season || '',
+        });
+    };
+
+    // Pulsanti "GUARDA LA STREAMING": uno solo, oppure uno per artista
+    // quando la serata è divisa in più dirette.
+    function buildLiveActionsHTML(liveLinks, isFuture) {
         let actionsHTML = '';
-        const liveLinks = getLiveLinks(stream);
         if (liveLinks.length === 1) {
             actionsHTML = `<a href="${_escHtml(liveLinks[0].url)}" target="_blank" rel="noopener" class="archive-modal-soundcloud-btn"><i class="fas fa-play-circle mr-2"></i>GUARDA LA STREAMING</a>`;
         } else if (liveLinks.length > 1) {
@@ -175,17 +191,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (isFuture) {
             actionsHTML = `<p class="text-sm text-[var(--text-secondary)]">Resta sintonizzato.</p>`;
         }
+        return actionsHTML;
+    }
 
-        openGalleryModal({
-            title: stream.artist || stream.title || '',
-            dateStr,
-            location,
-            description: stream.title || '',
-            tags: stream.tags || [],
-            images,
-            actionsHTML,
-            seasonClass: stream.season || '',
-        });
+    // Un evento (es. uno showcase) ha le sue dirette nelle live dello stesso giorno:
+    // le raccogliamo da lì, così i link si gestiscono in un posto solo.
+    const getEventLiveLinks = (event) => {
+        if (!event || !event.date) return [];
+        const streams = (typeof streamsData !== 'undefined' ? streamsData : []) || [];
+        const seen = new Set();
+        return streams
+            .filter(s => s.date === event.date)
+            .flatMap(getLiveLinks)
+            .filter(l => !seen.has(l.url) && seen.add(l.url));
     };
 
     // --- APERTURA MODALE EVENTO (eventi sul sito + calendario) ---
@@ -207,6 +225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             details: (lang === 'en' && event.details_en) ? event.details_en : (event.details || ''),
             tags: event.tags || [],
             images,
+            actionsHTML: buildLiveActionsHTML(getEventLiveLinks(event), false),
         });
     };
 
