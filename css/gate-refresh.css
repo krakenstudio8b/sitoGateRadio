@@ -31,7 +31,7 @@ body::before {
     box-shadow: none;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
-.glow-border:hover { border-color: rgba(255, 255, 255, 0.35); }
+.glow-border:hover { border-color: rgba(255, 255, 255, 0.2); }
 .section-divider {
     box-shadow: none;
     margin: 4rem auto;
@@ -72,7 +72,7 @@ body::before {
 .artist-card:hover {
     transform: none;
     box-shadow: none;
-    border-color: rgba(255, 255, 255, 0.35);
+    border-color: var(--border-color); /* niente riquadro bianco: decide il poster */
 }
 .archive-card img,
 .event-card img,
