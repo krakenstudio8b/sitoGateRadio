@@ -717,6 +717,7 @@ function openResidentModal(key) {
         $('#res-order').value = data.order || 0;
         $('#res-image').value = data.image || '';
         $('#res-bio').value = data.bio || '';
+        $('#res-bio-it').value = data.bio_it || '';
         $('#res-instagram').value = data.instagram || '';
         $('#res-soundcloud').value = data.soundcloud || '';
         $('#res-mixcloud').value = data.mixcloud || '';
@@ -739,6 +740,7 @@ $('#resident-form').addEventListener('submit', async e => {
             order:      parseInt($('#res-order').value, 10) || 0,
             image:      $('#res-image').value.trim(),
             bio:        $('#res-bio').value.trim(),
+            bio_it:     $('#res-bio-it').value.trim(),
             instagram:  $('#res-instagram').value.trim(),
             soundcloud: $('#res-soundcloud').value.trim(),
             mixcloud:   $('#res-mixcloud').value.trim(),

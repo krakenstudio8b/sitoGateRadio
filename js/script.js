@@ -610,6 +610,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     residents = fallbackResidents;
                 }
                 renderResidents(residents);
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(() => renderResidents(residents), 0);
+                });
             })
             .catch(() => renderResidents(fallbackResidents));
 
@@ -627,8 +630,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <img src="${artist.image || 'assets/resident_placeholder.svg'}" alt="${artist.name}" class="artist-card-image" loading="lazy">
                     </div>
                     <div class="artist-card-content">
-                        <h3 class="artist-card-title">${artist.name}</h3>
-                        <p class="artist-card-bio">${artist.bio || ''}</p>
+                        <h3 class="artist-card-title">${_escHtml(artist.name)}</h3>
+                        <p class="artist-card-bio">${_escHtml((_glLang() === 'it' && artist.bio_it) ? artist.bio_it : (artist.bio || ''))}</p>
                         ${socials ? `<div class="resident-socials">${socials}</div>` : ''}
                     </div>
                 </div>
@@ -679,7 +682,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let currentDate = new Date();
 
         const renderCalendar = () => {
-            monthYearHeader.textContent = currentDate.toLocaleDateString('it-IT', { month: 'long', year: 'numeric' }).toUpperCase();
+            monthYearHeader.textContent = currentDate.toLocaleDateString(_glLocale(), { month: 'long', year: 'numeric' }).toUpperCase();
             const year = currentDate.getFullYear(), month = currentDate.getMonth();
             const firstDayOfWeek = (new Date(year, month, 1).getDay() + 6) % 7;
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -695,6 +698,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             calendarGrid.innerHTML = gridHTML;
         };
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(renderCalendar, 0);
+        });
 
         calendarGrid.addEventListener('click', (e) => {
             const dayCell = e.target.closest('.has-event');

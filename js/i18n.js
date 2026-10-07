@@ -80,6 +80,7 @@
         'contact.info':     { it: 'INFO DIRETTE',     en: 'DIRECT INFO' },
         'contact.genemail': { it: 'Email Generali',   en: 'General Email' },
         'contact.artprop':  { it: 'Proposte Artistiche', en: 'Artist Proposals' },
+        'contact.reasonlabel': { it: 'Motivo del contatto', en: 'Reason for contact' },
         'contact.artlink':  { it: 'Vai al modulo di candidatura', en: 'Go to the application form' },
         'contact.social':   { it: 'SEGUICI SUI SOCIAL', en: 'FOLLOW US ON SOCIAL' },
         'contact.sendmsg':  { it: 'INVIA UN MESSAGGIO', en: 'SEND A MESSAGE' },
