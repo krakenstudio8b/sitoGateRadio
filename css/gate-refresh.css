@@ -204,27 +204,27 @@ body::before {
 
 /* ----- FOOTER "GATE È" (costruito da js/gate-nuova.js) ----- */
 .footer-main-area { padding-top: 0; }
-.gn-foot { padding-top: 5rem; padding-bottom: 3rem; text-align: left; }
-.gn-foot-manifesto { padding-bottom: 3.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
-.gn-foot-k {
+.gn-foot { padding-top: 3.5rem; padding-bottom: 3rem; text-align: left; }
+.gn-intro { padding-top: 5rem; padding-bottom: 4rem; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.gn-intro-k {
     font-family: 'Grifter', sans-serif; line-height: 0.9; color: #fff;
     font-size: clamp(3.25rem, 11vw, 8rem); letter-spacing: -0.02em;
 }
-.gn-foot-claim {
+.gn-intro-claim {
     margin-top: 1.25rem; max-width: 38ch;
     font-size: clamp(1.15rem, 2.4vw, 1.65rem); line-height: 1.35; color: #fff;
 }
-.gn-foot-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
-.gn-foot-btn {
+.gn-intro-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+.gn-intro-btn {
     font-family: 'Roboto Mono', monospace; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
     padding: 0.9rem 1.2rem; border: 1px solid rgba(255, 255, 255, 0.35); color: #fff;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
-.gn-foot-btn:hover { border-color: #fff; }
-.gn-foot-btn.is-main { background: var(--accent); border-color: var(--accent); color: #000; }
-.gn-foot-btn.is-main:hover { filter: brightness(1.1); }
+.gn-intro-btn:hover { border-color: #fff; }
+.gn-intro-btn.is-main { background: var(--accent); border-color: var(--accent); color: #000; }
+.gn-intro-btn.is-main:hover { filter: brightness(1.1); }
 .gn-foot-cols {
-    display: grid; gap: 2rem; padding-top: 2.5rem;
+    display: grid; gap: 2rem;
     grid-template-columns: repeat(2, 1fr);
 }
 @media (min-width: 900px) { .gn-foot-cols { grid-template-columns: 1fr 1.3fr 1fr 1fr; } }
