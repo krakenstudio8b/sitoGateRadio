@@ -142,21 +142,11 @@
 
         <section id="artist-booking" class="py-16 px-6">
             <div class="max-w-3xl mx-auto">
-                 <form class="space-y-5 p-8 rounded-xl border glow-border">
-                    <div class="text-center mb-8">
-                        <h2 class="text-3xl font-bold mb-4 glow-text" data-i18n-html="sched.wantplay">VUOI SUONARE <span class="text-[var(--accent)]">DA NOI?</span></h2>
-                        <p class="text-[var(--text-secondary)]" data-i18n="sched.formdesc">Clicca sul campo data per scegliere uno degli slot disponibili e inviaci la tua proposta.</p>
-                    </div>
-                     <div><label for="artist-name" class="block text-sm font-medium text-[var(--text-secondary)] mb-1 " data-i18n="sched.artistname">Nome Artista / DJ</label><input type="text" id="artist-name" name="artist-name" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></div>
-                     <div><label for="artist-email" class="block text-sm font-medium text-[var(--text-secondary)] mb-1 " data-i18n="sched.youremail">La tua Email</label><input type="email" id="artist-email" name="artist-email" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></div>
-                     <div><label for="artist-music" class="block text-sm font-medium text-[var(--text-secondary)] mb-1 " data-i18n="sched.musiclink">Link alla tua Musica</label><input type="url" id="artist-music" name="artist-music" required placeholder="https://" class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black"></div>
-                     <div>
-                        <label for="booking-date-input" class="block text-sm font-medium text-[var(--text-secondary)] mb-1 " data-i18n="sched.datepropose">Data Proposta</label>
-                        <input type="text" id="booking-date-input" name="preferred_date" placeholder="Seleziona una data disponibile..." data-i18n="sched.dateplaceh" readonly="readonly" class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black cursor-pointer">
-                     </div>
-                     <div><label for="artist-bio" class="block text-sm font-medium text-[var(--text-secondary)] mb-1 " data-i18n="sched.biogenre">Breve Bio / Genere Musicale</label><textarea id="artist-bio" name="artist-bio" rows="4" required class="w-full rounded-lg px-4 py-3 focus:outline-none focus:border-[var(--accent)] transition-colors border border-[var(--border-color)] bg-black" placeholder="Descrivi brevemente il tuo progetto..." data-i18n="sched.bioplaceh"></textarea></div>
-                     <div class="text-center pt-4"><button type="submit" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-paper-plane"></i> <span data-i18n="sched.sendprop">INVIA PROPOSTA</span></button></div>
-                </form>
+                 <div class="opencall-box space-y-5 p-8 rounded-xl border glow-border text-center">
+                    <h2 class="text-3xl font-bold mb-4 glow-text" data-i18n-html="sched.wantplay">VUOI SUONARE <span class="text-[var(--accent)]">DA NOI?</span></h2>
+                    <p class="text-[var(--text-secondary)] max-w-xl mx-auto" data-i18n="sched.formdesc">Compila l'open call: ci racconti chi sei, ci lasci i link alla tua musica e ti ricontattiamo noi per fissare la data.</p>
+                    <div class="pt-4"><a href="https://docs.google.com/forms/d/e/1FAIpQLSf_Ot0_OHSMYUuy2oyQtUJaMOaATIIkiMvNxKs_zMCRhZSMyg/viewform" target="_blank" rel="noopener" class="btn-primary font-bold py-3 px-8 rounded-lg text-lg inline-flex items-center gap-2"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> <span data-i18n="sched.sendprop">PROPONI IL TUO SET</span></a></div>
+                </div>
             </div>
         </section>
     </main>
@@ -186,11 +176,11 @@
             
             <div class="md:text-center"> <h4 class="text-lg font-bold"><span data-i18n="footer.follow">SEGUICI</span></h4>
                 <div class="flex justify-center md:justify-center space-x-4 text-2xl">
-                    <a href="#" aria-label="Instagram" class="footer-social-link"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="SoundCloud" class="footer-social-link"><i class="fab fa-soundcloud"></i></a>
-                    <a href="#" aria-label="YouTube" class="footer-social-link"><i class="fab fa-youtube"></i></a>
-                    <a href="#" aria-label="Twitch" class="footer-social-link"><i class="fab fa-twitch"></i></a>
-                    <a href="#" aria-label="Mixcloud" class="footer-social-link"><i class="fab fa-mixcloud"></i></a>
+                    <a href="https://instagram.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="footer-social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://soundcloud.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="SoundCloud" class="footer-social-link"><i class="fab fa-soundcloud"></i></a>
+                    <a href="https://www.youtube.com/@GateRadiorm" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="footer-social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="https://twitch.tv/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Twitch" class="footer-social-link"><i class="fab fa-twitch"></i></a>
+                    <a href="https://mixcloud.com/gateradio" target="_blank" rel="noopener noreferrer" aria-label="Mixcloud" class="footer-social-link"><i class="fab fa-mixcloud"></i></a>
                 </div>
             </div>
 

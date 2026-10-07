@@ -110,7 +110,7 @@
         'sched.event':      { it: 'Evento Fisico',    en: 'Live Event' },
         'sched.wantplay':   { it: 'VUOI SUONARE <span class="text-[var(--accent)]">DA NOI?</span>',
                               en: 'WANT TO PLAY <span class="text-[var(--accent)]">WITH US?</span>' },
-        'sched.formdesc':   { it: 'Clicca sul campo data per scegliere uno degli slot disponibili e inviaci la tua proposta.', en: 'Click on the date field to choose an available slot and send us your proposal.' },
+        'sched.formdesc':   { it: "Compila l'open call: ci racconti chi sei, ci lasci i link alla tua musica e ti ricontattiamo noi per fissare la data.", en: "Fill in the open call: tell us who you are, share links to your music and we'll get back to you to set a date." },
         'sched.artistname': { it: 'Nome Artista / DJ', en: 'Artist / DJ Name' },
         'sched.youremail':  { it: 'La tua Email',     en: 'Your Email' },
         'sched.musiclink':  { it: 'Link alla tua Musica', en: 'Link to your Music' },
@@ -118,7 +118,7 @@
         'sched.dateplaceh': { it: 'Seleziona una data disponibile...', en: 'Select an available date...' },
         'sched.biogenre':   { it: 'Breve Bio / Genere Musicale', en: 'Short Bio / Music Genre' },
         'sched.bioplaceh':  { it: 'Descrivi brevemente il tuo progetto...', en: 'Briefly describe your project...' },
-        'sched.sendprop':   { it: 'INVIA PROPOSTA',   en: 'SEND PROPOSAL' },
+        'sched.sendprop':   { it: 'PROPONI IL TUO SET', en: 'SUBMIT YOUR SET' },
 
         // ── RADIO ───────────────────────────────────────────────────────────
         'radio.install':    { it: 'Aggiungi Gate Radio alla schermata Home per ascoltare come un\'app.', en: 'Add Gate Radio to your Home screen to listen like an app.' },

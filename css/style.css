@@ -1731,3 +1731,10 @@ img:not([src]), img[src=""] {
     .radio-artwork-wrapper { display: none; }
     .radio-main-card { padding: 1rem; }
 }
+
+/* Titoli lunghi su telefono (es. "PROGRAMMAZIONE"): si adattano alla
+   larghezza invece di uscire dallo schermo. */
+@media (max-width: 640px) {
+    h1, h2 { overflow-wrap: anywhere; }
+    [data-i18n="sched.title"] { font-size: clamp(1.5rem, 8.5vw, 2.25rem) !important; }
+}
