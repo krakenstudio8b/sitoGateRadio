@@ -89,3 +89,133 @@ body::before {
     height: auto;
     aspect-ratio: 4 / 5;
 }
+
+/* ----- 4. TITOLI SENZA SCATOLA -----
+   Come sulle locandine: scritta grande, libera, allineata a sinistra. */
+.section-heading-box {
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    max-width: none !important;
+    text-align: left !important;
+}
+.section-heading-box h1,
+.section-heading-box h2 {
+    text-align: left !important;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+}
+.section-heading-box p { text-align: left !important; }
+
+/* ----- 5. PULSANTI RETTANGOLARI ----- */
+.btn-primary,
+.filter-btn,
+.archive-modal-soundcloud-btn {
+    border-radius: 0 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ----- 6. HOME SU TELEFONO: righe da scorrere di lato -----
+   Invece di 4 locandine a tutto schermo una sotto l'altra. */
+@media (max-width: 640px) {
+    #archive-grid-preview,
+    #events-grid-preview {
+        display: flex !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 12px !important;
+        margin-right: -1.5rem;           /* la riga arriva al bordo dello schermo */
+        padding-right: 1.5rem;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+    }
+    #archive-grid-preview > *,
+    #events-grid-preview > * {
+        flex: 0 0 78%;
+        scroll-snap-align: start;
+    }
+}
+
+/* ----- 7. UN SOLO "ASCOLTA ORA" in Home -----
+   Il pulsante grande in alto porta già alla Radio: via il doppione. */
+#live-section-content .radio-widget-banner { display: none !important; }
+#live-section-content .coming-soon-container > .w-full:empty,
+#live-section-content .coming-soon-container > .w-full:has(.radio-widget-banner) { display: none; }
+
+/* ----- 13. MENU CORTO (costruito da js/gate-nuova.js) ----- */
+.gn-nav { gap: 1.75rem; align-items: center; }
+.gn-nav-link {
+    font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--text-primary); transition: color 0.2s ease;
+}
+.gn-nav-link:hover, .gn-nav-link.is-current { color: var(--accent); }
+.gn-nav-cta {
+    font-family: 'Roboto Mono', monospace; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.1em; padding: 0.55rem 0.9rem;
+    border: 1px solid var(--accent); color: var(--accent);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.gn-nav-cta:hover { background: var(--accent); color: #000; }
+#mobile-menu > a.gn-nav-cta {
+    display: block; margin-top: 1rem !important; text-align: center;
+    border: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
+}
+
+/* ----- 12. HOME: "GATE È" ----- */
+.gn-gate-e { padding-top: 4rem; padding-bottom: 2rem; }
+.gn-section-title {
+    font-family: 'Grifter', sans-serif; font-size: clamp(2rem, 6vw, 3.25rem);
+    line-height: 1; text-transform: uppercase; margin-bottom: 1.75rem; text-align: left;
+}
+.gn-tiles { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 640px)  { .gn-tiles { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .gn-tiles { grid-template-columns: repeat(4, 1fr); } }
+.gn-tile {
+    display: flex; flex-direction: column; gap: 0.75rem;
+    min-height: 190px; padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(0, 0, 0, 0.55);
+    transition: background-color 0.2s ease;
+}
+.gn-tile:hover { background: rgba(255, 255, 255, 0.04); }
+.gn-tile-k { font-family: 'Grifter', sans-serif; font-size: 1.6rem; line-height: 1; color: #fff; }
+.gn-tile-d { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
+.gn-tile-go {
+    margin-top: auto; font-family: 'Roboto Mono', monospace; font-size: 0.75rem;
+    font-weight: 700; letter-spacing: 0.1em; color: var(--accent);
+}
+
+/* ----- 10. ARCHIVIO: ricerca + filtri per tipo ----- */
+.gn-archive-tools { max-width: 56rem; margin: 0 auto 1.25rem; }
+.gn-search {
+    width: 100%; padding: 0.95rem 1.1rem; font-size: 1rem;
+    background: #000; color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 0;
+}
+.gn-search:focus { outline: none; border-color: var(--accent); }
+.gn-kinds { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.gn-kind {
+    font-family: 'Roboto Mono', monospace; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.08em; padding: 0.5rem 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.25); color: var(--text-secondary);
+    background: transparent; cursor: pointer;
+}
+.gn-kind:hover { color: #fff; }
+.gn-kind.is-active { background: var(--accent); border-color: var(--accent); color: #000; }
+.gn-count {
+    margin-top: 0.75rem; font-family: 'Roboto Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 0.08em; color: var(--text-secondary);
+}
+.gn-empty { color: var(--text-secondary); text-align: center; padding: 3rem 0; }
+@media (max-width: 640px) {
+    .gn-kinds { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.25rem; }
+    .gn-kind { flex: 0 0 auto; }
+}
+
+/* titoli di sezione a sinistra anche su telefono (il contenitore li centrava) */
+#archive-preview .max-w-6xl > .flex { align-items: flex-start !important; }

@@ -30,8 +30,20 @@
     if (fromUrl) store.set(KEY_MODE, fromUrl);
 
     const sheet = document.getElementById('gate-refresh-css');
-    const apply = () => { if (sheet) sheet.disabled = (mode === 'vecchia'); };
+    const apply = () => {
+        if (sheet) sheet.disabled = (mode === 'vecchia');
+        document.documentElement.classList.toggle('gate-nuova', mode === 'nuova');
+    };
     apply(); // subito, prima che la pagina si disegni: niente "lampo"
+
+    // Versione nuova: oltre allo stile carica anche le modifiche di struttura
+    // (menu corto, blocchi Home, ricerca Archivio) — vedi js/gate-nuova.js
+    if (mode === 'nuova') {
+        const s = document.createElement('script');
+        s.src = 'js/gate-nuova.js';
+        s.defer = true;
+        document.head.appendChild(s);
+    }
 
     if (!confronto) return;
 
@@ -71,9 +83,10 @@
         btn.addEventListener('click', () => {
             mode = mode === 'nuova' ? 'vecchia' : 'nuova';
             store.set(KEY_MODE, mode);
-            apply();
-            label();
-            tagLinks();
+            // ricarichiamo: le due versioni hanno anche struttura diversa
+            const u = new URL(location.href);
+            u.searchParams.set('confronto', mode);
+            location.href = u.pathname + u.search + u.hash;
         });
         label();
         document.body.appendChild(btn);
