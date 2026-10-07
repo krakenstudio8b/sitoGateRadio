@@ -5,6 +5,7 @@
 //  1. Menu corto: RADIO · ARCHIVIO · EVENTI · RESIDENT · INFO + OPEN CALL, senza icone
 //  2. Home: un solo "ASCOLTA ORA" (va dritto alla Radio)
 //  4. Chi siamo: descrizione nuova
+//  5. Footer con "GATE È"
 //  3. Archivio: ricerca per artista/serata + filtri per tipo
 (function () {
     const OPEN_CALL_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf_Ot0_OHSMYUuy2oyQtUJaMOaATIIkiMvNxKs_zMCRhZSMyg/viewform';
@@ -154,14 +155,61 @@
         apply();
     }
 
+    // ─── 5. FOOTER: "GATE È" + colonne ordinate ─────────────────────────────────
+    function buildFooter() {
+        const area = document.querySelector('.footer-main-area');
+        if (!area) return;
+        // i social li riprendiamo da quelli già presenti (stessi link su tutte le pagine)
+        const socialsSrc = area.dataset.gnSocials || [...area.querySelectorAll('a.footer-social-link')].map(a => a.outerHTML).join('');
+        area.dataset.gnSocials = socialsSrc;
+        const l = lang() === 'en' ? 'en' : 'it';
+        const claim = l === 'en'
+            ? 'an independent project born in Rome. A radio, our nights and a booth open to anyone with something to say through their music.'
+            : 'un progetto indipendente nato a Roma. Una radio, le nostre serate e una console aperta a chi ha qualcosa da dire con la propria musica.';
+        const links = NAV.map(n => `<a href="${n.href}">${t(n.it, n.en)}</a>`).join('');
+        area.innerHTML = `
+            <div class="gn-foot max-w-6xl mx-auto px-6">
+                <div class="gn-foot-manifesto">
+                    <p class="gn-foot-k">GATE <span class="text-[var(--accent)]">${l === 'en' ? 'IS' : 'È'}</span></p>
+                    <p class="gn-foot-claim">${claim}</p>
+                    <div class="gn-foot-ctas">
+                        <a class="gn-foot-btn is-main" href="${OPEN_CALL_URL}" target="_blank" rel="noopener">${l === 'en' ? 'SUBMIT YOUR SET' : 'PROPONI IL TUO SET'} →</a>
+                        <a class="gn-foot-btn" href="https://instagram.com/gateradio" target="_blank" rel="noopener">INSTAGRAM @GATERADIO</a>
+                    </div>
+                </div>
+                <div class="gn-foot-cols">
+                    <div>
+                        <p class="gn-foot-h">${t('SITO', 'SITE')}</p>
+                        <nav class="gn-foot-links">${links}</nav>
+                    </div>
+                    <div>
+                        <p class="gn-foot-h">${t('CONTATTI', 'CONTACT')}</p>
+                        <div class="gn-foot-links">
+                            <a href="mailto:gateradiorm@gmail.com">gateradiorm@gmail.com</a>
+                            <a href="${OPEN_CALL_URL}" target="_blank" rel="noopener">Open call</a>
+                            <a href="contact.html">${t('Scrivici', 'Write to us')}</a>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="gn-foot-h">${t('SEGUICI', 'FOLLOW')}</p>
+                        <div class="gn-foot-socials">${socialsSrc}</div>
+                    </div>
+                    <div class="gn-foot-tag">EXPANDING<br>SOUND<br>BOUNDARIES</div>
+                </div>
+            </div>`;
+        const bottom = document.querySelector('body > footer p');
+        if (bottom) bottom.innerHTML = `© ${new Date().getFullYear()} <span class="grifter-font">GATE RADIO</span> · ROMA`;
+    }
+
     function init() {
         buildMenu();
         buildHome();
         buildAbout();
         buildArchiveSearch();
+        buildFooter();
         // le traduzioni IT/EN cambiano i testi del menu: lo ricostruiamo
         document.addEventListener('click', (e) => {
-            if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(() => { buildMenu(); buildAbout(); }, 50);
+            if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(() => { buildMenu(); buildAbout(); buildFooter(); }, 50);
         });
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
