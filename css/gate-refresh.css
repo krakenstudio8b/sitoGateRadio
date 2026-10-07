@@ -166,30 +166,6 @@ body::before {
     border: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
 }
 
-/* ----- 12. HOME: "GATE È" ----- */
-.gn-gate-e { padding-top: 4rem; padding-bottom: 2rem; }
-.gn-section-title {
-    font-family: 'Grifter', sans-serif; font-size: clamp(2rem, 6vw, 3.25rem);
-    line-height: 1; text-transform: uppercase; margin-bottom: 1.75rem; text-align: left;
-}
-.gn-tiles { display: grid; gap: 1rem; grid-template-columns: 1fr; }
-@media (min-width: 640px)  { .gn-tiles { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .gn-tiles { grid-template-columns: repeat(4, 1fr); } }
-.gn-tile {
-    display: flex; flex-direction: column; gap: 0.75rem;
-    min-height: 190px; padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: rgba(0, 0, 0, 0.55);
-    transition: background-color 0.2s ease;
-}
-.gn-tile:hover { background: rgba(255, 255, 255, 0.04); }
-.gn-tile-k { font-family: 'Grifter', sans-serif; font-size: 1.6rem; line-height: 1; color: #fff; }
-.gn-tile-d { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
-.gn-tile-go {
-    margin-top: auto; font-family: 'Roboto Mono', monospace; font-size: 0.75rem;
-    font-weight: 700; letter-spacing: 0.1em; color: var(--accent);
-}
-
 /* ----- 10. ARCHIVIO: ricerca + filtri per tipo ----- */
 .gn-archive-tools { max-width: 56rem; margin: 0 auto 1.25rem; }
 .gn-search {
@@ -219,3 +195,9 @@ body::before {
 
 /* titoli di sezione a sinistra anche su telefono (il contenitore li centrava) */
 #archive-preview .max-w-6xl > .flex { align-items: flex-start !important; }
+
+/* Chi siamo: link open call in fondo alla descrizione */
+.gn-about-cta a {
+    font-family: 'Roboto Mono', monospace; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--accent); font-size: 0.85rem;
+}

@@ -3,11 +3,11 @@
 // la versione vecchia resta identica a prima.
 //
 //  1. Menu corto: RADIO · ARCHIVIO · EVENTI · RESIDENT · INFO + OPEN CALL, senza icone
-//  2. Home: un solo "ASCOLTA ORA" (va dritto alla Radio) + blocco "GATE È"
+//  2. Home: un solo "ASCOLTA ORA" (va dritto alla Radio)
+//  4. Chi siamo: descrizione nuova
 //  3. Archivio: ricerca per artista/serata + filtri per tipo
 (function () {
     const OPEN_CALL_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf_Ot0_OHSMYUuy2oyQtUJaMOaATIIkiMvNxKs_zMCRhZSMyg/viewform';
-    const INSTAGRAM_URL = 'https://instagram.com/gateradio';
 
     const lang = () => (window.GateI18n ? window.GateI18n.getLang() : 'it');
     const t = (it, en) => (lang() === 'en' ? en : it);
@@ -49,40 +49,38 @@
         // un solo "ASCOLTA ORA": quello grande porta direttamente alla Radio
         const heroCta = document.querySelector('#hero-section a[href*="#live"]');
         if (heroCta) heroCta.setAttribute('href', 'radio.html');
+    }
 
-        // blocco GATE È (Records lo aggiungiamo quando ci sarà qualcosa)
-        const live = document.getElementById('live');
-        if (!live || document.getElementById('gn-gate-e')) return;
-        const tiles = [
-            { k: 'RADIO', href: 'radio.html',
-              d: t('Diretta 24/7 e tutti i set registrati in studio.', '24/7 stream and every set recorded in our studio.'),
-              go: t('ASCOLTA', 'LISTEN') },
-            { k: t('SERATE', 'NIGHTS'), href: 'events.html',
-              d: t('Gate Nacht, showcase e collaborazioni con collettivi e locali.', 'Gate Nacht, showcases and collabs with collectives and venues.'),
-              go: t('PROSSIME DATE', 'UPCOMING DATES') },
-            { k: 'OPEN CALL', href: OPEN_CALL_URL, ext: true,
-              d: t('Sei un DJ o un live act? Proponi il tuo set.', 'DJ or live act? Pitch us your set.'),
-              go: t('PROPONI IL TUO SET', 'SUBMIT YOUR SET') },
-            { k: 'MERCH', href: INSTAGRAM_URL, ext: true,
-              d: t('Magliette e stampe Gate: le trovi alle nostre serate.', 'Gate tees and prints: find them at our nights.'),
-              go: t('SEGUICI SU INSTAGRAM', 'FOLLOW ON INSTAGRAM') },
-        ];
-        const sec = document.createElement('section');
-        sec.id = 'gn-gate-e';
-        sec.className = 'gn-gate-e px-6';
-        sec.innerHTML = `
-            <div class="max-w-6xl mx-auto">
-                <h2 class="gn-section-title">GATE <span class="text-[var(--accent)]">${t('È', 'IS')}</span></h2>
-                <div class="gn-tiles">
-                    ${tiles.map(x => `
-                        <a class="gn-tile" href="${x.href}"${x.ext ? ' target="_blank" rel="noopener"' : ''}>
-                            <span class="gn-tile-k">${x.k}</span>
-                            <span class="gn-tile-d">${x.d}</span>
-                            <span class="gn-tile-go">${x.go} →</span>
-                        </a>`).join('')}
-                </div>
-            </div>`;
-        live.insertAdjacentElement('afterend', sec);
+    // ─── 4. CHI SIAMO: DESCRIZIONE NUOVA ────────────────────────────────────────
+    // Testo costruito sul post della open call + i dati dell'archivio.
+    const ABOUT = {
+        sub: { it: 'Expanding sound boundaries.', en: 'Expanding sound boundaries.' },
+        p: [
+            { it: "Gate Radio è un progetto indipendente nato a Roma alla fine del 2024, dedicato alla musica elettronica e alla promozione dell'arte in ogni sua forma. Siamo un collettivo: dal nostro studio trasmettiamo dirette DJ e live set, organizziamo serate e apriamo le porte a chi ha qualcosa da dire con la propria musica.",
+              en: "Gate Radio is an independent project born in Rome at the end of 2024, devoted to electronic music and to promoting art in all its forms. We are a collective: from our studio we stream DJ and live sets, we throw nights and we open our doors to anyone with something to say through their music." },
+            { it: "Dalla prima diretta, nel novembre 2024, sono passate da qui più di 60 sessioni: i nostri resident, ospiti dalla scena romana e italiana e artistə che oggi suonano tra Berlino e il resto d'Europa. Ogni set resta nel nostro archivio, la memoria di tutto quello che è passato da questa console.",
+              en: "Since our first stream in November 2024, more than 60 sessions have gone through here: our residents, guests from the Roman and Italian scene and artists now playing between Berlin and the rest of Europe. Every set stays in our archive, the memory of everything that has passed through this booth." },
+            { it: "Il nostro spazio è anche un punto d'incontro tra realtà diverse. Abbiamo ospitato gli showcase di collettivi ed etichette come Freenetica, ASS3, Resistance is Techno, Bugs, Glumpat, Boiler Groove, Blink, Hangover, Footwork e Prima o Poi Music, e portiamo il nostro suono fuori dallo studio con le serate Gate Nacht.",
+              en: "Our space is also a meeting point between different realities. We have hosted showcases by collectives and labels such as Freenetica, ASS3, Resistance is Techno, Bugs, Glumpat, Boiler Groove, Blink, Hangover, Footwork and Prima o Poi Music, and we take our sound beyond the studio with our Gate Nacht nights." },
+            { it: "La programmazione segue il ritmo delle stagioni: ognuna ha i suoi colori e le sue atmosfere, e cambia insieme alla musica che passa in radio.",
+              en: "Our programming follows the rhythm of the seasons: each one has its own colours and atmosphere, changing together with the music on air." },
+            { it: "Crediamo nelle opportunità reali e vogliamo dare voce a chi spesso non trova spazio altrove: che tu sia unə DJ, unə live performer con esperienza o unə giovane artistə alla ricerca della prima vera occasione, questo spazio è anche tuo. La nostra Open Call è aperta.",
+              en: "We believe in real opportunities and want to give a voice to those who rarely find room elsewhere: whether you are a DJ, an experienced live performer or a young artist looking for your first real chance, this space is yours too. Our Open Call is open." },
+        ],
+    };
+    function buildAbout() {
+        if (page !== 'about') return;
+        const sub = document.querySelector('[data-i18n="about.identdesc"], #gn-about-sub');
+        const box = document.querySelector('#chi-siamo-section .chi-siamo-text');
+        if (!sub || !box) return;
+        const l = lang() === 'en' ? 'en' : 'it';
+        // togliamo il collegamento alle vecchie traduzioni, altrimenti il cambio
+        // lingua rimetterebbe il testo vecchio
+        sub.removeAttribute('data-i18n');
+        sub.id = 'gn-about-sub';
+        sub.textContent = ABOUT.sub[l];
+        box.innerHTML = ABOUT.p.map(x => `<p>${esc(x[l])}</p>`).join('') +
+            `<p class="gn-about-cta"><a href="${OPEN_CALL_URL}" target="_blank" rel="noopener">${l === 'en' ? 'SUBMIT YOUR SET' : 'PROPONI IL TUO SET'} →</a></p>`;
     }
 
     // ─── 3. ARCHIVIO: RICERCA + FILTRI PER TIPO ─────────────────────────────────
@@ -158,18 +156,14 @@
         apply();
     }
 
-    function rebuildHomeTiles() {
-        const old = document.getElementById('gn-gate-e');
-        if (old) { old.remove(); buildHome(); }
-    }
-
     function init() {
         buildMenu();
         buildHome();
+        buildAbout();
         buildArchiveSearch();
         // le traduzioni IT/EN cambiano i testi del menu: lo ricostruiamo
         document.addEventListener('click', (e) => {
-            if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(() => { buildMenu(); rebuildHomeTiles(); }, 50);
+            if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(() => { buildMenu(); buildAbout(); }, 50);
         });
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
