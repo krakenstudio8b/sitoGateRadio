@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GATE RADIO | Anteprima texture animate</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        :root { --accent: #3DFF6E; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #050505; overflow: hidden; font-family: 'Poppins', system-ui, sans-serif; color: #fff; }
+        #tex { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+
+        /* Testo di prova sopra la texture, per giudicare la leggibilità */
+        #demo { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; pointer-events: none; z-index: 5; padding: 0 24px; }
+        #demo h1 { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 800; margin: 0 0 .5rem; letter-spacing: .02em; text-shadow: 0 2px 24px rgba(0,0,0,.8); }
+        #demo h1 span { color: var(--accent); }
+        #demo p { font-size: clamp(1rem, 2vw, 1.3rem); margin: 0; color: #ddd; text-shadow: 0 1px 12px rgba(0,0,0,.9); }
+
+        .ui { position: fixed; top: 14px; left: 14px; z-index: 10; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        .ui button { background: #0a0a0a; color: #aaa; border: 1px solid #2a2a2a; padding: 8px 14px; border-radius: 999px; font: 600 12px/1 system-ui; letter-spacing: .08em; cursor: pointer; }
+        .ui button.active { color: #000; background: var(--accent); border-color: var(--accent); }
+        .ui label { font: 600 11px/1 system-ui; color: #888; display: flex; gap: 6px; align-items: center; background: #0a0a0a; border: 1px solid #2a2a2a; padding: 7px 12px; border-radius: 999px; }
+        .ui input[type=range] { width: 90px; accent-color: var(--accent); }
+    </style>
+</head>
+<body>
+    <canvas id="tex"></canvas>
+
+    <div id="demo">
+        <h1>GATE <span>RADIO</span></h1>
+        <p>Live Streaming • Eventi stagionali • Archivio esclusivo</p>
+    </div>
+
+    <div class="ui">
+        <button data-v="fumo" class="active">FUMO</button>
+        <button data-v="puntini">PUNTINI</button>
+        <button data-v="statico">STATICO</button>
+        <button id="toggleDemo">TESTO ON/OFF</button>
+        <label>intensità <input type="range" id="alpha" min="15" max="100" value="100"></label>
+    </div>
+
+    <script>
+        const cv = document.getElementById('tex');
+        const ctx = cv.getContext('2d');
+        const DPR = Math.min(window.devicePixelRatio || 1, 2);
+        let W, H;
+
+        function resize() {
+            W = window.innerWidth; H = window.innerHeight;
+            cv.width = W * DPR; cv.height = H * DPR;
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+            init[variant] && init[variant]();
+        }
+
+        // Campo di rumore morbido (somma di onde): guida fumo e puntini
+        function field(x, y, t) {
+            return Math.sin(x * 1.7 + t * 0.8) + Math.sin(y * 2.3 - t * 0.6) + Math.sin((x + y) * 1.1 + t * 0.35);
+        }
+
+        let variant = 'fumo';
+        let t = 0;
+
+        /* ============ FUMO — volute luminose che fluttuano ============ */
+        const puffs = [];
+        function initFumo() {
+            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, W, H);
+            puffs.length = 0;
+            for (let i = 0; i < 55; i++) {
+                puffs.push({ x: Math.random() * W, y: Math.random() * H, r: 60 + Math.random() * 100 });
+            }
+        }
+        function stepFumo() {
+            ctx.fillStyle = 'rgba(5,5,5,0.10)'; ctx.fillRect(0, 0, W, H);
+            ctx.globalCompositeOperation = 'lighter';
+            for (const p of puffs) {
+                const a = field(p.x / 240, p.y / 240, t) * 1.25;
+                p.x += Math.cos(a) * 0.9;
+                p.y += Math.sin(a) * 0.9 - 0.3;           // tira leggermente verso l'alto, come fumo vero
+                if (p.x < -p.r) p.x = W + p.r; if (p.x > W + p.r) p.x = -p.r;
+                if (p.y < -p.r) { p.y = H + p.r; p.x = Math.random() * W; }
+                const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+                g.addColorStop(0, 'rgba(120,255,160,0.016)');
+                g.addColorStop(0.5, 'rgba(210,255,225,0.007)');
+                g.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = g;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+            }
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        /* ============ PUNTINI — onda halftone, richiama le grafiche Gate ============ */
+        function initPuntini() { ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, W, H); }
+        function stepPuntini() {
+            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, W, H);
+            const s = 20;
+            for (let y = s / 2; y < H + s; y += s) {
+                for (let x = s / 2; x < W + s; x += s) {
+                    const f = field(x / 150, y / 150, t * 0.9);   // da -3 a +3
+                    const r = Math.max(0, (f + 3) / 6) * s * 0.42;
+                    if (r < 0.4) continue;
+                    if (f > 2.05) {
+                        ctx.fillStyle = 'rgba(61,255,110,0.85)';   // cresta dell'onda: verde Gate
+                    } else {
+                        ctx.fillStyle = 'rgba(235,235,235,' + (0.12 + (r / (s * 0.42)) * 0.5).toFixed(2) + ')';
+                    }
+                    ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill();
+                }
+            }
+        }
+
+        /* ============ STATICO — grana TV + scanline + glitch verdi ============ */
+        let buf, bctx, bimg;
+        function initStatico() {
+            buf = document.createElement('canvas');
+            buf.width = 220; buf.height = Math.max(2, Math.round(220 * H / W));
+            bctx = buf.getContext('2d');
+            bimg = bctx.createImageData(buf.width, buf.height);
+        }
+        function stepStatico() {
+            const d = bimg.data;
+            for (let i = 0; i < d.length; i += 4) {
+                const v = (Math.random() * 255) | 0;
+                const dark = v * 0.20;                     // grana scura, non invadente
+                d[i] = dark; d[i + 1] = dark * 1.15; d[i + 2] = dark;  // velo verdino
+                d[i + 3] = 255;
+            }
+            bctx.putImageData(bimg, 0, 0);
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(buf, 0, 0, W, H);
+            ctx.fillStyle = 'rgba(0,0,0,0.35)';            // scanline
+            for (let y = 0; y < H; y += 3) ctx.fillRect(0, y, W, 1);
+            if (Math.random() < 0.06) {                    // ogni tanto: banda glitch
+                const gy = Math.random() * H, gh = 3 + Math.random() * 26;
+                const off = (Math.random() - 0.5) * 60;
+                ctx.drawImage(cv, 0, gy * DPR, cv.width, gh * DPR, off, gy, W, gh);
+                ctx.fillStyle = 'rgba(61,255,110,0.10)';
+                ctx.fillRect(0, gy, W, gh);
+            }
+        }
+
+        const init = { fumo: initFumo, puntini: initPuntini, statico: initStatico };
+        const step = { fumo: stepFumo, puntini: stepPuntini, statico: stepStatico };
+
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function frame() {
+            t += 0.016;
+            step[variant]();
+            if (!reduced) requestAnimationFrame(frame);
+        }
+
+        document.querySelectorAll('.ui button[data-v]').forEach(b => {
+            b.addEventListener('click', () => {
+                document.querySelectorAll('.ui button[data-v]').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                variant = b.dataset.v;
+                init[variant]();
+                if (reduced) { t += 1; step[variant](); }
+            });
+        });
+        document.getElementById('toggleDemo').addEventListener('click', () => {
+            const d = document.getElementById('demo');
+            d.style.display = d.style.display === 'none' ? 'flex' : 'none';
+        });
+        document.getElementById('alpha').addEventListener('input', e => {
+            cv.style.opacity = e.target.value / 100;
+        });
+
+        window.addEventListener('resize', resize);
+        resize();
+        frame();
+        // Per il fumo: qualche secondo di "riscaldamento" così le scie si formano subito
+        if (variant === 'fumo') for (let i = 0; i < 120; i++) { t += 0.016; stepFumo(); }
+    </script>
+</body>
+</html>
