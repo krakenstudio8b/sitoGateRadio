@@ -519,6 +519,16 @@ header nav .gn-nav .lang-toggle-group { height: 34px; display: inline-flex; alig
     .posts-row { display: none !important; }
 }
 
+/* ----- Nome "GATE RADIO" nella barra: centrato col logo ----- */
+header .header-logo-text { margin: 0; display: flex; align-items: center; }
+header .header-logo-text > a { display: flex !important; align-items: center; }
+header .header-logo-text > a > span {
+    display: inline-block; line-height: 1;
+    padding-top: 0.12em;               /* il font Grifter disegna le lettere più in alto del suo spazio */
+}
+/* titolo grande della Home: al centro esatto della torre */
+#hero-section h2 { margin-bottom: 0 !important; }
+
 /* ----- MENU DA TELEFONO: una voce per riga ----- */
 #mobile-menu:not(.hidden) {
     display: flex !important; flex-direction: column;
