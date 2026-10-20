@@ -298,7 +298,62 @@
         document.head.appendChild(sc);
     }
 
+    // ─── PROVA COLORI (temporaneo): apri il sito con ?colori ─────────────────────
+    // Un pannellino in basso a sinistra per provare dal vivo dei rossi al posto
+    // del colore di una stagione. La scelta resta cambiando pagina; ?colori=off lo spegne.
+    function colorTester() {
+        const p = new URLSearchParams(location.search).get('colori');
+        const store = {
+            get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+            set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* niente */ } },
+            del: (k) => { try { localStorage.removeItem(k); } catch (e) { /* niente */ } },
+        };
+        if (p === 'off') { store.del('gnColori'); store.del('gnColoriScelta'); return; }
+        if (p !== null) store.set('gnColori', '1');
+        if (store.get('gnColori') !== '1') return;
+
+        const REDS = [
+            ['Originale', ''], ['Rosso vivo', '#E10600'], ['Rosso neon', '#FF2A2A'],
+            ['Cremisi', '#C8102E'], ['Rosso scuro', '#A3001B'], ['Rosso corallo', '#FF4433'],
+        ];
+        const SEASONS = [['autumn', 'Autunno (ora)'], ['summer', 'Estate']];
+        let saved = {};
+        try { saved = JSON.parse(store.get('gnColoriScelta') || '{}'); } catch (e) { saved = {}; }
+        let season = saved.season || 'autumn';
+        let color = saved.color || '';
+
+        const style = document.createElement('style');
+        document.head.appendChild(style);
+        const hexRgb = (h) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)).join(', ');
+        const apply = () => {
+            style.textContent = color
+                ? `.${season}, body.${season} { --accent: ${color} !important; --accent-rgb: ${hexRgb(color)} !important; --accent-secondary: ${color} !important; }`
+                : '';
+            store.set('gnColoriScelta', JSON.stringify({ season, color }));
+            box.querySelectorAll('[data-c]').forEach(b => b.classList.toggle('on', b.dataset.c === color));
+            box.querySelectorAll('[data-s]').forEach(b => b.classList.toggle('on', b.dataset.s === season));
+        };
+        const box = document.createElement('div');
+        box.className = 'gn-colori';
+        box.innerHTML = `
+            <p>PROVA COLORE</p>
+            <div class="gn-colori-row">${SEASONS.map(([k, l]) => `<button type="button" data-s="${k}">${l}</button>`).join('')}</div>
+            <div class="gn-colori-sw">${REDS.map(([l, c]) => `<button type="button" data-c="${c}" title="${l}" aria-label="${l}" style="background:${c || 'linear-gradient(135deg,#D2691E 50%,#FFF200 50%)'}"></button>`).join('')}</div>
+            <p class="gn-colori-name"></p>`;
+        document.body.appendChild(box);
+        box.addEventListener('click', (e) => {
+            const b = e.target.closest('button'); if (!b) return;
+            if (b.dataset.s) season = b.dataset.s;
+            if (b.dataset.c !== undefined) color = b.dataset.c;
+            box.querySelector('.gn-colori-name').textContent = (REDS.find(r => r[1] === color) || ['Originale'])[0] + (color ? ' ' + color : '');
+            apply();
+        });
+        box.querySelector('.gn-colori-name').textContent = (REDS.find(r => r[1] === color) || ['Originale'])[0] + (color ? ' ' + color : '');
+        apply();
+    }
+
     function init() {
+        colorTester();
         loadMiniRadio();
         buildMenu();
         buildHome();

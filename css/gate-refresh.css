@@ -538,6 +538,22 @@ header .header-logo-text > a > span {
     background-position: center 55% !important;
 }
 
+/* ----- PROVA COLORI (temporaneo, solo con ?colori) ----- */
+.gn-colori {
+    position: fixed; left: 16px; bottom: 16px; z-index: 99999;
+    background: #000; border: 1px solid #fff; padding: 10px 12px; width: 236px;
+    font-family: 'Roboto Mono', monospace; font-size: 11px; color: #fff;
+}
+.gn-colori p { margin: 0 0 6px; letter-spacing: 0.1em; }
+.gn-colori-row { display: flex; gap: 6px; margin-bottom: 8px; }
+.gn-colori-row button { flex: 1; padding: 5px 4px; background: transparent; color: #fff; border: 1px solid #555; font: inherit; cursor: pointer; }
+.gn-colori-row button.on { border-color: #fff; background: #fff; color: #000; }
+.gn-colori-sw { display: flex; gap: 6px; margin-bottom: 6px; }
+.gn-colori-sw button { width: 30px; height: 30px; border: 2px solid transparent; cursor: pointer; }
+.gn-colori-sw button.on { border-color: #fff; outline: 1px solid #000; }
+.gn-colori-name { margin: 0 !important; color: #ccc; }
+@media (max-width: 899px) { .gn-colori { bottom: 76px; } }
+
 /* ----- MENU DA TELEFONO: una voce per riga ----- */
 #mobile-menu:not(.hidden) {
     display: flex !important; flex-direction: column;
