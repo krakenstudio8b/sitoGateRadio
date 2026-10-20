@@ -700,7 +700,10 @@
     window.GateRadio = {
         getCurrentState: () => state ? state : null,
         formatTime,
-        getPlaylist:     () => playlist
+        getPlaylist:     () => playlist,
+        // usati dal mini player (js/gate-radio-mini.js) per non suonare in due
+        isPlaying:       () => isPlaying,
+        pause:           () => { if (player && isPlaying) player.pauseVideo(); }
     };
 
 })();

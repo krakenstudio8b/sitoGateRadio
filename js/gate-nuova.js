@@ -258,7 +258,16 @@
         else run();
     }
 
+    // ─── 6. MINI PLAYER DELLA RADIO (js/gate-radio-mini.js) ──────────────────────
+    function loadMiniRadio() {
+        if (document.querySelector('script[src*="gate-radio-mini.js"]')) return;
+        const sc = document.createElement('script');
+        sc.src = 'js/gate-radio-mini.js';
+        document.head.appendChild(sc);
+    }
+
     function init() {
+        loadMiniRadio();
         buildMenu();
         buildHome();
         buildAbout();
