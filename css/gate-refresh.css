@@ -471,8 +471,8 @@ header nav .gn-nav-link {
 header nav .gn-nav-link:hover, header nav .gn-nav-link.is-current { color: var(--accent); }
 header nav .gn-nav-cta {
     display: inline-flex !important; align-items: center; justify-content: center;
-    height: 34px; padding: 0 0.95rem !important; line-height: 1 !important;
-    font-size: 0.75rem; letter-spacing: 0.12em;
+    height: 34px; padding: 0 0.85rem 0 0.95rem !important; line-height: 1 !important;
+    font-family: 'Fjalla One', sans-serif; font-size: 0.95rem; letter-spacing: 0.08em;
     border: 1px solid var(--accent) !important;
 }
 header nav .gn-nav .lang-toggle-group { height: 34px; display: inline-flex; align-items: stretch; }
