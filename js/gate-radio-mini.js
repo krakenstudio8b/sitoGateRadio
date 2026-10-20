@@ -128,7 +128,7 @@
                 <span class="gn-mini-label"><span class="gn-mini-dot" aria-hidden="true"></span>GATE RADIO 24/7</span>
                 <span class="gn-mini-name">${t('Sintonizzazione…', 'Tuning in…')}</span>
             </a>
-            <button type="button" class="gn-mini-btn" aria-label="${t('Ascolta la radio', 'Listen to the radio')}"><i class="fas fa-play" aria-hidden="true"></i></button>`;
+            <button type="button" class="gn-mini-btn"><i class="fas fa-play" aria-hidden="true"></i><span>${t('ASCOLTA ORA', 'LISTEN NOW')}</span></button>`;
         document.body.appendChild(bar);
         document.body.classList.add('gn-has-bar');
         media = bar.querySelector('.gn-mini-media');
@@ -141,7 +141,10 @@
         });
     }
     function setIcon(playing) {
-        btn.innerHTML = `<i class="fas fa-${playing ? 'pause' : 'play'}" aria-hidden="true"></i>`;
+        // in pausa il tasto dice "ASCOLTA ORA"; mentre suona resta solo l'icona di pausa
+        btn.innerHTML = playing
+            ? `<i class="fas fa-pause" aria-hidden="true"></i>`
+            : `<i class="fas fa-play" aria-hidden="true"></i><span>${t('ASCOLTA ORA', 'LISTEN NOW')}</span>`;
         btn.setAttribute('aria-label', playing ? t('Pausa', 'Pause') : t('Ascolta la radio', 'Listen to the radio'));
         bar.classList.toggle('is-playing', playing);
     }
