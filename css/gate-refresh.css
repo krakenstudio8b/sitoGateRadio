@@ -529,6 +529,15 @@ header .header-logo-text > a > span {
 /* titolo grande della Home: al centro esatto della torre */
 #hero-section h2 { margin-bottom: 0 !important; }
 
+/* ----- INFO: foto dello studio (il tavolo Gate) come apertura ----- */
+.about-hero, .page-about .about-hero {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url('https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/foto/tavolo-gate.jpg') !important;
+    background-size: cover !important;
+    background-position: center 55% !important;
+}
+
 /* ----- MENU DA TELEFONO: una voce per riga ----- */
 #mobile-menu:not(.hidden) {
     display: flex !important; flex-direction: column;
