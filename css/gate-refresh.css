@@ -348,3 +348,16 @@ html.gn-shell body { padding-bottom: 0; }
     border: 0; z-index: 8999; background: #000;
 }
 /* dentro la cornice la barra c'è già fuori: niente spazio vuoto in fondo */
+/* Da PC il mini player è una schedina compatta in basso a destra, non una barra intera */
+@media (min-width: 900px) {
+    .gn-mini {
+        left: auto; right: 20px; bottom: 20px;
+        width: 380px; height: 72px; padding-right: 0.9rem;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.9);
+    }
+    .gn-mini-media { width: 124px; height: 70px; }
+    body.gn-has-bar { padding-bottom: 0; }
+    body.gn-has-bar [aria-label="Cambia versione grafica"] { bottom: 16px !important; }
+    .gn-shell-frame { height: 100%; }
+}
