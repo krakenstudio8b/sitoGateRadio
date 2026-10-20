@@ -218,12 +218,13 @@ body::before {
 .gn-hero-more:hover { text-decoration-color: var(--accent); }
 
 /* ----- FOOTER (js/gate-nuova.js) -----
-   Ordine: striscia artisti · contatti + social · nome gigante · riga finale */
+   Ordine: contatti + social · striscia artisti · nome gigante · riga finale */
 .footer-main-area { padding-top: 0; overflow: hidden; }
 
 /* striscia con i nomi di chi è passato da Gate */
 .gn-ticker {
-    overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden; margin-top: 3.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0.9rem 0;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
             mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
@@ -269,7 +270,7 @@ body::before {
 
 /* firma finale: il nome a tutta larghezza, col retino delle locandine dentro le lettere */
 .gn-foot-mark {
-    margin: 3rem 0 0; padding-left: 1rem; padding-right: 1rem;
+    margin: 1.75rem 0 0; padding-left: 1rem; padding-right: 1rem;
     font-family: 'Grifter', sans-serif; line-height: 1; letter-spacing: -0.02em;
     font-size: 15.2vw; white-space: nowrap; text-align: center; user-select: none;
     color: transparent;

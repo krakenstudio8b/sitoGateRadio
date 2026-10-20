@@ -209,7 +209,6 @@
                 <span class="gn-foot-cta-sub">${sub}</span>
             </a>`;
         area.innerHTML = `
-            <div class="gn-ticker" aria-hidden="true"><div class="gn-ticker-track"></div></div>
             <div class="gn-foot max-w-6xl mx-auto px-6">
                 <div class="gn-foot-row">
                     <div class="gn-foot-ctas">
@@ -221,6 +220,7 @@
                     </div>
                 </div>
             </div>
+            <div class="gn-ticker" aria-hidden="true"><div class="gn-ticker-track"></div></div>
             <p class="gn-foot-mark" aria-hidden="true">GATE RADIO</p>`;
         const bottom = document.querySelector('body > footer p');
         if (bottom) bottom.innerHTML = `<span>© ${new Date().getFullYear()} GATE RADIO · ROMA</span><span>EXPANDING SOUND BOUNDARIES</span>`;
