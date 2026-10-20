@@ -76,8 +76,8 @@
             sub.className = 'gn-hero-claim hero-text-shadow';
             // una frase per riga
             const righe = l === 'en'
-                ? ['An independent project born in Rome.', 'A radio and our nights.', 'A booth open to anyone with something to say through their music.']
-                : ['Un progetto indipendente nato a Roma.', 'Una radio e le nostre serate.', 'Una console aperta a chi ha qualcosa da dire con la propria musica.'];
+                ? ['An independent project born in Rome:', 'a radio,', 'our nights,', 'a booth open to anyone with something to say through their music.']
+                : ['Un progetto indipendente nato a Roma:', 'una radio,', 'le nostre serate,', 'una console aperta a chi ha qualcosa da dire con la propria musica.'];
             sub.innerHTML = righe.map(r => `<span>${r}</span>`).join(' ');
         }
         hero.querySelector('.gn-hero-more')?.remove();
