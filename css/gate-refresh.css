@@ -65,14 +65,20 @@ body::before {
 .event-card,
 .artist-card {
     border-radius: 0 !important;
-    transition: border-color 0.2s ease;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
+/* al passaggio la cornice si illumina col colore della stagione della card
+   (come nella versione vecchia), senza saltare in su */
 .archive-card:hover,
-.event-card:hover,
 .artist-card:hover {
     transform: none;
-    box-shadow: none;
-    border-color: var(--border-color); /* niente riquadro bianco: decide il poster */
+    border-color: var(--accent);
+    box-shadow: 0 0 18px -4px var(--accent);
+}
+.event-card:hover {
+    transform: none;
+    border-color: var(--accent-event);
+    box-shadow: 0 0 18px -4px var(--accent-event);
 }
 .archive-card img,
 .event-card img,
