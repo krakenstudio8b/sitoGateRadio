@@ -202,46 +202,80 @@ body::before {
     color: var(--accent); font-size: 0.85rem;
 }
 
-/* ----- FOOTER "GATE È" (costruito da js/gate-nuova.js) ----- */
+/* ----- HOME: presentazione dentro la torre (js/gate-nuova.js) ----- */
+.gn-hero-claim {
+    max-width: 34ch; margin: 0 auto 1.75rem;
+    font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.45;
+    color: #fff; text-wrap: balance;
+}
+.gn-hero-more {
+    display: block; width: max-content; margin: 1rem auto 0;
+    font-size: 0.85rem; letter-spacing: 0.04em; color: #fff;
+    text-decoration: underline; text-underline-offset: 0.3em;
+    text-decoration-color: rgba(255, 255, 255, 0.45);
+    transition: text-decoration-color 0.2s ease;
+}
+.gn-hero-more:hover { text-decoration-color: var(--accent); }
+
+/* ----- FOOTER (js/gate-nuova.js) ----- */
 .footer-main-area { padding-top: 0; }
-.gn-foot { padding-top: 3.5rem; padding-bottom: 3rem; text-align: left; }
-.gn-intro { padding-top: 5rem; padding-bottom: 4rem; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
-.gn-intro-k {
-    font-family: 'Grifter', sans-serif; line-height: 0.9; color: #fff;
-    font-size: clamp(3.25rem, 11vw, 8rem); letter-spacing: -0.02em;
+/* striscia con i nomi di chi è passato da Gate */
+.gn-ticker {
+    overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.9rem 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
-.gn-intro-claim {
-    margin-top: 1.25rem; max-width: 38ch;
-    font-size: clamp(1.15rem, 2.4vw, 1.65rem); line-height: 1.35; color: #fff;
+.gn-ticker-track { display: flex; width: max-content; animation: gn-ticker 140s linear infinite; }
+.gn-ticker-track > div { display: flex; align-items: center; gap: 1.1rem; padding-right: 1.1rem; white-space: nowrap; }
+.gn-ticker span { font-family: 'Grifter', sans-serif; font-size: 1.05rem; color: rgba(255, 255, 255, 0.82); }
+.gn-ticker b { color: var(--accent); font-weight: 400; }
+.gn-ticker:hover .gn-ticker-track { animation-play-state: paused; }
+@keyframes gn-ticker { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .gn-ticker-track { animation: none; } }
+
+.gn-foot { padding-top: 2.75rem; padding-bottom: 2.5rem; text-align: left; }
+.gn-foot-top {
+    display: grid; gap: 1.5rem; align-items: center;
+    padding-bottom: 2.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.gn-intro-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
-.gn-intro-btn {
-    font-family: 'Roboto Mono', monospace; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
-    padding: 0.9rem 1.2rem; border: 1px solid rgba(255, 255, 255, 0.35); color: #fff;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+@media (min-width: 900px) { .gn-foot-top { grid-template-columns: 1fr auto; gap: 3rem; } }
+.gn-foot-brand { display: flex; gap: 1rem; align-items: flex-start; }
+.gn-foot-logo { width: 56px; height: 56px; flex: none; }
+.gn-foot-name { font-family: 'Grifter', sans-serif; font-size: 1.5rem; line-height: 1; color: #fff; }
+.gn-foot-claim { margin-top: 0.55rem; max-width: 46ch; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
+/* prossimo appuntamento */
+.gn-foot-next {
+    display: flex; gap: 0.9rem; align-items: center; min-width: 0;
+    padding: 0.6rem 1.1rem 0.6rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
-.gn-intro-btn:hover { border-color: #fff; }
-.gn-intro-btn.is-main { background: var(--accent); border-color: var(--accent); color: #000; }
-.gn-intro-btn.is-main:hover { filter: brightness(1.1); }
-.gn-foot-cols {
-    display: grid; gap: 2rem;
-    grid-template-columns: repeat(2, 1fr);
-}
-@media (min-width: 900px) { .gn-foot-cols { grid-template-columns: 1fr 1.3fr 1fr 1fr; } }
+.gn-foot-next:hover { border-color: var(--accent); background: rgba(255, 255, 255, 0.03); }
+.gn-foot-next img { width: 56px; height: 70px; object-fit: cover; flex: none; }
+.gn-foot-next-txt { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.gn-foot-next-txt .gn-foot-h { margin: 0; }
+.gn-foot-next-name { font-family: 'Grifter', sans-serif; font-size: 1.1rem; color: #fff; line-height: 1.1; }
+.gn-foot-next-meta { font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.03em; }
+
+.gn-foot-cols { display: grid; gap: 1.75rem; padding-top: 2rem; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 900px) { .gn-foot-cols { grid-template-columns: 1fr 1.2fr 1fr; } }
 .gn-foot-h {
-    font-family: 'Roboto Mono', monospace; font-size: 0.72rem; font-weight: 700;
-    letter-spacing: 0.14em; color: var(--accent); margin-bottom: 0.9rem;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+    color: var(--accent); margin-bottom: 0.8rem;
 }
-.gn-foot-links { display: flex; flex-direction: column; gap: 0.45rem; }
-.gn-foot-links a { color: var(--text-secondary); font-size: 0.95rem; transition: color 0.2s ease; overflow-wrap: anywhere; }
+.gn-foot-links { display: flex; flex-direction: column; gap: 0.4rem; }
+.gn-foot-links a { color: var(--text-secondary); font-size: 0.92rem; transition: color 0.2s ease; }
 .gn-foot-links a:hover { color: #fff; }
-.gn-foot-socials { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-.gn-foot-tag {
-    font-family: 'Grifter', sans-serif; font-size: 1.1rem; line-height: 1.05;
-    color: rgba(255, 255, 255, 0.35); align-self: end;
-}
-@media (max-width: 899px) { .gn-foot-tag { grid-column: 1 / -1; } }
-body > footer { font-family: 'Roboto Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; }
+.gn-foot-socials { display: flex; flex-wrap: wrap; gap: 0.55rem; }
 @media (max-width: 899px) {
-    .gn-foot-links a[href^="mailto:"] { font-size: 0.8rem; overflow-wrap: normal; white-space: nowrap; }
+    .gn-foot-cols > div:last-child { grid-column: 1 / -1; }
+    .gn-foot-links a[href^="mailto:"] { font-size: 0.8rem; white-space: nowrap; }
 }
+body > footer { font-size: 0.7rem; letter-spacing: 0.12em; }
+/* leggibilità sopra la torre grigia */
+.gn-hero-claim,
+.gn-hero-more {
+    text-shadow: 0 1px 2px #000, 0 0 12px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.85);
+}
+@media (min-width: 900px) { .gn-hero-claim { max-width: 42ch; font-size: 1.15rem; } }

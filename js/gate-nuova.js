@@ -5,7 +5,7 @@
 //  1. Menu corto: RADIO · ARCHIVIO · EVENTI · RESIDENT · INFO + OPEN CALL, senza icone
 //  2. Home: un solo "ASCOLTA ORA" (va dritto alla Radio)
 //  4. Chi siamo: descrizione nuova
-//  5. Footer ordinato; la presentazione "CHI SIAMO" sta in Home sotto la torre
+//  5. Footer: striscia artisti, prossimo appuntamento, link/contatti/social
 //  3. Archivio: ricerca per artista/serata + filtri per tipo
 (function () {
     const OPEN_CALL_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf_Ot0_OHSMYUuy2oyQtUJaMOaATIIkiMvNxKs_zMCRhZSMyg/viewform';
@@ -51,27 +51,27 @@
         const heroCta = document.querySelector('#hero-section a[href*="#live"]');
         if (heroCta) heroCta.setAttribute('href', 'radio.html');
 
-        // presentazione del sito: "CHI SIAMO" subito sotto la torre
+        // presentazione dentro la torre, al posto della vecchia riga
+        // "Live Streaming • Eventi stagionali • Archivio esclusivo"
         const hero = document.getElementById('hero-section');
         if (!hero) return;
-        document.getElementById('gn-intro')?.remove();
         const l = lang() === 'en' ? 'en' : 'it';
-        const claim = l === 'en'
-            ? 'Gate Radio is an independent project born in Rome. A radio, our nights and a booth open to anyone with something to say through their music.'
-            : 'Gate Radio è un progetto indipendente nato a Roma. Una radio, le nostre serate e una console aperta a chi ha qualcosa da dire con la propria musica.';
-        const sec = document.createElement('section');
-        sec.id = 'gn-intro';
-        sec.className = 'gn-intro px-6';
-        sec.innerHTML = `
-            <div class="max-w-6xl mx-auto">
-                <h2 class="gn-intro-k">${l === 'en' ? 'WHO <span class="text-[var(--accent)]">WE ARE</span>' : 'CHI <span class="text-[var(--accent)]">SIAMO</span>'}</h2>
-                <p class="gn-intro-claim">${claim}</p>
-                <div class="gn-intro-ctas">
-                    <a class="gn-intro-btn is-main" href="about.html">${l === 'en' ? 'MORE ABOUT US' : 'SCOPRI DI PIÙ'} →</a>
-                    <a class="gn-intro-btn" href="${OPEN_CALL_URL}" target="_blank" rel="noopener">${l === 'en' ? 'SUBMIT YOUR SET' : 'PROPONI IL TUO SET'} →</a>
-                </div>
-            </div>`;
-        hero.insertAdjacentElement('afterend', sec);
+        const sub = hero.querySelector('[data-i18n="home.subtitle"], .gn-hero-claim');
+        if (sub) {
+            sub.removeAttribute('data-i18n');
+            sub.className = 'gn-hero-claim hero-text-shadow';
+            sub.textContent = l === 'en'
+                ? 'An independent project born in Rome: a radio, our nights and a booth open to anyone with something to say through their music.'
+                : 'Un progetto indipendente nato a Roma: una radio, le nostre serate e una console aperta a chi ha qualcosa da dire con la propria musica.';
+        }
+        hero.querySelector('.gn-hero-more')?.remove();
+        if (heroCta) {
+            const more = document.createElement('a');
+            more.className = 'gn-hero-more';
+            more.href = 'about.html';
+            more.textContent = l === 'en' ? 'Who we are →' : 'Chi siamo →';
+            heroCta.insertAdjacentElement('afterend', more);
+        }
     }
 
     // ─── 4. CHI SIAMO: DESCRIZIONE NUOVA ────────────────────────────────────────
@@ -181,12 +181,26 @@
     function buildFooter() {
         const area = document.querySelector('.footer-main-area');
         if (!area) return;
-        // i social li riprendiamo da quelli già presenti (stessi link su tutte le pagine)
         const socialsSrc = area.dataset.gnSocials || [...area.querySelectorAll('a.footer-social-link')].map(a => a.outerHTML).join('');
         area.dataset.gnSocials = socialsSrc;
+        const l = lang() === 'en' ? 'en' : 'it';
         const links = NAV.map(n => `<a href="${n.href}">${t(n.it, n.en)}</a>`).join('');
+        const claim = l === 'en'
+            ? 'Independent radio and collective from Rome. Live sets from our studio, nights around the city, an open call that never closes.'
+            : 'Radio e collettivo indipendente da Roma. Dirette dal nostro studio, serate in giro per la città, un open call sempre aperto.';
         area.innerHTML = `
+            <div class="gn-ticker" aria-hidden="true"><div class="gn-ticker-track"></div></div>
             <div class="gn-foot max-w-6xl mx-auto px-6">
+                <div class="gn-foot-top">
+                    <div class="gn-foot-brand">
+                        <img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png" alt="" class="gn-foot-logo" width="56" height="56" loading="lazy">
+                        <div>
+                            <p class="gn-foot-name">GATE <span class="text-[var(--accent)]">RADIO</span></p>
+                            <p class="gn-foot-claim">${claim}</p>
+                        </div>
+                    </div>
+                    <a class="gn-foot-next" id="gn-foot-next" href="events.html" hidden></a>
+                </div>
                 <div class="gn-foot-cols">
                     <div>
                         <p class="gn-foot-h">${t('SITO', 'SITE')}</p>
@@ -196,7 +210,7 @@
                         <p class="gn-foot-h">${t('CONTATTI', 'CONTACT')}</p>
                         <div class="gn-foot-links">
                             <a href="mailto:gateradiorm@gmail.com">gateradiorm@gmail.com</a>
-                            <a href="${OPEN_CALL_URL}" target="_blank" rel="noopener">Open call</a>
+                            <a href="${OPEN_CALL_URL}" target="_blank" rel="noopener">${t('Proponi il tuo set', 'Submit your set')}</a>
                             <a href="contact.html">${t('Scrivici', 'Write to us')}</a>
                         </div>
                     </div>
@@ -204,11 +218,63 @@
                         <p class="gn-foot-h">${t('SEGUICI', 'FOLLOW')}</p>
                         <div class="gn-foot-socials">${socialsSrc}</div>
                     </div>
-                    <div class="gn-foot-tag">EXPANDING<br>SOUND<br>BOUNDARIES</div>
                 </div>
             </div>`;
         const bottom = document.querySelector('body > footer p');
-        if (bottom) bottom.innerHTML = `© ${new Date().getFullYear()} <span class="grifter-font">GATE RADIO</span> · ROMA`;
+        if (bottom) bottom.innerHTML = `© ${new Date().getFullYear()} <span class="grifter-font">GATE RADIO</span> · ROMA · EXPANDING SOUND BOUNDARIES`;
+        fillFooterData();
+    }
+
+    // Dati veri nel footer: chi è passato da Gate (striscia) + prossimo appuntamento
+    function fillFooterData() {
+        const run = () => {
+            const streams = window.streamsData || [];
+            const events = window.eventsData || [];
+            const now = new Date();
+            const endOf = (x) => new Date(`${x.date}T${x.timeEnd || '23:59'}:00`);
+            // striscia con i nomi degli artisti passati da Gate, dai più recenti
+            const skip = /^(SHOWCASE|GATE|SERATA|EVENT|2024 ARTIST|TEST)/i;
+            const names = [];
+            streams.filter(x => x.date && endOf(x) < now)
+                .sort((a, b) => b.date.localeCompare(a.date))
+                .forEach(x => {
+                    const labels = (x.liveLinks || []).map(k => k.label).filter(Boolean);
+                    const parts = /SHOWCASE/i.test(x.artist || '') ? labels
+                        : (x.artist || '').replace(/\(.*?\)/g, '').split(/,|\||&| \+ |\bb2b\b| x /i);
+                    parts.forEach(n => {
+                        n = String(n).trim().toUpperCase();
+                        if (n.length > 1 && !skip.test(n) && !names.includes(n)) names.push(n);
+                    });
+                });
+            const track = document.querySelector('.gn-ticker-track');
+            if (track && names.length) {
+                const row = names.slice(0, 70).map(n => `<span>${esc(n)}</span>`).join('<b aria-hidden="true">/</b>');
+                track.innerHTML = `<div>${row}<b aria-hidden="true">/</b></div><div>${row}<b aria-hidden="true">/</b></div>`;
+            }
+            // prossimo appuntamento: la prima live o evento pubblicato non ancora finito
+            const next = [...streams.map(x => ({ ...x, _k: 'live' })), ...events.map(x => ({ ...x, _k: 'event' }))]
+                .filter(x => x.date && endOf(x) >= now)
+                .sort((a, b) => (a.date + (a.timeStart || '')).localeCompare(b.date + (b.timeStart || '')))[0];
+            const box = document.getElementById('gn-foot-next');
+            if (box && next) {
+                const img = next.imageUrl || next.mainImage || '';
+                const name = next._k === 'event' ? next.title : next.artist;
+                const d = new Date(next.date).toLocaleDateString(lang() === 'en' ? 'en-GB' : 'it-IT',
+                    { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase();
+                const where = next._k === 'event' ? String(next.location || '').split('·')[0].trim() : (next.location || 'Gate Studio');
+                box.href = next._k === 'event' ? 'events.html' : 'index.html#live';
+                box.innerHTML = `
+                    ${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ''}
+                    <span class="gn-foot-next-txt">
+                        <span class="gn-foot-h">${t('PROSSIMO APPUNTAMENTO', 'NEXT UP')}</span>
+                        <span class="gn-foot-next-name">${esc(name)}</span>
+                        <span class="gn-foot-next-meta">${esc(d)}${next.timeStart ? ' · ' + esc(next.timeStart) : ''}${where ? ' · ' + esc(where) : ''}</span>
+                    </span>`;
+                box.hidden = false;
+            }
+        };
+        if (window.gateRadioDataPromise) window.gateRadioDataPromise.then(() => setTimeout(run, 50)).catch(() => {});
+        else run();
     }
 
     function init() {
