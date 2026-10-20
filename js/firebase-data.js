@@ -22,6 +22,7 @@ window.gateRadioDataPromise = (async function fetchGateRadioData() {
         const streams = streamsObj && typeof streamsObj === 'object'
             ? Object.entries(streamsObj)
                 .map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
+                .map(s => s.season ? { ...s, season: String(s.season).toLowerCase() } : s) // "Autumn" → "autumn"
                 .filter(s => s.published !== false)
             : null;
 
@@ -31,6 +32,7 @@ window.gateRadioDataPromise = (async function fetchGateRadioData() {
         const events = eventsObj && typeof eventsObj === 'object'
             ? Object.entries(eventsObj)
                 .map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
+                .map(e => e.season ? { ...e, season: String(e.season).toLowerCase() } : e)
                 .filter(e => e.published !== false)
             : null;
 

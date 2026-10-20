@@ -143,11 +143,11 @@
                 </button>
             </div>
             <div id="gn-filter-panel" class="gn-filter-panel">
-            <div class="gn-kinds" role="group" aria-label="${t('Tipo di set', 'Set type')}">
+            <div class="gn-kinds" role="group" aria-label="${t('Tipo di set', 'Set type')}" data-label="${t('TIPO', 'TYPE')}">
                 ${KINDS.map(([k, l], i) => `<button type="button" class="gn-kind${i === 0 ? ' is-active' : ''}" data-kind="${k}">${l}</button>`).join('')}
             </div>
-            <div class="gn-kinds gn-gseasons" role="group" aria-label="Season">
-                ${[['all', t('TUTTE LE SEASON', 'ALL SEASONS')], ['1 SEASON', '1 SEASON'], ['2 SEASON', '2 SEASON']].map(([k, l], i) =>
+            <div class="gn-kinds gn-gseasons" role="group" aria-label="Season" data-label="SEASON">
+                ${[['all', t('TUTTE', 'ALL')], ['1 SEASON', '1 SEASON'], ['2 SEASON', '2 SEASON']].map(([k, l], i) =>
                     `<button type="button" class="gn-kind${i === 0 ? ' is-active' : ''}" data-gseason="${k}">${l}</button>`).join('')}
             </div>
             </div>
@@ -156,6 +156,7 @@
         // anche i filtri per stagione entrano nel pannello (su telefono si apre con FILTRA)
         const panel = box.querySelector('#gn-filter-panel');
         panel.appendChild(seasons);
+        seasons.dataset.label = t('STAGIONE', 'SEASON');
         const toggle = box.querySelector('.gn-filter-toggle');
         toggle.addEventListener('click', () => {
             const open = !box.classList.contains('is-open');
@@ -301,71 +302,7 @@
     // ─── PROVA COLORI (temporaneo): apri il sito con ?colori ─────────────────────
     // Un pannellino in basso a sinistra per provare dal vivo dei rossi al posto
     // del colore di una stagione. La scelta resta cambiando pagina; ?colori=off lo spegne.
-    function colorTester() {
-        const p = new URLSearchParams(location.search).get('colori');
-        const store = {
-            get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } },
-            set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) { /* niente */ } },
-            del: (k) => { try { localStorage.removeItem(k); } catch (e) { /* niente */ } },
-        };
-        if (p === 'off') { store.del('gnColori'); store.del('gnColoriMappa'); return; }
-        if (p !== null) store.set('gnColori', '1');
-        if (store.get('gnColori') !== '1') return;
-
-        // i 4 colori ufficiali scelti con il grafico
-        const OFFICIAL = ['#64EA53', '#921EC8', '#3E32EC', '#BAEC32'];
-        const SEASONS = [['winter', t('Inverno', 'Winter')], ['spring', t('Primavera', 'Spring')],
-                         ['summer', t('Estate', 'Summer')], ['autumn', t('Autunno', 'Autumn')]];
-        const ORIGINAL = { winter: '#4682B4', spring: '#32CD32', summer: '#FFF200', autumn: '#D2691E' };
-        let map = {};
-        try { map = JSON.parse(store.get('gnColoriMappa') || '{}') || {}; } catch (e) { map = {}; }
-        let current = 'autumn';            // la stagione che stai guardando / a cui assegni il colore
-
-        const style = document.createElement('style');
-        document.head.appendChild(style);
-        const hexRgb = (h) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)).join(', ');
-        const rule = (sel, c) => `${sel} { --accent: ${c} !important; --accent-rgb: ${hexRgb(c)} !important; --accent-secondary: ${c} !important; }`;
-        const colorOf = (sk) => map[sk] || ORIGINAL[sk];
-
-        const box = document.createElement('div');
-        box.className = 'gn-colori';
-        box.innerHTML = `
-            <p>${t('COLORI DELLE STAGIONI', 'SEASON COLOURS')}</p>
-            <div class="gn-colori-seasons">${SEASONS.map(([k, l]) => `
-                <button type="button" data-s="${k}"><span class="dot"></span>${l}</button>`).join('')}</div>
-            <p class="gn-colori-hint">${t('Colore per', 'Colour for')} <b class="gn-colori-cur"></b>:</p>
-            <div class="gn-colori-sw">
-                ${OFFICIAL.map(c => `<button type="button" data-c="${c}" title="${c}" aria-label="${c}" style="background:${c}"></button>`).join('')}
-                <button type="button" data-c="" class="orig" title="${t('Originale', 'Original')}" aria-label="${t('Originale', 'Original')}">↺</button>
-            </div>
-            <p class="gn-colori-name"></p>`;
-        document.body.appendChild(box);
-
-        const apply = () => {
-            // ogni stagione col suo colore (card dell'archivio, ecc.) + tutto il sito
-            // colorato come se la stagione selezionata fosse quella in corso
-            style.textContent = SEASONS.map(([k]) => rule(`.${k}`, colorOf(k))).join('\n')
-                + '\n' + rule('body, body.autumn, body.winter, body.spring, body.summer', colorOf(current));
-            store.set('gnColoriMappa', JSON.stringify(map));
-            box.querySelectorAll('[data-s]').forEach(b => {
-                b.classList.toggle('on', b.dataset.s === current);
-                b.querySelector('.dot').style.background = colorOf(b.dataset.s);
-            });
-            box.querySelectorAll('[data-c]').forEach(b => b.classList.toggle('on', (map[current] || '') === b.dataset.c));
-            box.querySelector('.gn-colori-cur').textContent = SEASONS.find(x => x[0] === current)[1];
-            box.querySelector('.gn-colori-name').textContent = SEASONS.map(([k, l]) => `${l}: ${colorOf(k)}`).join(' · ');
-        };
-        box.addEventListener('click', (e) => {
-            const b = e.target.closest('button'); if (!b) return;
-            if (b.dataset.s) current = b.dataset.s;
-            if (b.dataset.c !== undefined) { if (b.dataset.c) map[current] = b.dataset.c; else delete map[current]; }
-            apply();
-        });
-        apply();
-    }
-
     function init() {
-        colorTester();
         loadMiniRadio();
         buildMenu();
         buildHome();

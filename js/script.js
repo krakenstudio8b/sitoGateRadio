@@ -440,6 +440,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Stagione di una data (le card senza stagione salvata la prendono da qui)
+    function seasonFromDate(dateStr) {
+        const d = new Date(dateStr);
+        const m = d.getMonth(); // 0-11
+        const day = d.getDate();
+        const year = d.getFullYear();
+        const inizioPrimavera = year === 2026 ? 28 : 21;
+        if ((m === 2 && day >= inizioPrimavera) || (m > 2 && m < 5) || (m === 5 && day < 21)) return 'spring';
+        if ((m === 5 && day >= 21) || (m > 5 && m < 8) || (m === 8 && day < 21)) return 'summer';
+        if ((m === 8 && day >= 21) || (m > 8 && m < 11) || (m === 11 && day < 21)) return 'autumn';
+        return 'winter';
+    }
+
     function gestioneArchivio() {
         const archiveGrid = $('#archive-grid');
         const archivePreviewGrid = $('#archive-grid-preview');
@@ -495,17 +508,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         // Unisci streams + eventi nell'archivio (card identiche)
-        function seasonFromDate(dateStr) {
-            const d = new Date(dateStr);
-            const m = d.getMonth(); // 0-11
-            const day = d.getDate();
-            const year = d.getFullYear();
-            const inizioPrimavera = year === 2026 ? 28 : 21;
-            if ((m === 2 && day >= inizioPrimavera) || (m > 2 && m < 5) || (m === 5 && day < 21)) return 'spring';
-            if ((m === 5 && day >= 21) || (m > 5 && m < 8) || (m === 8 && day < 21)) return 'summer';
-            if ((m === 8 && day >= 21) || (m > 8 && m < 11) || (m === 11 && day < 21)) return 'autumn';
-            return 'winter';
-        }
         // Merge streams + eventi: per date duplicate, l'EVENTO vince (dati più ricchi)
         // ma prende il soundcloudUrl dallo stream se disponibile
         const allEvents = typeof eventsData !== 'undefined' ? eventsData : [];
@@ -666,7 +668,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const createEventCardHTML = (event) => {
             const eventDate = new Date(event.date);
             return `
-                <div class="event-card group" data-event-id="${event.id}" style="cursor: pointer;">
+                <div class="event-card group ${event.season || seasonFromDate(event.date)}" data-event-id="${event.id}" style="cursor: pointer;">
                     <div class="event-card-image-wrapper"><img src="${event.mainImage || FALLBACK_IMG}" alt="${event.title}" class="event-card-image" loading="lazy"></div>
                     <div class="event-card-content">
                         <h3 class="event-card-title">${event.title}</h3>

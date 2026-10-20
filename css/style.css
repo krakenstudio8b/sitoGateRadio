@@ -45,10 +45,10 @@
 
 /* ----- VARIABILI COLORE GLOBALI ----- */
 :root {
-    --accent: #FFF200; /* Giallo Neon */
-    --accent-rgb: 255, 242, 0;
-    --accent-secondary: #FFFF55; /* Giallo più chiaro per hover */
-    --accent-event: #4682B4;
+    --accent: #BAEC32; /* Giallo Neon */
+    --accent-rgb: 186, 236, 50;
+    --accent-secondary: #CDF26A;
+    --accent-event: #3E32EC;
     --border-color: rgba(255, 255, 255, 0.1);
     --text-primary: #e2e8f0;
     --text-secondary: #cbd5e0; /* Migliorato contrasto da #a0aec0 */
@@ -266,10 +266,11 @@ header .hidden.md\:flex a:hover::after {
 }
 
 /* ----- STILI STAGIONALI ----- */
-.winter { --accent: #4682B4; --accent-rgb: 70, 130, 180; --accent-secondary: #5F9EA0; }
-.spring { --accent: #32CD32; --accent-rgb: 50, 205, 50; --accent-secondary: #9ACD32; }
-.autumn { --accent: #D2691E; --accent-rgb: 210, 105, 30; --accent-secondary: #CD853F; }
-.summer { --accent: #FFF200; --accent-rgb: 255, 242, 0; --accent-secondary: #FFFF55; }
+/* i 4 colori ufficiali Gate (scelti con Saverio, ottobre 2026) */
+.winter { --accent: #3E32EC; --accent-rgb: 62, 50, 236; --accent-secondary: #6A60F2; }
+.spring { --accent: #64EA53; --accent-rgb: 100, 234, 83; --accent-secondary: #8AF07C; }
+.autumn { --accent: #921EC8; --accent-rgb: 146, 30, 200; --accent-secondary: #B04FE0; }
+.summer { --accent: #BAEC32; --accent-rgb: 186, 236, 50; --accent-secondary: #CDF26A; }
 
 /* ----- CALENDARIO E FOOTER ----- */
 .day-cell {
@@ -821,32 +822,32 @@ header .hidden.md\:flex a:hover::after {
 /* --- Colori per il pulsante INVERNO --- */
 .filter-btn[data-season="winter"]:hover,
 .filter-btn[data-season="winter"].active {
-    border-color: #4682B4; /* Blu Inverno */
-    background-color: #4682B4;
+    border-color: #3E32EC; /* Blu Inverno */
+    background-color: #3E32EC;
     color: white;
 }
 
 /* --- Colori per il pulsante PRIMAVERA --- */
 .filter-btn[data-season="spring"]:hover,
 .filter-btn[data-season="spring"].active {
-    border-color: #32CD32; /* Verde Primavera */
-    background-color: #32CD32;
+    border-color: #64EA53; /* Verde Primavera */
+    background-color: #64EA53;
     color: black;
 }
 
 /* --- Colori per il pulsante ESTATE --- */
 .filter-btn[data-season="summer"]:hover,
 .filter-btn[data-season="summer"].active {
-    border-color: #FFF200; /* Giallo Estate */
-    background-color: #FFF200;
+    border-color: #BAEC32; /* Lime Estate */
+    background-color: #BAEC32;
     color: black;
 }
 
 /* --- Colori per il pulsante AUTUNNO --- */
 .filter-btn[data-season="autumn"]:hover,
 .filter-btn[data-season="autumn"].active {
-    border-color: #D2691E; /* Marrone Autunno */
-    background-color: #D2691E;
+    border-color: #921EC8; /* Viola Autunno */
+    background-color: #921EC8;
     color: white;
 }
 
@@ -1498,13 +1499,13 @@ textarea:focus-visible,
 }
 
 /* Colori stagionali nel player */
-#radio-player-container.spring .radio-progress-fill { background: #32CD32; box-shadow: 0 0 8px #32CD32; }
-#radio-player-container.spring .radio-ctrl-primary  { background: #32CD32; box-shadow: 0 0 16px -2px #32CD32; }
-#radio-player-container.summer .radio-progress-fill { background: #FFF200; }
-#radio-player-container.autumn .radio-progress-fill { background: #D2691E; box-shadow: 0 0 8px #D2691E; }
-#radio-player-container.autumn .radio-ctrl-primary  { background: #D2691E; color: #fff; box-shadow: 0 0 16px -2px #D2691E; }
-#radio-player-container.winter .radio-progress-fill { background: #4682B4; box-shadow: 0 0 8px #4682B4; }
-#radio-player-container.winter .radio-ctrl-primary  { background: #4682B4; color: #fff; box-shadow: 0 0 16px -2px #4682B4; }
+#radio-player-container.spring .radio-progress-fill { background: #64EA53; box-shadow: 0 0 8px #64EA53; }
+#radio-player-container.spring .radio-ctrl-primary  { background: #64EA53; box-shadow: 0 0 16px -2px #64EA53; }
+#radio-player-container.summer .radio-progress-fill { background: #BAEC32; }
+#radio-player-container.autumn .radio-progress-fill { background: #921EC8; box-shadow: 0 0 8px #921EC8; }
+#radio-player-container.autumn .radio-ctrl-primary  { background: #921EC8; color: #fff; box-shadow: 0 0 16px -2px #921EC8; }
+#radio-player-container.winter .radio-progress-fill { background: #3E32EC; box-shadow: 0 0 8px #3E32EC; }
+#radio-player-container.winter .radio-ctrl-primary  { background: #3E32EC; color: #fff; box-shadow: 0 0 16px -2px #3E32EC; }
 
 /* Widget radio in index.html */
 .radio-widget-banner {
@@ -1600,10 +1601,10 @@ textarea:focus-visible,
 }
 
 /* Colore accent stagionale per il fill del volume */
-#radio-player-container.spring .radio-volume-slider::-webkit-slider-thumb { background: #32CD32; box-shadow: 0 0 6px #32CD32; }
-#radio-player-container.summer .radio-volume-slider::-webkit-slider-thumb { background: #FFF200; box-shadow: 0 0 6px #FFF200; }
-#radio-player-container.autumn .radio-volume-slider::-webkit-slider-thumb { background: #D2691E; box-shadow: 0 0 6px #D2691E; }
-#radio-player-container.winter .radio-volume-slider::-webkit-slider-thumb { background: #4682B4; box-shadow: 0 0 6px #4682B4; }
+#radio-player-container.spring .radio-volume-slider::-webkit-slider-thumb { background: #64EA53; box-shadow: 0 0 6px #64EA53; }
+#radio-player-container.summer .radio-volume-slider::-webkit-slider-thumb { background: #BAEC32; box-shadow: 0 0 6px #BAEC32; }
+#radio-player-container.autumn .radio-volume-slider::-webkit-slider-thumb { background: #921EC8; box-shadow: 0 0 6px #921EC8; }
+#radio-player-container.winter .radio-volume-slider::-webkit-slider-thumb { background: #3E32EC; box-shadow: 0 0 6px #3E32EC; }
 
 /* ─── PWA install banner ────────────────────────────────────────────────────── */
 #radio-install-banner {
