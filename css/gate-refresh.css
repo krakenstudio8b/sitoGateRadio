@@ -357,3 +357,64 @@ h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; letter-spacing: nor
 .gn-mini.is-playing .gn-mini-btn { padding: 0; width: 44px; }
 @media (min-width: 900px) { .gn-mini { width: 430px; } }
 @media (max-width: 380px) { .gn-mini-btn span { display: none; } .gn-mini-btn { width: 44px; padding: 0; } }
+
+/* =====================================================================
+   SCALA DI MISURE (versione nuova) — tutto più proporzionato
+   Titoli pagina 40/28px · testi 16px · spazi sezioni 72/40px · barra 60px
+   ===================================================================== */
+:root { --gn-sec: clamp(2.5rem, 5.5vw, 4.5rem); }
+
+/* barra in alto */
+header nav { padding-top: 0.55rem !important; padding-bottom: 0.55rem !important; }
+.header-logo-img { height: 2.4rem !important; }
+.header-logo-text { font-size: 1.35rem !important; line-height: 1 !important; }
+.gn-nav { gap: 1.35rem; }
+.gn-nav-link { font-size: 0.8rem; }
+.gn-nav-cta { padding: 0.45rem 0.8rem; font-size: 0.7rem; }
+
+/* spazi tra le sezioni */
+main section.py-32, main section.py-24, main section.py-16,
+.section-padding { padding-top: var(--gn-sec) !important; padding-bottom: var(--gn-sec) !important; }
+main section.pb-32 { padding-bottom: var(--gn-sec) !important; }
+.section-heading-box { margin-bottom: clamp(1.5rem, 3vw, 2.5rem) !important; }
+.section-heading-box h1, .section-heading-box h2 { margin-bottom: 0.4rem !important; }
+.section-divider { margin: 2.5rem auto !important; }
+
+/* titoli: una sola scala per tutte le pagine (il GATE RADIO della torre resta grande) */
+main h1, main h2 { font-size: clamp(1.75rem, 3vw, 2.5rem) !important; line-height: 1.1 !important; }
+#hero-section h2 { font-size: clamp(2.75rem, 6vw, 4.5rem) !important; }
+main h3.text-3xl, main h3.text-2xl { font-size: clamp(1.15rem, 1.6vw, 1.4rem) !important; }
+
+/* frasi sotto i titoli e testi */
+.section-heading-box p, main p.text-lg, main p.text-xl, main .text-lg:not(a):not(button) { font-size: 1rem !important; line-height: 1.55 !important; }
+.chi-siamo-text p { font-size: 1rem; line-height: 1.7; }
+
+/* Home: prossima live più compatta */
+#live-section-content .mt-20 { margin-top: 2rem !important; }
+#live-section-content .pt-16 { padding-top: 2rem !important; }
+.coming-soon-title { font-size: 1.35rem !important; margin-bottom: 1.5rem !important; }
+.next-event-card { max-width: 250px; }
+.next-event-noposter { width: 250px; }
+.next-event-noposter span { font-size: 1.75rem; }
+.next-event-artist { font-size: 1.4rem; }
+.next-event-date { font-size: 0.95rem; }
+
+/* card */
+.archive-card h3 { font-size: 1rem !important; line-height: 1.25 !important; }
+.event-card-title { font-size: 1.05rem !important; }
+.artist-card-title { font-size: 1.1rem !important; }
+
+/* telefono: due card per riga in Archivio ed Eventi, testi delle card più piccoli */
+@media (max-width: 640px) {
+    #archive-grid, #events-grid { grid-template-columns: 1fr 1fr !important; gap: 0.75rem !important; }
+    #archive-grid .archive-card > div:last-child { padding: 0.6rem 0.65rem 0.7rem !important; }
+    #archive-grid .archive-card h3 { font-size: 0.85rem !important; }
+    #archive-grid .archive-card p { font-size: 0.7rem !important; margin-bottom: 0.5rem !important; }
+    #archive-grid .card-tag { font-size: 0.6rem; padding: 1px 5px; }
+    #events-grid .event-card-title { font-size: 0.85rem !important; }
+    #events-grid .event-card-content { padding: 0.6rem !important; }
+    main h3.text-3xl, main h3.text-2xl { font-size: 1.15rem !important; }
+}
+/* aperture di Info e Contatti più contenute */
+.about-hero { height: 62vh !important; min-height: 380px; }
+.contact-hero { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
