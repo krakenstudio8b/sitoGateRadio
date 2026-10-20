@@ -5,7 +5,7 @@
 //  1. Menu corto: RADIO · ARCHIVIO · EVENTI · RESIDENT · INFO + OPEN CALL, senza icone
 //  2. Home: un solo "ASCOLTA ORA" (va dritto alla Radio)
 //  4. Chi siamo: descrizione nuova
-//  5. Footer: striscia artisti, prossimo appuntamento, link/contatti/social
+//  5. Footer: striscia artisti, link/contatti/social, nome GATE RADIO
 //  3. Archivio: ricerca per artista/serata + filtri per tipo
 (function () {
     const OPEN_CALL_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf_Ot0_OHSMYUuy2oyQtUJaMOaATIIkiMvNxKs_zMCRhZSMyg/viewform';
@@ -190,16 +190,9 @@
             ['https://twitch.tv/gateradio', 'Twitch'],
             ['https://mixcloud.com/gateradio', 'Mixcloud'],
         ];
-        const claim = l === 'en'
-            ? 'Independent radio and collective from Rome. Live sets from our studio, nights around the city, an open call that never closes.'
-            : 'Radio e collettivo indipendente da Roma. Dirette dal nostro studio, serate in giro per la città, un open call sempre aperto.';
         area.innerHTML = `
             <div class="gn-ticker" aria-hidden="true"><div class="gn-ticker-track"></div></div>
             <div class="gn-foot max-w-6xl mx-auto px-6">
-                <div class="gn-foot-top">
-                    <p class="gn-foot-claim">${claim}</p>
-                    <a class="gn-foot-next" id="gn-foot-next" href="events.html" hidden></a>
-                </div>
                 <div class="gn-foot-cols">
                     <nav class="gn-foot-col gn-foot-col-site" aria-label="${t('Sito', 'Site')}">
                         <p class="gn-foot-h">${t('SITO', 'SITE')}</p>
@@ -225,7 +218,7 @@
         fillFooterData();
     }
 
-    // Dati veri nel footer: chi è passato da Gate (striscia) + prossimo appuntamento
+    // Dati veri nel footer: i nomi di chi è passato da Gate (striscia)
     function fillFooterData() {
         const run = () => {
             const streams = window.streamsData || [];
@@ -250,27 +243,6 @@
             if (track && names.length) {
                 const row = names.slice(0, 70).map(n => `<span>${esc(n)}</span>`).join('<b aria-hidden="true">/</b>');
                 track.innerHTML = `<div>${row}<b aria-hidden="true">/</b></div><div>${row}<b aria-hidden="true">/</b></div>`;
-            }
-            // prossimo appuntamento: la prima live o evento pubblicato non ancora finito
-            const next = [...streams.map(x => ({ ...x, _k: 'live' })), ...events.map(x => ({ ...x, _k: 'event' }))]
-                .filter(x => x.date && endOf(x) >= now)
-                .sort((a, b) => (a.date + (a.timeStart || '')).localeCompare(b.date + (b.timeStart || '')))[0];
-            const box = document.getElementById('gn-foot-next');
-            if (box && next) {
-                const img = next.imageUrl || next.mainImage || '';
-                const name = next._k === 'event' ? next.title : next.artist;
-                const d = new Date(next.date).toLocaleDateString(lang() === 'en' ? 'en-GB' : 'it-IT',
-                    { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase();
-                const where = next._k === 'event' ? String(next.location || '').split('·')[0].trim() : (next.location || 'Gate Studio');
-                box.href = next._k === 'event' ? 'events.html' : 'index.html#live';
-                box.innerHTML = `
-                    ${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : ''}
-                    <span class="gn-foot-next-txt">
-                        <span class="gn-foot-h">${t('PROSSIMO APPUNTAMENTO', 'NEXT UP')}</span>
-                        <span class="gn-foot-next-name">${esc(name)}</span>
-                        <span class="gn-foot-next-meta">${esc(d)}${next.timeStart ? ' · ' + esc(next.timeStart) : ''}${where ? ' · ' + esc(where) : ''}</span>
-                    </span>`;
-                box.hidden = false;
             }
         };
         if (window.gateRadioDataPromise) window.gateRadioDataPromise.then(() => setTimeout(run, 50)).catch(() => {});

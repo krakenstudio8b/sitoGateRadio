@@ -218,7 +218,7 @@ body::before {
 .gn-hero-more:hover { text-decoration-color: var(--accent); }
 
 /* ----- FOOTER (js/gate-nuova.js) -----
-   Ordine: striscia artisti · frase + prossimo appuntamento · link · nome gigante · riga finale */
+   Ordine: striscia artisti · link · nome gigante · riga finale */
 .footer-main-area { padding-top: 0; overflow: hidden; }
 
 /* striscia con i nomi di chi è passato da Gate */
@@ -238,31 +238,8 @@ body::before {
 
 .gn-foot { padding-top: 3rem; text-align: left; }
 
-/* frase + prossimo appuntamento */
-.gn-foot-top {
-    display: grid; gap: 1.75rem; align-items: center;
-    padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-@media (min-width: 900px) { .gn-foot-top { grid-template-columns: 1fr minmax(0, 26rem); gap: 4rem; } }
-.gn-foot-claim {
-    max-width: 30ch; color: #fff;
-    font-size: clamp(1.15rem, 1.9vw, 1.45rem); line-height: 1.4; text-wrap: balance;
-}
-.gn-foot-next {
-    display: flex; gap: 1.1rem; align-items: center; min-width: 0;
-    padding: 0.75rem 1.25rem 0.75rem 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    transition: border-color 0.2s ease;
-}
-.gn-foot-next:hover { border-color: var(--accent); }
-.gn-foot-next img { width: 84px; height: 105px; object-fit: cover; flex: none; }
-.gn-foot-next-txt { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
-.gn-foot-next-txt .gn-foot-h { margin: 0; }
-.gn-foot-next-name { font-family: 'Grifter', sans-serif; font-size: 1.45rem; color: #fff; line-height: 1.05; overflow-wrap: anywhere; }
-.gn-foot-next-meta { font-size: 0.82rem; color: var(--text-secondary); letter-spacing: 0.03em; }
-
 /* link: sito (due colonne) · contatti · social */
-.gn-foot-cols { display: grid; gap: 2rem 1.5rem; padding-top: 2.25rem; grid-template-columns: 1fr 1fr; }
+.gn-foot-cols { display: grid; gap: 2rem 1.5rem; padding-top: 0; grid-template-columns: 1fr 1fr; }
 .gn-foot-col-site { grid-column: 1 / -1; }
 @media (min-width: 900px) {
     .gn-foot-cols { grid-template-columns: repeat(3, 1fr); }
@@ -280,14 +257,14 @@ body::before {
 
 /* firma finale: il nome a tutta larghezza, col retino delle locandine dentro le lettere */
 .gn-foot-mark {
-    margin: 3rem 0 0; padding: 0 1rem;
-    font-family: 'Grifter', sans-serif; line-height: 0.82; letter-spacing: -0.02em;
+    margin: 3rem 0 0; padding-left: 1rem; padding-right: 1rem;
+    font-family: 'Grifter', sans-serif; line-height: 1; letter-spacing: -0.02em;
     font-size: 15.2vw; white-space: nowrap; text-align: center; user-select: none;
     color: transparent;
     background: url('../assets/retino-gate.png') 0 0 / 256px 256px, #3a3a3a;
     background-blend-mode: screen;
     -webkit-background-clip: text; background-clip: text;
-    transform: translateY(0.12em);
+    padding-bottom: 0.04em;
 }
 
 /* riga finale */
