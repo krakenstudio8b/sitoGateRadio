@@ -217,8 +217,10 @@ body::before {
 }
 .gn-hero-more:hover { text-decoration-color: var(--accent); }
 
-/* ----- FOOTER (js/gate-nuova.js) ----- */
-.footer-main-area { padding-top: 0; }
+/* ----- FOOTER (js/gate-nuova.js) -----
+   Ordine: striscia artisti · frase + prossimo appuntamento · link · nome gigante · riga finale */
+.footer-main-area { padding-top: 0; overflow: hidden; }
+
 /* striscia con i nomi di chi è passato da Gate */
 .gn-ticker {
     overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -234,45 +236,64 @@ body::before {
 @keyframes gn-ticker { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .gn-ticker-track { animation: none; } }
 
-.gn-foot { padding-top: 2.75rem; padding-bottom: 2.5rem; text-align: left; }
-.gn-foot-top {
-    display: grid; gap: 1.5rem; align-items: center;
-    padding-bottom: 2.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-@media (min-width: 900px) { .gn-foot-top { grid-template-columns: 1fr auto; gap: 3rem; } }
-.gn-foot-brand { display: flex; gap: 1rem; align-items: flex-start; }
-.gn-foot-logo { width: 56px; height: 56px; flex: none; }
-.gn-foot-name { font-family: 'Grifter', sans-serif; font-size: 1.5rem; line-height: 1; color: #fff; }
-.gn-foot-claim { margin-top: 0.55rem; max-width: 46ch; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; }
-/* prossimo appuntamento */
-.gn-foot-next {
-    display: flex; gap: 0.9rem; align-items: center; min-width: 0;
-    padding: 0.6rem 1.1rem 0.6rem 0.6rem;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-}
-.gn-foot-next:hover { border-color: var(--accent); background: rgba(255, 255, 255, 0.03); }
-.gn-foot-next img { width: 56px; height: 70px; object-fit: cover; flex: none; }
-.gn-foot-next-txt { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
-.gn-foot-next-txt .gn-foot-h { margin: 0; }
-.gn-foot-next-name { font-family: 'Grifter', sans-serif; font-size: 1.1rem; color: #fff; line-height: 1.1; }
-.gn-foot-next-meta { font-size: 0.8rem; color: var(--text-secondary); letter-spacing: 0.03em; }
+.gn-foot { padding-top: 3rem; text-align: left; }
 
-.gn-foot-cols { display: grid; gap: 1.75rem; padding-top: 2rem; grid-template-columns: repeat(2, 1fr); }
-@media (min-width: 900px) { .gn-foot-cols { grid-template-columns: 1fr 1.2fr 1fr; } }
+/* frase + prossimo appuntamento */
+.gn-foot-top {
+    display: grid; gap: 1.75rem; align-items: center;
+    padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+@media (min-width: 900px) { .gn-foot-top { grid-template-columns: 1fr minmax(0, 26rem); gap: 4rem; } }
+.gn-foot-claim {
+    max-width: 30ch; color: #fff;
+    font-size: clamp(1.15rem, 1.9vw, 1.45rem); line-height: 1.4; text-wrap: balance;
+}
+.gn-foot-next {
+    display: flex; gap: 1.1rem; align-items: center; min-width: 0;
+    padding: 0.75rem 1.25rem 0.75rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    transition: border-color 0.2s ease;
+}
+.gn-foot-next:hover { border-color: var(--accent); }
+.gn-foot-next img { width: 84px; height: 105px; object-fit: cover; flex: none; }
+.gn-foot-next-txt { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+.gn-foot-next-txt .gn-foot-h { margin: 0; }
+.gn-foot-next-name { font-family: 'Grifter', sans-serif; font-size: 1.45rem; color: #fff; line-height: 1.05; overflow-wrap: anywhere; }
+.gn-foot-next-meta { font-size: 0.82rem; color: var(--text-secondary); letter-spacing: 0.03em; }
+
+/* link: sito (due colonne) · contatti · social */
+.gn-foot-cols { display: grid; gap: 2rem 1.5rem; padding-top: 2.25rem; grid-template-columns: 1fr 1fr; }
+.gn-foot-col-site { grid-column: 1 / -1; }
+@media (min-width: 900px) {
+    .gn-foot-cols { grid-template-columns: repeat(3, 1fr); }
+    .gn-foot-col-site { grid-column: auto; }
+}
 .gn-foot-h {
     font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
-    color: var(--accent); margin-bottom: 0.8rem;
+    color: var(--accent); margin-bottom: 0.85rem;
 }
-.gn-foot-links { display: flex; flex-direction: column; gap: 0.4rem; }
+.gn-foot-links { display: flex; flex-direction: column; gap: 0.45rem; align-items: flex-start; }
+.gn-foot-links-2 { display: grid; grid-template-columns: repeat(2, max-content); column-gap: 3rem; row-gap: 0.45rem; }
 .gn-foot-links a { color: var(--text-secondary); font-size: 0.92rem; transition: color 0.2s ease; }
 .gn-foot-links a:hover { color: #fff; }
-.gn-foot-socials { display: flex; flex-wrap: wrap; gap: 0.55rem; }
-@media (max-width: 899px) {
-    .gn-foot-cols > div:last-child { grid-column: 1 / -1; }
-    .gn-foot-links a[href^="mailto:"] { font-size: 0.8rem; white-space: nowrap; }
+@media (max-width: 899px) { .gn-foot-links a[href^="mailto:"] { font-size: 0.8rem; white-space: nowrap; } }
+
+/* firma finale: il nome a tutta larghezza, col retino delle locandine dentro le lettere */
+.gn-foot-mark {
+    margin: 3rem 0 0; padding: 0 1rem;
+    font-family: 'Grifter', sans-serif; line-height: 0.82; letter-spacing: -0.02em;
+    font-size: 15.2vw; white-space: nowrap; text-align: center; user-select: none;
+    color: transparent;
+    background: url('../assets/retino-gate.png') 0 0 / 256px 256px, #3a3a3a;
+    background-blend-mode: screen;
+    -webkit-background-clip: text; background-clip: text;
+    transform: translateY(0.12em);
 }
-body > footer { font-size: 0.7rem; letter-spacing: 0.12em; }
+
+/* riga finale */
+body > footer { padding-top: 1.1rem; padding-bottom: 1.1rem; font-size: 0.7rem; letter-spacing: 0.12em; }
+body > footer p { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1.5rem; max-width: 72rem; margin: 0 auto; }
+
 /* leggibilità sopra la torre grigia */
 .gn-hero-claim,
 .gn-hero-more {

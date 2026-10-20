@@ -181,10 +181,15 @@
     function buildFooter() {
         const area = document.querySelector('.footer-main-area');
         if (!area) return;
-        const socialsSrc = area.dataset.gnSocials || [...area.querySelectorAll('a.footer-social-link')].map(a => a.outerHTML).join('');
-        area.dataset.gnSocials = socialsSrc;
         const l = lang() === 'en' ? 'en' : 'it';
-        const links = NAV.map(n => `<a href="${n.href}">${t(n.it, n.en)}</a>`).join('');
+        const link = (href, label, ext) => `<a href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}>${label}</a>`;
+        const SOCIAL = [
+            ['https://instagram.com/gateradio', 'Instagram'],
+            ['https://www.youtube.com/@GateRadiorm', 'YouTube'],
+            ['https://soundcloud.com/gateradio', 'SoundCloud'],
+            ['https://twitch.tv/gateradio', 'Twitch'],
+            ['https://mixcloud.com/gateradio', 'Mixcloud'],
+        ];
         const claim = l === 'en'
             ? 'Independent radio and collective from Rome. Live sets from our studio, nights around the city, an open call that never closes.'
             : 'Radio e collettivo indipendente da Roma. Dirette dal nostro studio, serate in giro per la città, un open call sempre aperto.';
@@ -192,36 +197,31 @@
             <div class="gn-ticker" aria-hidden="true"><div class="gn-ticker-track"></div></div>
             <div class="gn-foot max-w-6xl mx-auto px-6">
                 <div class="gn-foot-top">
-                    <div class="gn-foot-brand">
-                        <img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png" alt="" class="gn-foot-logo" width="56" height="56" loading="lazy">
-                        <div>
-                            <p class="gn-foot-name">GATE <span class="text-[var(--accent)]">RADIO</span></p>
-                            <p class="gn-foot-claim">${claim}</p>
-                        </div>
-                    </div>
+                    <p class="gn-foot-claim">${claim}</p>
                     <a class="gn-foot-next" id="gn-foot-next" href="events.html" hidden></a>
                 </div>
                 <div class="gn-foot-cols">
-                    <div>
+                    <nav class="gn-foot-col gn-foot-col-site" aria-label="${t('Sito', 'Site')}">
                         <p class="gn-foot-h">${t('SITO', 'SITE')}</p>
-                        <nav class="gn-foot-links">${links}</nav>
-                    </div>
-                    <div>
+                        <div class="gn-foot-links gn-foot-links-2">${NAV.map(n => { const w = t(n.it, n.en).toLowerCase(); return link(n.href, w.charAt(0).toUpperCase() + w.slice(1)); }).join('')}</div>
+                    </nav>
+                    <div class="gn-foot-col">
                         <p class="gn-foot-h">${t('CONTATTI', 'CONTACT')}</p>
                         <div class="gn-foot-links">
-                            <a href="mailto:gateradiorm@gmail.com">gateradiorm@gmail.com</a>
-                            <a href="${OPEN_CALL_URL}" target="_blank" rel="noopener">${t('Proponi il tuo set', 'Submit your set')}</a>
-                            <a href="contact.html">${t('Scrivici', 'Write to us')}</a>
+                            ${link('mailto:gateradiorm@gmail.com', 'gateradiorm@gmail.com')}
+                            ${link(OPEN_CALL_URL, t('Proponi il tuo set', 'Submit your set'), true)}
+                            ${link('contact.html', t('Scrivici', 'Write to us'))}
                         </div>
                     </div>
-                    <div>
+                    <div class="gn-foot-col">
                         <p class="gn-foot-h">${t('SEGUICI', 'FOLLOW')}</p>
-                        <div class="gn-foot-socials">${socialsSrc}</div>
+                        <div class="gn-foot-links">${SOCIAL.map(([h, n]) => link(h, `${n} ↗`, true)).join('')}</div>
                     </div>
                 </div>
-            </div>`;
+            </div>
+            <p class="gn-foot-mark" aria-hidden="true">GATE RADIO</p>`;
         const bottom = document.querySelector('body > footer p');
-        if (bottom) bottom.innerHTML = `© ${new Date().getFullYear()} <span class="grifter-font">GATE RADIO</span> · ROMA · EXPANDING SOUND BOUNDARIES`;
+        if (bottom) bottom.innerHTML = `<span>© ${new Date().getFullYear()} GATE RADIO · ROMA</span><span>EXPANDING SOUND BOUNDARIES</span>`;
         fillFooterData();
     }
 
