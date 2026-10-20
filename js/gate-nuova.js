@@ -89,8 +89,23 @@
               en: "We believe in real opportunities and want to give a voice to those who rarely find room elsewhere: whether you are a DJ, an experienced live performer or a young artist looking for your first real chance, this space is yours too. Our Open Call is open." },
         ],
     };
+    // Galleria di Info: ai lati due video al posto delle immagini (il centrale resta)
+    const ABOUT_SIDE_VIDEOS = [
+        'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/video/dioppppp.mp4',          // sinistra
+        'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/video/animazione_banner.mp4', // destra
+    ];
+    function buildAboutVideos() {
+        const items = document.querySelectorAll('.about-media-grid > .about-media-item');
+        if (items.length !== 3) return;
+        [items[0], items[2]].forEach((item, i) => {
+            if (item.querySelector('video')) return;
+            item.innerHTML = `<video autoplay muted loop playsinline preload="metadata"><source src="${ABOUT_SIDE_VIDEOS[i]}" type="video/mp4"></video>`;
+        });
+    }
+
     function buildAbout() {
         if (page !== 'about') return;
+        buildAboutVideos();
         const sub = document.querySelector('[data-i18n="about.identdesc"], #gn-about-sub');
         const box = document.querySelector('#chi-siamo-section .chi-siamo-text');
         if (!sub || !box) return;
