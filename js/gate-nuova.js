@@ -46,48 +46,11 @@
 
     // ─── 2. HOME ────────────────────────────────────────────────────────────────
     function buildHome() {
+        // Home come prima: torre-antenna e scritta GATE RADIO, niente frase.
+        // Il bottone ASCOLTA ORA è nascosto (CSS): ora sta nel mini player.
         if (page !== 'index') return;
-        // un solo "ASCOLTA ORA": quello grande porta direttamente alla Radio
-        const heroCta = document.querySelector('#hero-section a[href*="#live"]');
-        if (heroCta) heroCta.setAttribute('href', 'radio.html');
-
-        // presentazione dentro la torre, al posto della vecchia riga
-        // "Live Streaming • Eventi stagionali • Archivio esclusivo"
-        const hero = document.getElementById('hero-section');
-        if (!hero) return;
-        const l = lang() === 'en' ? 'en' : 'it';
-
-        // tre immagini in fila: grafica "From the bass" · logo · torre-antenna
-        if (!hero.querySelector('.gn-hero-trio')) {
-            const box = hero.querySelector(':scope > div');
-            const trio = document.createElement('div');
-            trio.className = 'gn-hero-trio';
-            trio.innerHTML = `
-                <img src="assets/gate-bass-tower.png" alt="" class="gn-hero-side" width="827" height="981" decoding="async">
-                <img src="assets/gate-simbolo-bianco.png" alt="Gate Radio" class="gn-hero-logo" decoding="async">
-                <img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/graficatorreradio.png" alt="" class="gn-hero-side" decoding="async">`;
-            if (box) box.insertAdjacentElement('afterbegin', trio);
-            const title = hero.querySelector('h2');
-            if (title) title.classList.add('sr-only');      // il nome c'è già nel logo
-        }
-        // la presentazione diventa una striscia "da locandina" sopra le tre immagini:
-        // linea sottile + tre blocchi in maiuscolo, ognuno allineato alla sua immagine
-        const sub = hero.querySelector('[data-i18n="home.subtitle"], .gn-hero-claim');
-        const blocchi = l === 'en'
-            ? ['An independent project born in Rome', 'A radio · Our nights', 'A booth open to anyone with something to say through their music']
-            : ['Un progetto indipendente nato a Roma', 'Una radio · Le nostre serate', 'Una console aperta a chi ha qualcosa da dire con la propria musica'];
-        if (sub) {
-            sub.removeAttribute('data-i18n');
-            sub.className = 'sr-only';                         // resta per Google e lettori di schermo
-            sub.textContent = blocchi.join('. ') + '.';
-        }
-        hero.querySelector('.gn-hero-strip')?.remove();
-        const strip = document.createElement('div');
-        strip.className = 'gn-hero-strip';
-        strip.setAttribute('aria-hidden', 'true');
-        strip.innerHTML = blocchi.map(b => `<span>${b}</span>`).join('');
-        hero.querySelector('.gn-hero-trio')?.insertAdjacentElement('beforebegin', strip);
-        hero.querySelector('.gn-hero-more')?.remove();
+        const sub = document.querySelector('#hero-section [data-i18n="home.subtitle"]');
+        if (sub) sub.style.display = 'none';
     }
 
     // ─── 4. CHI SIAMO: DESCRIZIONE NUOVA ────────────────────────────────────────
