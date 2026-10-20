@@ -461,6 +461,22 @@ main h3.text-3xl, main h3.text-2xl { font-size: clamp(1.15rem, 1.6vw, 1.4rem) !i
     #events-grid-preview { margin-bottom: 0 !important; }
 }
 
+/* ----- BARRA IN ALTO (PC): voci leggibili, tutto sulla stessa linea ----- */
+header nav .gn-nav { align-items: center; gap: 1.6rem; }
+header nav .gn-nav > a { padding: 0 !important; line-height: 1 !important; border: 0; }
+header nav .gn-nav-link {
+    font-size: 0.95rem; letter-spacing: 0.07em; color: #ffffff;
+    display: inline-flex; align-items: center; height: 34px;
+}
+header nav .gn-nav-link:hover, header nav .gn-nav-link.is-current { color: var(--accent); }
+header nav .gn-nav-cta {
+    display: inline-flex !important; align-items: center; justify-content: center;
+    height: 34px; padding: 0 0.95rem !important; line-height: 1 !important;
+    font-size: 0.75rem; letter-spacing: 0.12em;
+    border: 1px solid var(--accent) !important;
+}
+header nav .gn-nav .lang-toggle-group { height: 34px; display: inline-flex; align-items: stretch; }
+
 /* ----- MENU DA TELEFONO: una voce per riga ----- */
 #mobile-menu:not(.hidden) {
     display: flex !important; flex-direction: column;
