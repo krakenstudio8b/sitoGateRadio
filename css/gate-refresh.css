@@ -435,3 +435,19 @@ h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; letter-spacing: nor
     .gn-hero-claim { width: max-content !important; max-width: 94% !important; white-space: nowrap; text-wrap: initial; }
     .gn-hero-claim span { display: block; }
 }
+
+/* ----- HOME v2: striscia "da locandina" in alto + tre immagini libere ----- */
+@media (min-width: 900px) {
+    #hero-section > div { justify-content: flex-start; gap: 1.5rem; padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .gn-hero-strip {
+        display: grid; grid-template-columns: 1.25fr 0.7fr 1.25fr; gap: 1.5rem; align-items: start;
+        padding-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.35);
+        text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.25;
+        font-size: clamp(0.9rem, 1.05vw, 1.15rem); color: #fff;
+    }
+    .gn-hero-strip span:nth-child(1) { text-align: left; }
+    .gn-hero-strip span:nth-child(2) { text-align: center; color: var(--accent); }
+    .gn-hero-strip span:nth-child(3) { text-align: right; justify-self: end; max-width: 40ch; text-wrap: balance; }
+    .gn-hero-trio { flex: 1; height: auto !important; min-height: 0; }
+    .gn-hero-logo { align-self: center; margin-top: 0; height: 52% !important; }
+}

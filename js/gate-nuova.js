@@ -70,16 +70,23 @@
             const title = hero.querySelector('h2');
             if (title) title.classList.add('sr-only');      // il nome c'è già nel logo
         }
+        // la presentazione diventa una striscia "da locandina" sopra le tre immagini:
+        // linea sottile + tre blocchi in maiuscolo, ognuno allineato alla sua immagine
         const sub = hero.querySelector('[data-i18n="home.subtitle"], .gn-hero-claim');
+        const blocchi = l === 'en'
+            ? ['An independent project born in Rome', 'A radio · Our nights', 'A booth open to anyone with something to say through their music']
+            : ['Un progetto indipendente nato a Roma', 'Una radio · Le nostre serate', 'Una console aperta a chi ha qualcosa da dire con la propria musica'];
         if (sub) {
             sub.removeAttribute('data-i18n');
-            sub.className = 'gn-hero-claim hero-text-shadow';
-            // una frase per riga
-            const righe = l === 'en'
-                ? ['An independent project born in Rome:', 'a radio,', 'our nights,', 'a booth open to anyone with something to say through their music.']
-                : ['Un progetto indipendente nato a Roma:', 'una radio,', 'le nostre serate,', 'una console aperta a chi ha qualcosa da dire con la propria musica.'];
-            sub.innerHTML = righe.map(r => `<span>${r}</span>`).join(' ');
+            sub.className = 'sr-only';                         // resta per Google e lettori di schermo
+            sub.textContent = blocchi.join('. ') + '.';
         }
+        hero.querySelector('.gn-hero-strip')?.remove();
+        const strip = document.createElement('div');
+        strip.className = 'gn-hero-strip';
+        strip.setAttribute('aria-hidden', 'true');
+        strip.innerHTML = blocchi.map(b => `<span>${b}</span>`).join('');
+        hero.querySelector('.gn-hero-trio')?.insertAdjacentElement('beforebegin', strip);
         hero.querySelector('.gn-hero-more')?.remove();
     }
 
