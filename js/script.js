@@ -129,6 +129,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     const _escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
         c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+    // Luogo di una live: quello scritto nei dati (live fatte fuori, es. Groovelab),
+    // altrimenti le live "base" (streaming/resident/set) sono al Gate Studio.
+    const liveLocation = (item) => {
+        if (!item) return '';
+        if (item.location) return item.location;
+        if (item._type === 'event') return '';
+        return /^(LIVE|EXTENDED)/i.test(item.title || '') ? 'Gate Studio' : '';
+    };
+
     const getLiveLinks = (item) => {
         if (!item) return [];
         if (Array.isArray(item.liveLinks)) {
@@ -154,7 +163,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             ? `${stream.timeStart}${stream.timeEnd ? ' → ' + stream.timeEnd : ''}`
             : '';
         const isFuture = stream.date && new Date(stream.date) >= new Date(new Date().setHours(0,0,0,0));
-        const location = timeStr || (isFuture ? 'PROSSIMA DIRETTA' : 'DIRETTA ARCHIVIATA');
+        const where = liveLocation(stream);
+        const location = [timeStr || (isFuture ? 'PROSSIMA DIRETTA' : 'DIRETTA ARCHIVIATA'), where].filter(Boolean).join(' • ');
 
         const images = stream.galleryImages && stream.galleryImages.length > 0
             ? stream.galleryImages
@@ -466,7 +476,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>
                         <div class="p-4 md:p-5 flex flex-col flex-grow bg-[#0d0d0d]" style="cursor: pointer;">
                             <h3 class="text-lg font-bold text-[var(--accent)]">${item.artist}</h3>
-                            <p class="text-sm text-[var(--text-secondary)] mb-3">${item.title}</p>
+                            <p class="text-sm text-[var(--text-secondary)] mb-3">${_escHtml(item.title)}${liveLocation(item) ? ' · ' + _escHtml(liveLocation(item)) : ''}</p>
                             <div class="mt-auto flex justify-between items-end">
                                 <div class="flex flex-wrap gap-1">${tagsHTML}</div>
                                 
