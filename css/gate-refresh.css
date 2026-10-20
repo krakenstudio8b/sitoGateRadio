@@ -417,4 +417,43 @@ main h3.text-3xl, main h3.text-2xl { font-size: clamp(1.15rem, 1.6vw, 1.4rem) !i
 }
 /* aperture di Info e Contatti più contenute */
 .about-hero { height: 62vh !important; min-height: 380px; }
-.contact-hero { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
+.contact-hero { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+
+/* Home da PC: "Ultime dirette" e "I nostri eventi" stanno interi in una schermata.
+   La larghezza della sezione segue l'altezza dello schermo, così le locandine
+   (4:5) non diventano mai più alte dello spazio disponibile. */
+@media (min-width: 900px) {
+    #archive-preview > .max-w-6xl {
+        max-width: min(68rem, calc((100vh - 410px) * 0.8 * 4 + 4.5rem));
+    }
+    #events-preview > .max-w-6xl {
+        max-width: min(60rem, calc((100vh - 385px) * 0.8 * 3 + 3rem));
+    }
+    #archive-preview .max-w-6xl > .flex { margin-bottom: 1.5rem !important; }
+    #archive-grid-preview, #events-grid-preview { gap: 1.5rem !important; }
+    #events-grid-preview { margin-bottom: 1.25rem !important; }
+    #events-preview .section-heading-box { margin-bottom: 1.5rem !important; }
+    #events-preview .btn-primary { padding: 0.6rem 1.4rem !important; font-size: 0.9rem !important; }
+    #events-grid-preview .event-card-content { padding: 0.75rem 1rem; }
+    #archive-preview, #events-preview { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+}
+
+/* ----- SECONDO GIRO DI MISURE: tutto un gradino più piccolo ----- */
+main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
+#hero-section h2 { font-size: clamp(2.4rem, 5vw, 3.75rem) !important; }
+.section-heading-box p, main p.text-lg, main p.text-xl, main .text-lg:not(a):not(button) { font-size: 0.95rem !important; }
+:root { --gn-sec: clamp(2rem, 4.5vw, 3.5rem); }
+/* griglie delle pagine: card meno larghe (più colonne / contenitore più stretto) */
+@media (min-width: 1024px) {
+    #events-grid, #artists-grid { grid-template-columns: repeat(4, 1fr) !important; }
+    #archive-grid { grid-template-columns: repeat(5, 1fr) !important; }
+    #archive-grid, #events-grid, #artists-grid { gap: 1.25rem !important; }
+}
+.archive-card > div:last-child, .artist-card-content { padding: 0.85rem 1rem !important; }
+.artist-card-bio { font-size: 0.85rem !important; line-height: 1.5 !important; }
+.btn-primary { font-size: 0.9rem !important; }
+.gn-foot-cta-title { font-size: clamp(1.1rem, 1.6vw, 1.4rem); }
+.gn-foot-cta { padding: 1.1rem 1.25rem; }
+.gn-foot-social a { width: 2.75rem; height: 2.75rem; font-size: 1.05rem; }
+.gn-foot-mark { font-size: 13vw; }
+@media (min-width: 900px) { .gn-mini { width: 400px; height: 64px; } .gn-mini-media { width: 110px; height: 62px; } }
