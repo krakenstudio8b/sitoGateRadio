@@ -56,6 +56,20 @@
         const hero = document.getElementById('hero-section');
         if (!hero) return;
         const l = lang() === 'en' ? 'en' : 'it';
+
+        // tre immagini in fila: grafica "From the bass" · logo · torre-antenna
+        if (!hero.querySelector('.gn-hero-trio')) {
+            const box = hero.querySelector(':scope > div');
+            const trio = document.createElement('div');
+            trio.className = 'gn-hero-trio';
+            trio.innerHTML = `
+                <img src="assets/gate-bass-tower.png" alt="" class="gn-hero-side" width="827" height="981" decoding="async">
+                <img src="assets/gate-logo-bianco.png" alt="Gate Radio" class="gn-hero-logo" width="700" height="508" decoding="async">
+                <img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/graficatorreradio.png" alt="" class="gn-hero-side" decoding="async">`;
+            if (box) box.insertAdjacentElement('afterbegin', trio);
+            const title = hero.querySelector('h2');
+            if (title) title.classList.add('sr-only');      // il nome c'è già nel logo
+        }
         const sub = hero.querySelector('[data-i18n="home.subtitle"], .gn-hero-claim');
         if (sub) {
             sub.removeAttribute('data-i18n');

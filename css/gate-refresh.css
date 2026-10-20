@@ -361,3 +361,17 @@ html.gn-shell body { padding-bottom: 0; }
     body.gn-has-bar [aria-label="Cambia versione grafica"] { bottom: 16px !important; }
     .gn-shell-frame { height: 100%; }
 }
+
+/* ----- HOME: tre immagini in fila (grafica · logo · torre) ----- */
+#hero-section::before { display: none !important; }
+#hero-section > div { width: 100%; max-width: 72rem; }
+.gn-hero-trio {
+    display: grid; grid-template-columns: 1fr 0.9fr 1fr; align-items: center;
+    gap: clamp(0.75rem, 3vw, 3rem);
+    height: clamp(220px, 52vh, 560px); margin: 0 auto 2rem;
+}
+.gn-hero-trio img { width: 100%; height: 100%; object-fit: contain; background: none !important; }
+.gn-hero-logo { height: 62% !important; }
+@media (max-width: 640px) {
+    .gn-hero-trio { height: 34vh; gap: 0.5rem; margin-bottom: 1.5rem; }
+}
