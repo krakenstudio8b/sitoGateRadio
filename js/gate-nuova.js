@@ -313,8 +313,9 @@
         if (store.get('gnColori') !== '1') return;
 
         const REDS = [
-            ['Originale', ''], ['Rosso vivo', '#E10600'], ['Rosso neon', '#FF2A2A'],
-            ['Cremisi', '#C8102E'], ['Rosso scuro', '#A3001B'], ['Rosso corallo', '#FF4433'],
+            ['Originale', ''], ['Rosso pomodoro', '#E8341C'], ['Rosso mattone', '#C0392B'],
+            ['Rosso ciliegia', '#D2042D'], ['Rosso fragola', '#FF3B4E'], ['Rosso vino', '#8E1B2B'],
+            ['Rosso vermiglio', '#E34234'],
         ];
         const SEASONS = [['autumn', 'Autunno (ora)'], ['summer', 'Estate']];
         let saved = {};
@@ -339,6 +340,12 @@
             <p>PROVA COLORE</p>
             <div class="gn-colori-row">${SEASONS.map(([k, l]) => `<button type="button" data-s="${k}">${l}</button>`).join('')}</div>
             <div class="gn-colori-sw">${REDS.map(([l, c]) => `<button type="button" data-c="${c}" title="${l}" aria-label="${l}" style="background:${c || 'linear-gradient(135deg,#D2691E 50%,#FFF200 50%)'}"></button>`).join('')}</div>
+            <div class="gn-colori-pick">
+                <label>${t('Colore libero', 'Any colour')}
+                    <input type="color" class="gn-colori-input" value="${color || '#D2691E'}">
+                </label>
+                <input type="text" class="gn-colori-hex" maxlength="7" spellcheck="false" value="${color || '#D2691E'}" aria-label="Codice colore">
+            </div>
             <p class="gn-colori-name"></p>`;
         document.body.appendChild(box);
         box.addEventListener('click', (e) => {
@@ -348,7 +355,23 @@
             box.querySelector('.gn-colori-name').textContent = (REDS.find(r => r[1] === color) || ['Originale'])[0] + (color ? ' ' + color : '');
             apply();
         });
-        box.querySelector('.gn-colori-name').textContent = (REDS.find(r => r[1] === color) || ['Originale'])[0] + (color ? ' ' + color : '');
+        // colore libero: la rotella e il codice si aggiornano a vicenda, il sito cambia mentre trascini
+        const picker = box.querySelector('.gn-colori-input');
+        const hexIn = box.querySelector('.gn-colori-hex');
+        const setFree = (hex) => {
+            if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return;
+            color = hex.toUpperCase();
+            picker.value = color; hexIn.value = color;
+            box.querySelector('.gn-colori-name').textContent = (REDS.find(r => r[1] === color) || [t('Scelto da te', 'Your pick')])[0] + ' ' + color;
+            apply();
+        };
+        picker.addEventListener('input', () => setFree(picker.value));
+        hexIn.addEventListener('input', () => setFree(hexIn.value.trim()));
+        box.addEventListener('click', (e) => {
+            const b = e.target.closest('button[data-c]');
+            if (b && b.dataset.c) { picker.value = b.dataset.c; hexIn.value = b.dataset.c; }
+        });
+        box.querySelector('.gn-colori-name').textContent = (REDS.find(r => r[1] === color) || [color ? t('Scelto da te', 'Your pick') : 'Originale'])[0] + (color ? ' ' + color : '');
         apply();
     }
 

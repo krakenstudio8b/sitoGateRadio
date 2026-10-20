@@ -552,6 +552,12 @@ header .header-logo-text > a > span {
 .gn-colori-sw button { width: 30px; height: 30px; border: 2px solid transparent; cursor: pointer; }
 .gn-colori-sw button.on { border-color: #fff; outline: 1px solid #000; }
 .gn-colori-name { margin: 0 !important; color: #ccc; }
+.gn-colori { width: 270px; }
+.gn-colori-sw { flex-wrap: wrap; }
+.gn-colori-pick { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.gn-colori-pick label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.gn-colori-input { width: 42px; height: 30px; padding: 0; border: 1px solid #555; background: none; cursor: pointer; }
+.gn-colori-hex { width: 84px; padding: 5px 6px; background: #111; color: #fff; border: 1px solid #555; font: inherit; text-transform: uppercase; }
 @media (max-width: 899px) { .gn-colori { bottom: 76px; } }
 
 /* ----- MENU DA TELEFONO: una voce per riga ----- */
