@@ -646,3 +646,16 @@ main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
     .gn-filter-panel { flex-wrap: wrap; justify-content: flex-start; }
     .gn-filter-panel > #archive-filters { flex-basis: 100%; border-left: 0; margin-left: 0 !important; padding-left: 0; }
 }
+
+/* ----- FOOTER: i due tasti pieni, nei colori ufficiali (viola + lime) ----- */
+.gn-foot-ctas .gn-foot-cta { border: 0; background: #921EC8; transition: transform 0.2s ease, filter 0.2s ease; }
+.gn-foot-ctas .gn-foot-cta + .gn-foot-cta { background: #BAEC32; }
+.gn-foot-ctas .gn-foot-cta .gn-foot-cta-title,
+.gn-foot-ctas .gn-foot-cta .gn-foot-cta-arrow { color: #fff; }
+.gn-foot-ctas .gn-foot-cta .gn-foot-cta-sub { color: rgba(255, 255, 255, 0.85); }
+.gn-foot-ctas .gn-foot-cta + .gn-foot-cta .gn-foot-cta-title,
+.gn-foot-ctas .gn-foot-cta + .gn-foot-cta .gn-foot-cta-arrow { color: #000; }
+.gn-foot-ctas .gn-foot-cta + .gn-foot-cta .gn-foot-cta-sub { color: rgba(0, 0, 0, 0.75); }
+.gn-foot-ctas .gn-foot-cta:hover, .gn-foot-ctas .gn-foot-cta:focus-visible { background-color: #921EC8; filter: brightness(1.12); transform: translateY(-2px); }
+.gn-foot-ctas .gn-foot-cta + .gn-foot-cta:hover, .gn-foot-ctas .gn-foot-cta + .gn-foot-cta:focus-visible { background-color: #BAEC32; }
+@media (prefers-reduced-motion: reduce) { .gn-foot-ctas .gn-foot-cta:hover { transform: none; } }
