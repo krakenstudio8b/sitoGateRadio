@@ -544,8 +544,8 @@ header .header-logo-text > a > span {
 .gn-about-photo { margin: 0; border: 1px solid rgba(255, 255, 255, 0.12); }
 .gn-about-photo img { display: block; width: 100%; height: auto; }
 @media (min-width: 900px) {
-    .gn-about-hero { grid-template-columns: 5fr 7fr; align-items: end; gap: 3rem; }
-    .gn-about-hero-text { padding-bottom: 0.5rem; }
+    .gn-about-hero { grid-template-columns: 5fr 7fr; align-items: center; gap: 3rem; }
+    .gn-about-hero-text { padding-bottom: 2rem; }
     .gn-about-hero h1 { font-size: clamp(2.4rem, 4.2vw, 3.6rem) !important; }
     .gn-about-hero h1 span { display: block; }
 }
