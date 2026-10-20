@@ -478,6 +478,47 @@ header nav .gn-nav-cta {
 header nav .gn-nav > a.gn-nav-cta { padding: 0 1rem !important; }
 header nav .gn-nav .lang-toggle-group { height: 34px; display: inline-flex; align-items: stretch; }
 
+/* ----- ARCHIVIO: un solo tasto FILTRA da telefono ----- */
+.gn-filter-bar { display: none; }
+#gn-filter-panel #archive-filters { margin-top: 1rem; }
+@media (max-width: 768px) {
+    .gn-filter-bar { display: flex; margin-top: 0.75rem; }
+    .gn-filter-toggle {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        padding: 0.6rem 1rem; background: transparent; color: #fff; cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        font-size: 0.85rem; letter-spacing: 0.1em;
+    }
+    .gn-archive-tools.is-open .gn-filter-toggle { border-color: var(--accent); color: var(--accent); }
+    .gn-filter-n { color: var(--accent); }
+    .gn-filter-panel { display: none; }
+    .gn-archive-tools.is-open .gn-filter-panel { display: block; }
+    #gn-filter-panel #archive-filters { justify-content: flex-start !important; flex-wrap: wrap; gap: 0.5rem; }
+    #gn-filter-panel .gn-kinds { flex-wrap: wrap !important; overflow: visible !important; }
+    #gn-filter-panel #archive-filters .filter-btn { padding: 0.45rem 0.75rem; font-size: 0.8rem; }
+}
+
+/* ----- SCHEDA APERTA DA TELEFONO: locandine intere, niente caselle grigie ----- */
+@media (max-width: 1024px) {
+    .gallery-column { height: auto !important; padding: 3.75rem 0 1rem !important; background: #000; }
+    .gallery-grid, .gallery-row {
+        display: flex !important; height: auto !important; gap: 0.75rem;
+        overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 1rem;
+        -webkit-overflow-scrolling: touch;
+    }
+    .gallery-grid .gallery-item, .gallery-row .gallery-item {
+        flex: 0 0 86%; height: auto !important; background: none !important;
+        scroll-snap-align: center; border-radius: 0;
+    }
+    .gallery-item img, .single-image-wrapper img {
+        width: 100% !important; height: auto !important; max-height: 70vh;
+        object-fit: contain; background: none !important;
+    }
+    .gallery-grid .gallery-item:only-child { flex-basis: 100%; }
+    .single-image-wrapper { height: auto !important; padding: 0 1rem; }
+    .posts-row { display: none !important; }
+}
+
 /* ----- MENU DA TELEFONO: una voce per riga ----- */
 #mobile-menu:not(.hidden) {
     display: flex !important; flex-direction: column;

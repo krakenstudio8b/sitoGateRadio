@@ -137,6 +137,12 @@
             <label class="sr-only" for="gn-search">${t('Cerca nell\'archivio', 'Search the archive')}</label>
             <input id="gn-search" type="search" autocomplete="off"
                    placeholder="${t('Cerca artista o serata…', 'Search artist or night…')}" class="gn-search">
+            <div class="gn-filter-bar">
+                <button type="button" class="gn-filter-toggle" aria-expanded="false" aria-controls="gn-filter-panel">
+                    <i class="fas fa-sliders" aria-hidden="true"></i> ${t('FILTRA', 'FILTER')} <span class="gn-filter-n"></span>
+                </button>
+            </div>
+            <div id="gn-filter-panel" class="gn-filter-panel">
             <div class="gn-kinds" role="group" aria-label="${t('Tipo di set', 'Set type')}">
                 ${KINDS.map(([k, l], i) => `<button type="button" class="gn-kind${i === 0 ? ' is-active' : ''}" data-kind="${k}">${l}</button>`).join('')}
             </div>
@@ -144,8 +150,27 @@
                 ${[['all', t('TUTTE LE SEASON', 'ALL SEASONS')], ['1 SEASON', '1 SEASON'], ['2 SEASON', '2 SEASON']].map(([k, l], i) =>
                     `<button type="button" class="gn-kind${i === 0 ? ' is-active' : ''}" data-gseason="${k}">${l}</button>`).join('')}
             </div>
+            </div>
             <p id="gn-count" class="gn-count" aria-live="polite"></p>`;
         seasons.insertAdjacentElement('beforebegin', box);
+        // anche i filtri per stagione entrano nel pannello (su telefono si apre con FILTRA)
+        const panel = box.querySelector('#gn-filter-panel');
+        panel.appendChild(seasons);
+        const toggle = box.querySelector('.gn-filter-toggle');
+        toggle.addEventListener('click', () => {
+            const open = !box.classList.contains('is-open');
+            box.classList.toggle('is-open', open);
+            toggle.setAttribute('aria-expanded', String(open));
+        });
+        // quanti filtri sono attivi (mostrato accanto a FILTRA)
+        const updateBadge = () => {
+            const seasonBtn = seasons.querySelector('.filter-btn.active');
+            const n = [box.querySelector('.gn-kind[data-kind].is-active'), box.querySelector('.gn-kind[data-gseason].is-active')]
+                .filter(b => b && !['all'].includes(b.dataset.kind || b.dataset.gseason)).length
+                + (seasonBtn && seasonBtn.dataset.season !== 'all' ? 1 : 0);
+            box.querySelector('.gn-filter-n').textContent = n ? `(${n})` : '';
+        };
+        box.addEventListener('click', () => setTimeout(updateBadge, 0));
 
         let q = '';
         let kind = 'all';
