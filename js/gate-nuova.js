@@ -51,6 +51,20 @@
         if (page !== 'index') return;
         const sub = document.querySelector('#hero-section [data-i18n="home.subtitle"]');
         if (sub) sub.style.display = 'none';
+
+        // "TUTTI GLI EVENTI" accanto al titolo, a destra (come "VAI ALL'ARCHIVIO")
+        const ev = document.getElementById('events-preview');
+        const evHead = ev && ev.querySelector('.section-heading-box');
+        const evBtn = ev && ev.querySelector('a[href*="events"].btn-primary');
+        if (evHead && evBtn && !ev.querySelector('.gn-sec-head')) {
+            const row = document.createElement('div');
+            row.className = 'gn-sec-head';
+            evHead.insertAdjacentElement('beforebegin', row);
+            const oldWrap = evBtn.parentElement;
+            row.appendChild(evHead);
+            row.appendChild(evBtn);
+            if (oldWrap && !oldWrap.children.length) oldWrap.remove();
+        }
     }
 
     // ─── 4. CHI SIAMO: DESCRIZIONE NUOVA ────────────────────────────────────────
