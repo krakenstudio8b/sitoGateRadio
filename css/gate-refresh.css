@@ -429,3 +429,9 @@ h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; letter-spacing: nor
 @media (min-width: 900px) {
     .gn-hero-logo { align-self: start; height: 52% !important; margin-top: 9%; }
 }
+
+/* frase della Home: due righe intere, una per idea */
+@media (min-width: 900px) {
+    .gn-hero-claim { width: max-content !important; max-width: 94% !important; white-space: nowrap; text-wrap: initial; }
+    .gn-hero-claim span { display: block; }
+}
