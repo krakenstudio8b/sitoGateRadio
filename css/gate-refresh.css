@@ -475,6 +475,7 @@ header nav .gn-nav-cta {
     font-family: 'Fjalla One', sans-serif; font-size: 0.95rem; letter-spacing: 0.08em;
     border: 1px solid var(--accent) !important;
 }
+header nav .gn-nav > a.gn-nav-cta { padding: 0 1rem !important; }
 header nav .gn-nav .lang-toggle-group { height: 34px; display: inline-flex; align-items: stretch; }
 
 /* ----- MENU DA TELEFONO: una voce per riga ----- */
