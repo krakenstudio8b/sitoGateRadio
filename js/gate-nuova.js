@@ -64,7 +64,7 @@
             trio.className = 'gn-hero-trio';
             trio.innerHTML = `
                 <img src="assets/gate-bass-tower.png" alt="" class="gn-hero-side" width="827" height="981" decoding="async">
-                <img src="assets/gate-logo-bianco.png" alt="Gate Radio" class="gn-hero-logo" width="700" height="508" decoding="async">
+                <img src="assets/gate-simbolo-bianco.png" alt="Gate Radio" class="gn-hero-logo" decoding="async">
                 <img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/graficatorreradio.png" alt="" class="gn-hero-side" decoding="async">`;
             if (box) box.insertAdjacentElement('afterbegin', trio);
             const title = hero.querySelector('h2');
@@ -79,13 +79,6 @@
                 : 'Un progetto indipendente nato a Roma: una radio, le nostre serate e una console aperta a chi ha qualcosa da dire con la propria musica.';
         }
         hero.querySelector('.gn-hero-more')?.remove();
-        if (heroCta) {
-            const more = document.createElement('a');
-            more.className = 'gn-hero-more';
-            more.href = 'about.html';
-            more.textContent = l === 'en' ? 'Who we are →' : 'Chi siamo →';
-            heroCta.insertAdjacentElement('afterend', more);
-        }
     }
 
     // ─── 4. CHI SIAMO: DESCRIZIONE NUOVA ────────────────────────────────────────

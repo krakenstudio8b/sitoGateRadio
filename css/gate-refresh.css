@@ -295,7 +295,7 @@ body > footer p { display: flex; flex-wrap: wrap; justify-content: space-between
 .gn-hero-more {
     text-shadow: 0 1px 2px #000, 0 0 12px rgba(0, 0, 0, 0.95), 0 0 30px rgba(0, 0, 0, 0.85);
 }
-@media (min-width: 900px) { .gn-hero-claim { max-width: 42ch; font-size: 1.15rem; } }
+@media (min-width: 900px) { .gn-hero-claim { max-width: 46ch; font-size: 1.3rem; line-height: 1.45; } }
 
 /* Info: galleria dei tre video ad angoli vivi come il resto */
 .about-media-grid, .about-media-item, .about-media-item img, .about-media-item video { border-radius: 0 !important; }
@@ -362,16 +362,33 @@ html.gn-shell body { padding-bottom: 0; }
     .gn-shell-frame { height: 100%; }
 }
 
-/* ----- HOME: tre immagini in fila (grafica · logo · torre) ----- */
+/* ----- HOME: tre immagini in fila (grafica · simbolo · torre) -----
+   Riempiono la prima schermata: le immagini prendono tutto lo spazio che resta
+   dopo frase e bottone. */
 #hero-section::before { display: none !important; }
-#hero-section > div { width: 100%; max-width: 72rem; }
+#hero-section > div { width: 100%; max-width: 88rem; }
 .gn-hero-trio {
-    display: grid; grid-template-columns: 1fr 0.9fr 1fr; align-items: center;
-    gap: clamp(0.75rem, 3vw, 3rem);
-    height: clamp(220px, 52vh, 560px); margin: 0 auto 2rem;
+    display: grid; grid-template-columns: 1fr 0.8fr 1fr; align-items: center;
+    gap: clamp(0.5rem, 2vw, 2rem);
+    height: clamp(240px, calc(100vh - 70px - 15.5rem), 760px);
+    margin: 0 auto 1.75rem;
 }
-.gn-hero-trio img { width: 100%; height: 100%; object-fit: contain; background: none !important; }
-.gn-hero-logo { height: 62% !important; }
+.gn-hero-trio { grid-template-rows: 100%; }
+.gn-hero-trio img {
+    width: 100%; height: 100%; min-height: 0; max-height: 100%;
+    object-fit: contain; background: none !important;
+}
+.gn-hero-logo { height: 58% !important; }
+/* telefono: simbolo sopra, casse e torre affiancate sotto (più grandi) */
 @media (max-width: 640px) {
-    .gn-hero-trio { height: 34vh; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .gn-hero-trio {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 28% 1fr;
+        grid-template-areas: "logo logo" "left right";
+        height: clamp(320px, calc(100svh - 70px - 14rem), 520px);
+        gap: 0.75rem 0.5rem;
+    }
+    .gn-hero-trio img:nth-child(1) { grid-area: left; }
+    .gn-hero-trio img:nth-child(2) { grid-area: logo; height: 100% !important; }
+    .gn-hero-trio img:nth-child(3) { grid-area: right; }
 }
