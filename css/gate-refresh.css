@@ -453,7 +453,9 @@ main h3.text-3xl, main h3.text-2xl { font-size: clamp(1.15rem, 1.6vw, 1.4rem) !i
     padding: 0.5rem 0.9rem !important; font-size: 0.78rem !important;
 }
 #events-preview .max-w-6xl { text-align: left; }
-#events-preview .gn-sec-head .btn-primary { padding: 0.5rem 0.9rem !important; font-size: 0.78rem !important; }
+#events-preview .gn-sec-head .btn-primary,
+#archive-preview .max-w-6xl > .flex .btn-primary { padding: 0.5rem 0.9rem !important; font-size: 0.78rem !important; line-height: 1.2 !important; }
+.footer-main-area { margin-top: 2rem !important; }
 @media (max-width: 640px) {
     .gn-sec-head .section-heading-box p { display: none; }
     #events-grid-preview { margin-bottom: 0 !important; }
