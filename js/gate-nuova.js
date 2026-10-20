@@ -181,34 +181,28 @@
     function buildFooter() {
         const area = document.querySelector('.footer-main-area');
         if (!area) return;
-        const l = lang() === 'en' ? 'en' : 'it';
-        const link = (href, label, ext) => `<a href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}>${label}</a>`;
         const SOCIAL = [
-            ['https://instagram.com/gateradio', 'Instagram'],
-            ['https://www.youtube.com/@GateRadiorm', 'YouTube'],
-            ['https://soundcloud.com/gateradio', 'SoundCloud'],
-            ['https://twitch.tv/gateradio', 'Twitch'],
-            ['https://mixcloud.com/gateradio', 'Mixcloud'],
+            ['https://instagram.com/gateradio', 'Instagram', 'fab fa-instagram'],
+            ['https://www.youtube.com/@GateRadiorm', 'YouTube', 'fab fa-youtube'],
+            ['https://soundcloud.com/gateradio', 'SoundCloud', 'fab fa-soundcloud'],
+            ['https://twitch.tv/gateradio', 'Twitch', 'fab fa-twitch'],
+            ['https://mixcloud.com/gateradio', 'Mixcloud', 'fab fa-mixcloud'],
         ];
+        const cta = (href, title, sub, ext) => `
+            <a class="gn-foot-cta" href="${href}"${ext ? ' target="_blank" rel="noopener"' : ''}>
+                <span class="gn-foot-cta-title">${title} <span class="gn-foot-cta-arrow" aria-hidden="true">→</span></span>
+                <span class="gn-foot-cta-sub">${sub}</span>
+            </a>`;
         area.innerHTML = `
             <div class="gn-ticker" aria-hidden="true"><div class="gn-ticker-track"></div></div>
             <div class="gn-foot max-w-6xl mx-auto px-6">
-                <div class="gn-foot-cols">
-                    <nav class="gn-foot-col gn-foot-col-site" aria-label="${t('Sito', 'Site')}">
-                        <p class="gn-foot-h">${t('SITO', 'SITE')}</p>
-                        <div class="gn-foot-links gn-foot-links-2">${NAV.map(n => { const w = t(n.it, n.en).toLowerCase(); return link(n.href, w.charAt(0).toUpperCase() + w.slice(1)); }).join('')}</div>
-                    </nav>
-                    <div class="gn-foot-col">
-                        <p class="gn-foot-h">${t('CONTATTI', 'CONTACT')}</p>
-                        <div class="gn-foot-links">
-                            ${link('mailto:gateradiorm@gmail.com', 'gateradiorm@gmail.com')}
-                            ${link(OPEN_CALL_URL, t('Proponi il tuo set', 'Submit your set'), true)}
-                            ${link('contact.html', t('Scrivici', 'Write to us'))}
-                        </div>
+                <div class="gn-foot-row">
+                    <div class="gn-foot-ctas">
+                        ${cta('mailto:gateradiorm@gmail.com', t('SCRIVICI', 'WRITE TO US'), 'gateradiorm@gmail.com')}
+                        ${cta(OPEN_CALL_URL, t('PROPONI IL TUO SET', 'SUBMIT YOUR SET'), t('Open call per DJ e live act', 'Open call for DJs and live acts'), true)}
                     </div>
-                    <div class="gn-foot-col">
-                        <p class="gn-foot-h">${t('SEGUICI', 'FOLLOW')}</p>
-                        <div class="gn-foot-links">${SOCIAL.map(([h, n]) => link(h, `${n} ↗`, true)).join('')}</div>
+                    <div class="gn-foot-social" aria-label="Social">
+                        ${SOCIAL.map(([h, n, i]) => `<a href="${h}" target="_blank" rel="noopener" aria-label="${n}" title="${n}"><i class="${i}" aria-hidden="true"></i></a>`).join('')}
                     </div>
                 </div>
             </div>

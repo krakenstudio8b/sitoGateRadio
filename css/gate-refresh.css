@@ -218,7 +218,7 @@ body::before {
 .gn-hero-more:hover { text-decoration-color: var(--accent); }
 
 /* ----- FOOTER (js/gate-nuova.js) -----
-   Ordine: striscia artisti · link · nome gigante · riga finale */
+   Ordine: striscia artisti · contatti + social · nome gigante · riga finale */
 .footer-main-area { padding-top: 0; overflow: hidden; }
 
 /* striscia con i nomi di chi è passato da Gate */
@@ -238,22 +238,34 @@ body::before {
 
 .gn-foot { padding-top: 3rem; text-align: left; }
 
-/* link: sito (due colonne) · contatti · social */
-.gn-foot-cols { display: grid; gap: 2rem 1.5rem; padding-top: 0; grid-template-columns: 1fr 1fr; }
-.gn-foot-col-site { grid-column: 1 / -1; }
-@media (min-width: 900px) {
-    .gn-foot-cols { grid-template-columns: repeat(3, 1fr); }
-    .gn-foot-col-site { grid-column: auto; }
+/* contatti come grandi "quasi bottoni" + social con i loghi */
+.gn-foot-row { display: grid; gap: 1.5rem; align-items: center; }
+@media (min-width: 900px) { .gn-foot-row { grid-template-columns: 1fr auto; gap: 3rem; } }
+.gn-foot-ctas { display: grid; gap: 1rem; }
+@media (min-width: 640px) { .gn-foot-ctas { grid-template-columns: 1fr 1fr; } }
+.gn-foot-cta {
+    display: flex; flex-direction: column; gap: 0.45rem;
+    padding: 1.4rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
-.gn-foot-h {
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
-    color: var(--accent); margin-bottom: 0.85rem;
+.gn-foot-cta:hover, .gn-foot-cta:focus-visible { border-color: var(--accent); background: rgba(255, 255, 255, 0.03); }
+.gn-foot-cta-title {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    font-family: 'Grifter', sans-serif; font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+    line-height: 1; color: #fff; white-space: nowrap;
 }
-.gn-foot-links { display: flex; flex-direction: column; gap: 0.45rem; align-items: flex-start; }
-.gn-foot-links-2 { display: grid; grid-template-columns: repeat(2, max-content); column-gap: 3rem; row-gap: 0.45rem; }
-.gn-foot-links a { color: var(--text-secondary); font-size: 0.92rem; transition: color 0.2s ease; }
-.gn-foot-links a:hover { color: #fff; }
-@media (max-width: 899px) { .gn-foot-links a[href^="mailto:"] { font-size: 0.8rem; white-space: nowrap; } }
+.gn-foot-cta-arrow { display: inline-block; color: var(--accent); transition: transform 0.2s ease; }
+.gn-foot-cta:hover .gn-foot-cta-arrow { transform: translateX(0.3em); }
+.gn-foot-cta-sub { font-size: 0.9rem; color: var(--text-secondary); overflow-wrap: anywhere; }
+.gn-foot-social { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.gn-foot-social a {
+    display: flex; align-items: center; justify-content: center;
+    width: 3.25rem; height: 3.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; font-size: 1.25rem;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+.gn-foot-social a:hover, .gn-foot-social a:focus-visible { border-color: var(--accent); color: var(--accent); }
 
 /* firma finale: il nome a tutta larghezza, col retino delle locandine dentro le lettere */
 .gn-foot-mark {
