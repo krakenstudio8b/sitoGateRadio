@@ -161,11 +161,16 @@
             <div class="gn-kinds" role="group" aria-label="${t('Tipo di set', 'Set type')}">
                 ${KINDS.map(([k, l], i) => `<button type="button" class="gn-kind${i === 0 ? ' is-active' : ''}" data-kind="${k}">${l}</button>`).join('')}
             </div>
+            <div class="gn-kinds gn-gseasons" role="group" aria-label="Season">
+                ${[['all', t('TUTTE LE SEASON', 'ALL SEASONS')], ['1 SEASON', '1 SEASON'], ['2 SEASON', '2 SEASON']].map(([k, l], i) =>
+                    `<button type="button" class="gn-kind${i === 0 ? ' is-active' : ''}" data-gseason="${k}">${l}</button>`).join('')}
+            </div>
             <p id="gn-count" class="gn-count" aria-live="polite"></p>`;
         seasons.insertAdjacentElement('beforebegin', box);
 
         let q = '';
         let kind = 'all';
+        let gseason = 'all';
         const input = box.querySelector('#gn-search');
         const count = box.querySelector('#gn-count');
         let empty = null;
@@ -178,7 +183,10 @@
             grid.querySelectorAll('.archive-card[data-stream-id]').forEach(card => {
                 const it = byId.get(card.dataset.streamId) || {};
                 const hay = `${it.artist || ''} ${it.title || ''} ${(it.liveLinks || []).map(l => l.label).join(' ')} ${it.description || ''}`.toLowerCase();
-                const ok = (kind === 'all' || kindOf(it) === kind) && words.every(w => hay.includes(w));
+                const itSeason = (it.tags || []).find(x => /^\d+ SEASON$/.test(x)) || (String(it.date || '') < '2026-09-01' ? '1 SEASON' : '2 SEASON');
+                const ok = (kind === 'all' || kindOf(it) === kind)
+                    && (gseason === 'all' || itSeason === gseason)
+                    && words.every(w => hay.includes(w));
                 card.style.display = ok ? '' : 'none';
                 if (ok) shown++;
             });
@@ -193,10 +201,16 @@
         };
 
         input.addEventListener('input', () => { q = input.value.trim(); apply(); });
-        box.querySelectorAll('.gn-kind').forEach(b => b.addEventListener('click', () => {
-            box.querySelectorAll('.gn-kind').forEach(x => x.classList.remove('is-active'));
+        box.querySelectorAll('.gn-kind[data-kind]').forEach(b => b.addEventListener('click', () => {
+            box.querySelectorAll('.gn-kind[data-kind]').forEach(x => x.classList.remove('is-active'));
             b.classList.add('is-active');
             kind = b.dataset.kind;
+            apply();
+        }));
+        box.querySelectorAll('.gn-kind[data-gseason]').forEach(b => b.addEventListener('click', () => {
+            box.querySelectorAll('.gn-kind[data-gseason]').forEach(x => x.classList.remove('is-active'));
+            b.classList.add('is-active');
+            gseason = b.dataset.gseason;
             apply();
         }));
         // la griglia viene ridisegnata (dati da Firebase, filtro stagioni): riapplichiamo

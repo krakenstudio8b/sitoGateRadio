@@ -562,6 +562,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
+        // Stagione di Gate ("1 SEASON" fino all'estate 2026, "2 SEASON" da settembre 2026):
+        // se una live arriva dal gestionale senza etichetta, la aggiungiamo in base alla data
+        const gateSeasonTag = (date) => (String(date || '') < '2026-09-01' ? '1 SEASON' : '2 SEASON');
+        mergedArchive.forEach(it => {
+            const tags = Array.isArray(it.tags) ? it.tags : [];
+            it.tags = tags.some(t => /^\d+ SEASON$/.test(t)) ? tags : [gateSeasonTag(it.date), ...tags];
+        });
         const allArchiveItems = mergedArchive;
         window._allArchiveItems = allArchiveItems;
         // Uno stream finisce nell'archivio solo quando la sua fine (timeEnd) è passata.
