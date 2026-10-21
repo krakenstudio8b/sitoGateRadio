@@ -620,8 +620,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Prova a caricare i resident da Firebase; se vuoto o errore → fallback
         const GATE_FB_URL = 'https://studio-kraken-gate-default-rtdb.firebaseio.com';
-        fetch(`${GATE_FB_URL}/gateRadio/residents.json`)
-            .then(r => r.ok ? r.json() : null)
+        // prima dal Worker (/api/residents), se non risponde direttamente da Firebase
+        fetch('/api/residents')
+            .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .catch(() => fetch(`${GATE_FB_URL}/gateRadio/residents.json`).then(r => r.ok ? r.json() : null))
             .then(obj => {
                 let residents;
                 if (obj && typeof obj === 'object') {

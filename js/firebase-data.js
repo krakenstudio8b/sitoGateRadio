@@ -15,13 +15,25 @@ function isVisibleStream(s) {
 
 window.gateRadioDataPromise = (async function fetchGateRadioData() {
     try {
-        const [streamsRes, eventsRes] = await Promise.all([
-            fetch(`${GATE_FIREBASE_URL}/gateRadio/streams.json`),
-            fetch(`${GATE_FIREBASE_URL}/gateRadio/events.json`)
-        ]);
-
-        const streamsObj = await streamsRes.json();
-        const eventsObj  = await eventsRes.json();
+        // Prima la strada sicura: il Worker di Cloudflare (/api/gate-data) che toglie
+        // telefoni ed email. Se non risponde (es. anteprima in locale) si legge
+        // Firebase direttamente, finché la sua lettura pubblica resta aperta.
+        let streamsObj, eventsObj;
+        try {
+            const r = await fetch('/api/gate-data');
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            const d = await r.json();
+            if (!d || !d.streams) throw new Error('risposta vuota');
+            streamsObj = d.streams;
+            eventsObj  = d.events;
+        } catch (apiErr) {
+            const [streamsRes, eventsRes] = await Promise.all([
+                fetch(`${GATE_FIREBASE_URL}/gateRadio/streams.json`),
+                fetch(`${GATE_FIREBASE_URL}/gateRadio/events.json`)
+            ]);
+            streamsObj = await streamsRes.json();
+            eventsObj  = await eventsRes.json();
+        }
 
         // Firebase restituisce oggetti con push key → converti in array
         // Usa la push key come `id` per compatibilità con il codice del sito

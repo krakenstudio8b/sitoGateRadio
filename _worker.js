@@ -85,6 +85,65 @@ async function handleUpload(request, env) {
     }
 }
 
+// ─── DATI PUBBLICI DEL SITO (/api/gate-data, /api/residents) ─────────────────
+// Il sito legge live, eventi e resident da qui invece che direttamente da Firebase:
+// così telefoni, email e note arrivate dal Google Sheet / Open Call restano privati.
+// Delle live passa solo ciò che il sito mostra (lista qui sotto).
+// FIREBASE_DB_SECRET (facoltativo, `wrangler secret put`) serve quando la lettura
+// pubblica di Firebase verrà chiusa.
+const PUBLIC_STREAM_FIELDS = ['artist', 'title', 'date', 'timeStart', 'timeEnd', 'season', 'tags',
+    'imageUrl', 'soundcloudUrl', 'liveLinks', 'description', 'description_en', 'location',
+    'duration', 'source', 'published', 'hidden'];
+
+async function readFirebase(path, env) {
+    const auth = env.FIREBASE_DB_SECRET ? `?auth=${encodeURIComponent(env.FIREBASE_DB_SECRET)}` : '';
+    const res = await fetch(`${FIREBASE_DB_URL}/${path}.json${auth}`);
+    if (!res.ok) throw new Error(`Firebase ${path}: ${res.status}`);
+    return res.json();
+}
+
+function publicStreams(obj) {
+    const out = {};
+    for (const [key, s] of Object.entries(obj || {})) {
+        if (!s || typeof s !== 'object') continue;
+        const clean = {};
+        for (const f of PUBLIC_STREAM_FIELDS) if (s[f] !== undefined) clean[f] = s[f];
+        out[key] = clean;
+    }
+    return out;
+}
+
+function jsonResponse(data, status = 200) {
+    return new Response(JSON.stringify(data), {
+        status,
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Cache-Control': 'public, max-age=60',
+            'Access-Control-Allow-Origin': '*',
+        },
+    });
+}
+
+async function handleGateData(env) {
+    try {
+        const [streams, events] = await Promise.all([
+            readFirebase('gateRadio/streams', env),
+            readFirebase('gateRadio/events', env),
+        ]);
+        return jsonResponse({ streams: publicStreams(streams), events: events || {} });
+    } catch (err) {
+        return jsonResponse({ error: err.message }, 502);
+    }
+}
+
+async function handleResidents(env) {
+    try {
+        return jsonResponse(await readFirebase('gateRadio/residents', env) || {});
+    } catch (err) {
+        return jsonResponse({ error: err.message }, 502);
+    }
+}
+
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
@@ -99,6 +158,9 @@ export default {
                 return handleUpload(request, env);
             }
         }
+
+        if (url.pathname === '/api/gate-data') return handleGateData(env);
+        if (url.pathname === '/api/residents') return handleResidents(env);
 
         // Se il dominio è gateradiorm.com (o www), mostra Coming Soon
         if (host === 'gateradiorm.com' || host === 'www.gateradiorm.com') {
