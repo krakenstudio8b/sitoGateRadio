@@ -51,6 +51,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const galleryLightbox = $('#lightbox');
     const galleryLightboxImg = $('#lightbox-image');
     const FALLBACK_IMG = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png';
+    // Locandine nelle card: versione piccola (600 px, rimpicciolita bene) in R2 sotto
+    // thumbs/<stesso percorso>.webp. Il browser che rimpicciolisce l'originale crea
+    // "pallini" (moiré) sul retino delle grafiche; la piccola è pulita e pesa metà.
+    // Se la piccola non esiste ancora, onerror torna all'originale.
+    const R2_BASE = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/';
+    const thumbOf = (url) => (url && url.startsWith(R2_BASE) && !url.startsWith(R2_BASE + 'thumbs/'))
+        ? `${R2_BASE}thumbs/${url.slice(R2_BASE.length)}.webp` : url;
+    const posterImg = (url, alt, cls, loading = 'lazy') => {
+        const t = thumbOf(url);
+        const back = t !== url ? ` onerror="this.onerror=null;this.src='${_escHtml(url)}'"` : '';
+        return `<img src="${_escHtml(t)}"${back} alt="${_escHtml(alt || '')}" class="${cls}" loading="${loading}" decoding="async">`;
+    };
     const SEASON_CLASSES = ['winter', 'spring', 'summer', 'autumn'];
 
     function openGalleryModal({ title = '', dateStr = '', location = '', description = '', details = '', tags = [], images = [], actionsHTML = '', seasonClass = '' } = {}) {
@@ -420,7 +432,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const nextName  = _escHtml(nextStream.artist || '');
             const nextKind  = _escHtml(nextStream.title || '');
             const posterHTML = nextStream.imageUrl
-                ? `<img src="${_escHtml(nextStream.imageUrl)}" alt="${nextName}" class="w-full h-auto" loading="lazy">`
+                ? posterImg(nextStream.imageUrl, nextStream.artist, 'w-full h-auto')
                 : `<div class="next-event-noposter"><span>${nextName}</span></div>`;
             const nextLabel = _lang === 'en' ? 'NEXT LIVE' : 'PROSSIMA LIVE';
             liveContainer.innerHTML = `
@@ -492,7 +504,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return `<div class="archive-card rounded-xl overflow-hidden border border-[var(--border-color)] flex flex-col group ${seasonClass}" data-stream-id="${item.id}">
                         <div class="relative">
                             ${item.imageUrl
-                                ? `<img src="${item.imageUrl}" alt="${item.title}" class="archive-card-image-wrapper w-full h-full object-cover" loading="${loadingAttr}" decoding="async">`
+                                ? posterImg(item.imageUrl, item.title, 'archive-card-image-wrapper w-full h-full object-cover', loadingAttr)
                                 : `<div class="archive-card-noposter"><span>${_escHtml(item.artist || '')}</span></div>`}
                         </div>
                         <div class="p-4 md:p-5 flex flex-col flex-grow bg-[#0d0d0d]" style="cursor: pointer;">
@@ -697,7 +709,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const eventDate = new Date(event.date);
             return `
                 <div class="event-card group ${event.season || seasonFromDate(event.date)}" data-event-id="${event.id}" style="cursor: pointer;">
-                    <div class="event-card-image-wrapper"><img src="${event.mainImage || FALLBACK_IMG}" alt="${event.title}" class="event-card-image" loading="lazy"></div>
+                    <div class="event-card-image-wrapper">${posterImg(event.mainImage || FALLBACK_IMG, event.title, 'event-card-image')}</div>
                     <div class="event-card-content">
                         <h3 class="event-card-title">${event.title}</h3>
                         <p class="event-card-date">${eventDate.toLocaleDateString(_glLocale(), { day: 'numeric', month: 'long', year: 'numeric' })}</p>

@@ -77,6 +77,13 @@ async function handleUpload(request, env) {
         await env.R2_BUCKET.put(key, file.stream(), {
             httpMetadata: { contentType: file.type },
         });
+        // versione piccola per le card del sito (la prepara il backstage), stesso percorso sotto thumbs/
+        const thumb = formData.get('thumb');
+        if (thumb && thumb.type === 'image/webp' && thumb.size < 2 * 1024 * 1024) {
+            await env.R2_BUCKET.put(`thumbs/${key}.webp`, thumb.stream(), {
+                httpMetadata: { contentType: 'image/webp' },
+            });
+        }
 
         const publicUrl = `${R2_PUBLIC_BASE}/${key.split('/').map(encodeURIComponent).join('/')}`;
         return json({ url: publicUrl, key }, 200);

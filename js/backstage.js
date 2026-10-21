@@ -49,12 +49,34 @@ function hide(el) { el.classList.add('hidden'); }
 // il worker lo verifica e controlla che l'utente abbia ruolo admin.
 const UPLOAD_API_URL = '/api/upload';
 
+// Versione piccola (600 px) per le card del sito: rimpicciolita bene qui, il
+// browser che rimpicciolisce l'originale crea "pallini" sul retino delle locandine.
+// Se il browser non sa farla (es. vecchi Safari) si va avanti senza.
+async function creaMiniatura(file) {
+    try {
+        const probe = await createImageBitmap(file);
+        const w = Math.min(600, probe.width);
+        const h = Math.round(probe.height * w / probe.width);
+        probe.close();
+        const bmp = await createImageBitmap(file, { resizeWidth: w, resizeHeight: h, resizeQuality: 'high' });
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(bmp, 0, 0);
+        bmp.close();
+        return await new Promise(res => canvas.toBlob(b => res(b && b.type === 'image/webp' ? b : null), 'image/webp', 0.82));
+    } catch (e) {
+        return null;
+    }
+}
+
 async function uploadFile(file, folder) {
     if (!auth.currentUser) throw new Error('Sessione scaduta: rifai il login');
     const idToken = await auth.currentUser.getIdToken();
     const fd = new FormData();
     fd.append('file', file);
     fd.append('folder', folder);
+    const thumb = await creaMiniatura(file);
+    if (thumb) fd.append('thumb', thumb, 'thumb.webp');
     const res = await fetch(UPLOAD_API_URL, {
         method: 'POST',
         headers: { Authorization: 'Bearer ' + idToken },
