@@ -311,6 +311,8 @@
         buildAbout();
         buildArchiveSearch();
         buildFooter();
+        // grafica nuova pronta: la pagina può comparire (vedi js/style-toggle.js)
+        requestAnimationFrame(() => document.documentElement.classList.remove('gn-attesa'));
         // le traduzioni IT/EN cambiano i testi del menu: lo ricostruiamo
         document.addEventListener('click', (e) => {
             if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(() => { buildMenu(); buildHome(); buildAbout(); buildFooter(); }, 50);
