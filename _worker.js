@@ -124,28 +124,56 @@ function jsonResponse(data, status = 200) {
     });
 }
 
-async function handleGateData(env) {
+// Copia dei dati nella cache di Cloudflare: le visite arrivano subito (niente
+// attesa di Firebase) e, se Firebase non risponde, si serve l'ultima copia buona.
+const CACHE_FRESCA_SEC = 60;            // dopo 1 minuto si rilegge Firebase
+const CACHE_SCORTA_SEC = 7 * 24 * 3600; // copia di riserva se Firebase è giù
+
+async function conCache(nome, ctx, leggi) {
+    const cache = caches.default;
+    const fresca = new Request(`https://gate-cache.internal/${nome}`);
+    const scorta = new Request(`https://gate-cache.internal/${nome}-scorta`);
+    const hit = await cache.match(fresca);
+    if (hit) return hit;
     try {
-        const [streams, events] = await Promise.all([
-            readFirebase('gateRadio/streams', env),
-            readFirebase('gateRadio/events', env),
-        ]);
-        return jsonResponse({ streams: publicStreams(streams), events: events || {} });
+        const body = JSON.stringify(await leggi());
+        const mk = (sec) => new Response(body, { headers: {
+            'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': `public, max-age=${sec}` } });
+        ctx.waitUntil(Promise.all([cache.put(fresca, mk(CACHE_FRESCA_SEC)), cache.put(scorta, mk(CACHE_SCORTA_SEC))]));
+        return mk(CACHE_FRESCA_SEC);
+    } catch (err) {
+        const vecchia = await cache.match(scorta);
+        if (vecchia) return vecchia;
+        throw err;
+    }
+}
+
+async function handleGateData(env, ctx) {
+    try {
+        const r = await conCache('gate-data', ctx, async () => {
+            const [streams, events] = await Promise.all([
+                readFirebase('gateRadio/streams', env),
+                readFirebase('gateRadio/events', env),
+            ]);
+            return { streams: publicStreams(streams), events: events || {} };
+        });
+        return jsonResponse(await r.json());
     } catch (err) {
         return jsonResponse({ error: err.message }, 502);
     }
 }
 
-async function handleResidents(env) {
+async function handleResidents(env, ctx) {
     try {
-        return jsonResponse(await readFirebase('gateRadio/residents', env) || {});
+        const r = await conCache('residents', ctx, async () => await readFirebase('gateRadio/residents', env) || {});
+        return jsonResponse(await r.json());
     } catch (err) {
         return jsonResponse({ error: err.message }, 502);
     }
 }
 
 export default {
-    async fetch(request, env) {
+    async fetch(request, env, ctx) {
         const url = new URL(request.url);
         const host = url.hostname;
 
@@ -159,8 +187,8 @@ export default {
             }
         }
 
-        if (url.pathname === '/api/gate-data') return handleGateData(env);
-        if (url.pathname === '/api/residents') return handleResidents(env);
+        if (url.pathname === '/api/gate-data') return handleGateData(env, ctx);
+        if (url.pathname === '/api/residents') return handleResidents(env, ctx);
 
         // Se il dominio è gateradiorm.com (o www), mostra Coming Soon
         if (host === 'gateradiorm.com' || host === 'www.gateradiorm.com') {

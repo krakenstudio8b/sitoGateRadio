@@ -30,6 +30,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Funzioni helper
     function $(selector) { return document.querySelector(selector); }
     function $$(selector) { return document.querySelectorAll(selector); }
+    // Quando i dati non arrivano (rete, server): messaggio con "riprova", non "nessun risultato"
+    function erroreDatiHTML() {
+        const it = (typeof _glLang === 'function' ? _glLang() : 'it') === 'it';
+        return `<div class="gn-data-error"><p>${it ? 'Non riesco a caricare i dati in questo momento.' : 'Cannot load the data right now.'}</p>
+            <button type="button" onclick="location.reload()">${it ? 'RIPROVA' : 'TRY AGAIN'}</button></div>`;
+    }
     
     function toLocalDateString(date) {
         const year = date.getFullYear();
@@ -506,6 +512,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const renderGrid = (items, container) => {
             if (!container) return;
+            if (!items.length && window.gateDataError) { container.innerHTML = erroreDatiHTML(); return; }
             container.innerHTML = items.length > 0 ? items.map(createArchiveItemHTML).join('') : '<p class="col-span-full text-center text-[var(--text-secondary)]">Nessun risultato trovato.</p>';
         };
 
@@ -699,8 +706,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         const sortedEvents = [...eventsData].sort((a, b) => new Date(b.date) - new Date(a.date));
-        if (eventsGrid) { eventsGrid.innerHTML = sortedEvents.map(createEventCardHTML).join(''); }
-        if (eventsPreviewGrid) { eventsPreviewGrid.innerHTML = sortedEvents.slice(0, 4).map(createEventCardHTML).join(''); }
+        if (!sortedEvents.length && window.gateDataError) {
+            if (eventsGrid) eventsGrid.innerHTML = erroreDatiHTML();
+            if (eventsPreviewGrid) eventsPreviewGrid.innerHTML = erroreDatiHTML();
+        }
+        else {
+            if (eventsGrid) eventsGrid.innerHTML = sortedEvents.map(createEventCardHTML).join('');
+            if (eventsPreviewGrid) eventsPreviewGrid.innerHTML = sortedEvents.slice(0, 4).map(createEventCardHTML).join('');
+        }
 
         document.body.addEventListener('click', function(e) {
             const clickedCard = e.target.closest('.event-card');

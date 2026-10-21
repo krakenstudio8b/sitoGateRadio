@@ -181,6 +181,8 @@
         let empty = null;
 
         const apply = () => {
+            // dati non ancora arrivati: lascia la griglia vuota (gira il logo di caricamento)
+            if (!window._allArchiveItems) { count.textContent = ''; return; }
             const items = window._allArchiveItems || [];
             const byId = new Map(items.map(i => [String(i.id), i]));
             const words = q.toLowerCase().split(/\s+/).filter(Boolean);

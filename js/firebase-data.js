@@ -19,11 +19,26 @@ window.gateRadioDataPromise = (async function fetchGateRadioData() {
         // telefoni ed email. Se non risponde (es. anteprima in locale) si legge
         // Firebase direttamente, finché la sua lettura pubblica resta aperta.
         let streamsObj, eventsObj;
+        // fino a 3 tentativi, ognuno con un tempo massimo: una rete lenta o un
+        // intoppo momentaneo non devono lasciare le pagine vuote
+        const tentativo = async (ms) => {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), ms);
+            try {
+                const r = await fetch('/api/gate-data', { signal: ctrl.signal });
+                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                const d = await r.json();
+                if (!d || !d.streams) throw new Error('risposta vuota');
+                return d;
+            } finally { clearTimeout(timer); }
+        };
         try {
-            const r = await fetch('/api/gate-data');
-            if (!r.ok) throw new Error(`HTTP ${r.status}`);
-            const d = await r.json();
-            if (!d || !d.streams) throw new Error('risposta vuota');
+            let d = null, ultimoErrore = null;
+            for (const [ms, pausa] of [[8000, 0], [10000, 800], [15000, 2000]]) {
+                if (pausa) await new Promise(r => setTimeout(r, pausa));
+                try { d = await tentativo(ms); break; } catch (e) { ultimoErrore = e; }
+            }
+            if (!d) throw ultimoErrore || new Error('dati non arrivati');
             streamsObj = d.streams;
             eventsObj  = d.events;
         } catch (apiErr) {
@@ -64,6 +79,7 @@ window.gateRadioDataPromise = (async function fetchGateRadioData() {
         return { streams, events };
     } catch (err) {
         console.warn('[GateRadio] Firebase non disponibile, uso dati statici:', err.message);
+        window.gateDataError = true;   // le pagine mostrano "riprova" invece di "nessun risultato"
         return { streams: null, events: null };
     }
 })();

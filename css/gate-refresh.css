@@ -715,3 +715,28 @@ main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
     .gn-about-gallery { flex-direction: row; align-items: flex-start; gap: 1.25rem; }
     .gn-about-gallery figure { flex: var(--r) 1 0; min-width: 0; }
 }
+
+/* ----- CARICAMENTO: logo Gate che gira finché i dati non arrivano ----- */
+#archive-grid:not(:has(*))::before, #archive-grid-preview:not(:has(*))::before,
+#events-grid:not(:has(*))::before, #events-grid-preview:not(:has(*))::before,
+#artists-grid:not(:has(*))::before, #live-section-content:not(:has(*))::before {
+    content: ''; display: block; grid-column: 1 / -1; justify-self: center;
+    width: 64px; height: 64px; margin: 4rem auto;
+    background: url('../assets/gate-simbolo-bianco.png') center / contain no-repeat;
+    animation: gn-gira 1.6s linear infinite; opacity: 0.85;
+}
+@keyframes gn-gira { to { transform: rotate(360deg); } }
+@keyframes gn-pulsa { 50% { opacity: 0.3; } }
+@media (prefers-reduced-motion: reduce) {
+    #archive-grid:not(:has(*))::before, #archive-grid-preview:not(:has(*))::before,
+    #events-grid:not(:has(*))::before, #events-grid-preview:not(:has(*))::before,
+    #artists-grid:not(:has(*))::before, #live-section-content:not(:has(*))::before { animation: gn-pulsa 1.6s ease-in-out infinite; }
+}
+/* locandine e foto: fondo che "respira" finché l'immagine non è arrivata */
+.archive-card .relative, .event-card-image-wrapper, .artist-card-image-wrapper {
+    background: #111; animation: gn-attesa 1.4s ease-in-out infinite;
+}
+@keyframes gn-attesa { 50% { background-color: #1d1d1d; } }
+@media (prefers-reduced-motion: reduce) { .archive-card .relative, .event-card-image-wrapper, .artist-card-image-wrapper { animation: none; } }
+.gn-data-error { grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 3rem 1rem; }
+.gn-data-error button { margin-top: 1rem; border: 1px solid var(--accent); color: var(--accent); background: none; padding: 0.5rem 1.25rem; font: 500 0.8rem 'Roboto Mono', monospace; cursor: pointer; }
