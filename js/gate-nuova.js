@@ -23,7 +23,7 @@
         { href: 'archive.html', it: 'ARCHIVIO', en: 'ARCHIVE',  pages: ['archive'] },
         { href: 'events.html',  it: 'EVENTI',   en: 'EVENTS',   pages: ['events', 'programmazione'] },
         { href: 'artists.html', it: 'RESIDENT', en: 'RESIDENTS', pages: ['artists'] },
-        { href: 'about.html',   it: 'INFO',     en: 'INFO',     pages: ['about', 'contact'] },
+        { href: 'about.html',   it: 'CHI SIAMO', en: 'ABOUT US',    pages: ['about', 'contact'] },
     ];
     function buildMenu() {
         const desktop = document.querySelector('header nav > div.hidden.md\\:flex');
