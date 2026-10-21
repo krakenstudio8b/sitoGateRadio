@@ -12,12 +12,12 @@
 
     // La pagina resta invisibile finché js/gate-nuova.js non ha rifatto menu, home e
     // footer: niente "lampo" della grafica vecchia a ogni caricamento. Paracadute:
-    // dopo 1,5 secondi si mostra comunque, anche se qualcosa va storto.
+    // dopo 2,5 secondi si mostra comunque, anche se qualcosa va storto.
     document.documentElement.classList.add('gn-attesa');
     const st = document.createElement('style');
     st.textContent = 'html.gn-attesa body{opacity:0}body{transition:opacity .15s ease-out}';
     document.head.appendChild(st);
-    setTimeout(() => document.documentElement.classList.remove('gn-attesa'), 1500);
+    setTimeout(() => document.documentElement.classList.remove('gn-attesa'), 2500);
 
     // pulizia della memoria lasciata dal vecchio pulsante di confronto
     try { localStorage.removeItem('gateConfronto'); localStorage.removeItem('gateGrafica'); } catch (e) { /* niente */ }
