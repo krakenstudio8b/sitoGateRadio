@@ -742,7 +742,7 @@ main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
 .gn-data-error button { margin-top: 1rem; border: 1px solid var(--accent); color: var(--accent); background: none; padding: 0.5rem 1.25rem; font: 500 0.8rem 'Roboto Mono', monospace; cursor: pointer; }
 
 /* ----- INTRO "ENTRA NELLO STUDIO" (prova, index.html?intro) ----- */
-.gn-intro { position: relative; height: 560vh; background: #000; }
+.gn-intro { position: relative; height: 420vh; background: #000; }
 .gn-intro.is-ferma { height: 100vh; }
 .gn-intro-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .gn-intro-canvas { width: 100%; height: 100%; display: block; background: #000; }
