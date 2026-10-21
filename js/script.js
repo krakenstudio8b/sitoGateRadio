@@ -640,7 +640,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             .catch(() => renderResidents(fallbackResidents));
 
         function renderResidents(residents) {
+        // sempre in ordine alfabetico, qualunque sia l'ordine nel database
+        residents = [...residents].sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'it', { sensitivity: 'base' }));
         const gridHTML = residents.map(artist => {
+            const bio = (_glLang() === 'it' && artist.bio_it) ? artist.bio_it : (artist.bio || '');
             const socials = [
                 artist.instagram ? `<a href="${artist.instagram}" target="_blank" rel="noopener" class="resident-social-link" aria-label="Instagram di ${artist.name}"><i class="fab fa-instagram"></i></a>` : '',
                 artist.soundcloud ? `<a href="${artist.soundcloud}" target="_blank" rel="noopener" class="resident-social-link" aria-label="SoundCloud di ${artist.name}"><i class="fab fa-soundcloud"></i></a>` : '',
@@ -650,18 +653,32 @@ document.addEventListener('DOMContentLoaded', async () => {
             return `
                 <div class="artist-card">
                     <div class="artist-card-image-wrapper">
-                        <img src="${artist.image || 'assets/resident_placeholder.svg'}" alt="${artist.name}" class="artist-card-image" loading="lazy">
+                        ${artist.image
+                            ? `<img src="${artist.image}" alt="${_escHtml(artist.name)}" class="artist-card-image" loading="lazy">`
+                            : `<div class="artist-card-noimage"><img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png" alt=""><small>${_glLang() === 'it' ? 'FOTO IN ARRIVO' : 'PHOTO COMING SOON'}</small></div>`}
                     </div>
                     <div class="artist-card-content">
                         <h3 class="artist-card-title">${_escHtml(artist.name)}</h3>
-                        <p class="artist-card-bio">${_escHtml((_glLang() === 'it' && artist.bio_it) ? artist.bio_it : (artist.bio || ''))}</p>
+                        ${bio ? `<p class="artist-card-bio">${_escHtml(bio)}</p>
+                        <button type="button" class="artist-card-more">${_glLang() === 'it' ? 'Leggi tutto' : 'Read more'}</button>` : ''}
                         ${socials ? `<div class="resident-socials">${socials}</div>` : ''}
                     </div>
                 </div>
             `;
         }).join('');
         artistsGrid.innerHTML = gridHTML;
+        // "Leggi tutto" solo dove la bio è davvero tagliata
+        artistsGrid.querySelectorAll('.artist-card-bio').forEach(p => {
+            const btn = p.nextElementSibling;
+            if (btn && p.scrollHeight <= p.clientHeight + 2) btn.remove();
+        });
         }
+        artistsGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.artist-card-more');
+            if (!btn) return;
+            const open = btn.previousElementSibling.classList.toggle('is-open');
+            btn.textContent = open ? (_glLang() === 'it' ? 'Chiudi' : 'Close') : (_glLang() === 'it' ? 'Leggi tutto' : 'Read more');
+        });
     }
 
     function gestioneEventi() {

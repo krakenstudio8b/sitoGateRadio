@@ -677,3 +677,27 @@ main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
     font-family: 'Grifter', sans-serif; font-size: 1.5rem; line-height: 1;
     color: #fff; text-transform: uppercase; word-break: break-word;
 }
+
+/* ----- RESIDENT: testo a sinistra, bio corta con "Leggi tutto", segnaposto senza foto ----- */
+.artist-card-content { text-align: left !important; justify-content: flex-start !important; }
+.artist-card-bio {
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6;
+    overflow: hidden; margin-bottom: 0.4rem !important; color: #c9c9c9 !important;
+}
+.artist-card-bio.is-open { display: block; -webkit-line-clamp: unset; }
+.artist-card-more {
+    align-self: flex-start; background: none; border: 0; padding: 0; margin-bottom: 0.75rem;
+    font: 500 0.72rem 'Roboto Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); cursor: pointer;
+}
+.artist-card-more:hover { text-decoration: underline; }
+.resident-socials { justify-content: flex-start !important; gap: 0.6rem !important; }
+.artist-card-noimage {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.9rem;
+    background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.78)), url('../assets/retino-gate.png') 0 0 / 512px 512px, #000;
+}
+.artist-card-noimage img { width: 56px; height: 56px; opacity: 0.85; }
+.artist-card-noimage small {
+    font: 500 0.7rem 'Roboto Mono', monospace; letter-spacing: 0.16em; color: #bdbdbd;
+}
