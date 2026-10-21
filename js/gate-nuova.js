@@ -319,7 +319,7 @@
         const main = document.getElementById('main-content');
         if (!main || document.getElementById('gn-intro')) return;
 
-        const N = 225;
+        const N = 325;
         const mobile = window.matchMedia('(max-width: 768px)').matches;
         const dir = mobile ? 'intro/m/' : 'intro/d/';
         const src = (i) => `${dir}${String(i + 1).padStart(3, '0')}.webp`;
