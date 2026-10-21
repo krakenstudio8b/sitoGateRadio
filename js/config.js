@@ -1,6 +1,6 @@
 const TWITCH_CONFIG = {
     CLIENT_ID: 'r9zmd4q5jr62v5ffuau3t0xsk6vckx',
-    CLIENT_SECRET: 'n3l3hpf5vyy9d0ljnsnmj3sq9w5pdt',
+    CLIENT_SECRET: '', // mai nel codice pubblico: chi vede il sito lo legge. Se servisse, va nel Worker
     CHANNEL_NAME: 'gate radio',
     TEST_MODE: true,
     FORCE_LIVE_STATE: false
