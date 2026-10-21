@@ -439,6 +439,14 @@
                 </div>
 
                 <!-- Campi stream -->
+                <div class="edit-stream-only" style="grid-column: 1 / -1;">
+                    <label class="field-label">Tipo</label>
+                    <div class="flex gap-2" id="edit-kind" role="group" aria-label="Diretta o evento">
+                        <button type="button" class="chip" data-kind="live"><i class="fas fa-video mr-1"></i> Diretta</button>
+                        <button type="button" class="chip" data-kind="nolive"><i class="fas fa-video-slash mr-1"></i> Evento senza diretta</button>
+                    </div>
+                    <p class="text-xs mt-1" style="color: var(--text-dim);">"Evento senza diretta": serata o post senza streaming. Non chiede il link e non compare in "Ultime dirette" sulla Home.</p>
+                </div>
                 <div class="edit-stream-only">
                     <label class="field-label">Artista</label>
                     <input id="edit-artist" type="text" class="form-input">

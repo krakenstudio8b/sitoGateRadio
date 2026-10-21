@@ -418,6 +418,10 @@ function initStreams() {
         fixCollapsed = !fixCollapsed;
         renderFixPanel();
     });
+    $('#edit-kind').addEventListener('click', e => {
+        const b = e.target.closest('[data-kind]');
+        if (b) setEditKind(b.dataset.kind === 'nolive');
+    });
     $('#fix-list').addEventListener('click', e => {
         const btn = e.target.closest('[data-action="edit-stream"]');
         if (btn) openEditModal('stream', btn.dataset.key);
@@ -591,6 +595,14 @@ function renderStreamRow([key, s], isPending) {
                     </button>
                 </div>
             </div>`;
+}
+
+// Interruttore "Diretta / Evento senza diretta" nel modale di modifica live
+let editNoLive = false;
+function setEditKind(noLive) {
+    editNoLive = !!noLive;
+    document.querySelectorAll('#edit-kind [data-kind]').forEach(b =>
+        b.classList.toggle('active', (b.dataset.kind === 'nolive') === editNoLive));
 }
 
 // ── Pannello "Da sistemare" ─────────────────────────────────────────────────
@@ -960,6 +972,7 @@ function openEditModal(type, key) {
             $('#edit-st-description').value = data.description || '';
             $('#edit-st-description-en').value = data.description_en || '';
             editGallery = data.imageUrl ? [data.imageUrl] : [];
+            setEditKind(data.noLive === true);
         }
 
         // suggerimenti YouTube della live aperta prima: via
@@ -1037,6 +1050,7 @@ $('#edit-form').addEventListener('submit', async e => {
                 imageUrl:       editGallery[0] || '',
                 description:    $('#edit-st-description').value.trim(),
                 description_en: $('#edit-st-description-en').value.trim(),
+                noLive:         editNoLive ? true : null,
                 tags,
             };
         } else {
