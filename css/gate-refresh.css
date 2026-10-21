@@ -740,30 +740,3 @@ main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
 @media (prefers-reduced-motion: reduce) { .archive-card .relative, .event-card-image-wrapper, .artist-card-image-wrapper { animation: none; } }
 .gn-data-error { grid-column: 1 / -1; text-align: center; color: var(--text-secondary); padding: 3rem 1rem; }
 .gn-data-error button { margin-top: 1rem; border: 1px solid var(--accent); color: var(--accent); background: none; padding: 0.5rem 1.25rem; font: 500 0.8rem 'Roboto Mono', monospace; cursor: pointer; }
-
-/* ----- INTRO "ENTRA NELLO STUDIO" (prova, index.html?intro) ----- */
-.gn-intro { position: relative; height: 420vh; background: #000; }
-.gn-intro.is-ferma { height: 100vh; }
-.gn-intro-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; }
-.gn-intro-canvas { width: 100%; height: 100%; display: block; background: #000; }
-.gn-intro-hint {
-    position: absolute; left: 50%; bottom: 2.25rem; transform: translateX(-50%);
-    font: 500 0.75rem 'Roboto Mono', monospace; letter-spacing: 0.25em; color: #fff;
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    transition: opacity 0.4s ease; text-shadow: 0 1px 8px rgba(0,0,0,.8);
-}
-.gn-intro-hint span { font-size: 1.1rem; animation: gn-giu 1.6s ease-in-out infinite; }
-@keyframes gn-giu { 50% { transform: translateY(6px); } }
-.gn-intro.is-iniziato .gn-intro-hint { opacity: 0; }
-.gn-intro-title {
-    position: absolute; inset: 0; margin: 0; display: flex; align-items: center; justify-content: center; gap: 0.25em;
-    font-family: 'Grifter', sans-serif; font-size: clamp(3rem, 11vw, 10rem) !important; line-height: 1; color: #fff;
-    opacity: 0; transform: scale(1.06); transition: opacity 0.6s ease, transform 0.8s cubic-bezier(.2,.7,.2,1);
-    text-shadow: 0 2px 30px rgba(0,0,0,.7); pointer-events: none;
-}
-.gn-intro-title span { color: var(--accent); }
-.gn-intro.is-fine .gn-intro-title { opacity: 1; transform: none; }
-.gn-intro.is-fine .gn-intro-canvas { filter: brightness(0.55); transition: filter 0.6s ease; }
-.gn-intro-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(255,255,255,.08); }
-.gn-intro-bar i { display: block; height: 100%; width: calc(var(--carico, 0) * 100%); background: var(--accent); transition: width .2s linear; }
-@media (prefers-reduced-motion: reduce) { .gn-intro-hint span { animation: none; } .gn-intro-title { transition: none; } }
