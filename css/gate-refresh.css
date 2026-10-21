@@ -701,3 +701,13 @@ main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
 .artist-card-noimage small {
     font: 500 0.7rem 'Roboto Mono', monospace; letter-spacing: 0.16em; color: #bdbdbd;
 }
+
+/* ----- CHI SIAMO: le 3 foto intere, mai tagliate. Su PC stessa altezza
+   (ognuna larga in proporzione alla sua forma), su telefono una sotto l'altra ----- */
+.gn-about-gallery { display: flex; flex-direction: column; gap: 1rem; }
+.gn-about-gallery figure { margin: 0; border: 1px solid rgba(255, 255, 255, 0.12); }
+.gn-about-gallery img { display: block; width: 100%; height: auto; }
+@media (min-width: 768px) {
+    .gn-about-gallery { flex-direction: row; align-items: flex-start; gap: 1.25rem; }
+    .gn-about-gallery figure { flex: var(--r) 1 0; min-width: 0; }
+}
