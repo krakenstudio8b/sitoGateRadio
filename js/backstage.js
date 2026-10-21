@@ -320,8 +320,13 @@ function initStreams() {
         const items = Object.entries(data).sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
         // published === false → live in attesa di approvazione (arrivata dal Sheet).
         // Tutto il resto (senza il campo, o true) è già pubblicato sul sito.
-        const pending = items.filter(([, s]) => s.published === false);
-        const live    = items.filter(([, s]) => s.published !== false);
+        // Le live del calendario con data, orario e nome sono approvate in automatico
+        // (stessa regola di js/firebase-data.js); restano "in attesa" le altre e
+        // quelle nascoste con l'occhio (hidden:true).
+        const isVisible = (s) => s.hidden !== true && (s.published !== false
+            || (s.source === 'google-sheets' && !!s.date && !!s.timeStart && !!s.artist));
+        const pending = items.filter(([, s]) => !isVisible(s));
+        const live    = items.filter(([, s]) => isVisible(s));
 
         const renderRow = ([key, s], isPending) => `
             <div class="list-item" ${isPending ? 'style="border-color: var(--accent);"' : ''}>
@@ -417,12 +422,12 @@ function initStreams() {
         if (btn.dataset.action === 'edit-stream') openEditModal('stream', key);
         if (btn.dataset.action === 'delete-stream') deleteItem(`gateRadio/streams/${key}`, btn.dataset.label);
         if (btn.dataset.action === 'publish-stream') {
-            update(ref(database, `gateRadio/streams/${key}`), { published: true })
+            update(ref(database, `gateRadio/streams/${key}`), { published: true, hidden: null })
                 .catch(err => alert('Errore: ' + err.message));
         }
         if (btn.dataset.action === 'publish-as-event') publishStreamAsEvent(key);
         if (btn.dataset.action === 'hide-stream') {
-            update(ref(database, `gateRadio/streams/${key}`), { published: false })
+            update(ref(database, `gateRadio/streams/${key}`), { published: false, hidden: true })
                 .catch(err => alert('Errore: ' + err.message));
         }
     });

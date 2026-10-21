@@ -3,13 +3,14 @@
 
 const GATE_FIREBASE_URL = 'https://studio-kraken-gate-default-rtdb.firebaseio.com';
 
-// Una live arrivata dal calendario (Google Sheet) con data e orario è confermata:
-// finché non è passata si vede (prossima live, calendario) anche senza
-// approvazione nel backstage. Dopo la data entra in archivio solo se approvata.
-function isConfirmedUpcoming(s) {
-    if (s.source !== 'google-sheets' || !s.date || !s.timeStart || !s.artist) return false;
-    const end = new Date(`${s.date}T${s.timeEnd || '23:59'}:00`);
-    return end > new Date();
+// Le live del calendario (Google Sheet) con data, orario e nome sono approvate in
+// automatico: si vedono prima (prossima live, calendario) e dopo (archivio, il link
+// YouTube si aggiunge quando il video è online). Si nascondono solo con l'occhio
+// del backstage, che scrive hidden:true. Stessa regola in js/backstage.js.
+function isVisibleStream(s) {
+    if (s.hidden === true) return false;
+    if (s.published !== false) return true;
+    return s.source === 'google-sheets' && !!s.date && !!s.timeStart && !!s.artist;
 }
 
 window.gateRadioDataPromise = (async function fetchGateRadioData() {
@@ -32,7 +33,7 @@ window.gateRadioDataPromise = (async function fetchGateRadioData() {
             ? Object.entries(streamsObj)
                 .map(([key, val]) => ({ ...val, id: key, _fbKey: key }))
                 .map(s => s.season ? { ...s, season: String(s.season).toLowerCase() } : s) // "Autumn" → "autumn"
-                .filter(s => s.published !== false || isConfirmedUpcoming(s))
+                .filter(isVisibleStream)
             : null;
 
         // Come per le live: gli eventi con published:false (nascosti dall'admin

@@ -485,7 +485,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             return `<div class="archive-card rounded-xl overflow-hidden border border-[var(--border-color)] flex flex-col group ${seasonClass}" data-stream-id="${item.id}">
                         <div class="relative">
-                            <img src="${item.imageUrl}" alt="${item.title}" class="archive-card-image-wrapper w-full h-full object-cover" loading="${loadingAttr}" decoding="async">
+                            ${item.imageUrl
+                                ? `<img src="${item.imageUrl}" alt="${item.title}" class="archive-card-image-wrapper w-full h-full object-cover" loading="${loadingAttr}" decoding="async">`
+                                : `<div class="archive-card-noposter"><span>${_escHtml(item.artist || '')}</span></div>`}
                         </div>
                         <div class="p-4 md:p-5 flex flex-col flex-grow bg-[#0d0d0d]" style="cursor: pointer;">
                             <h3 class="text-lg font-bold text-[var(--accent)]">${item.artist}</h3>
