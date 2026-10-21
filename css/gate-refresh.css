@@ -545,7 +545,14 @@ header .header-logo-text > a > span {
 }
 .gn-about-photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; }
 /* PC: 16:9, così titolo + foto stanno nel primo schermo senza scorrere */
-@media (min-width: 900px) { .gn-about-photo { aspect-ratio: 16 / 9; } .gn-about-photo img { object-position: 50% 62%; } }
+@media (min-width: 900px) {
+    .gn-about-photo { aspect-ratio: 16 / 9; margin-left: auto; margin-right: auto;
+        /* larga al massimo quanto la pagina, ma mai più alta dello spazio che resta
+           sotto il titolo: su ogni schermo si vede intera senza scorrere */
+        max-width: calc((100vh - 250px) * 16 / 9); }
+    .gn-about-photo img { object-position: 50% 62%; }
+    .gn-about-hero { padding-top: clamp(1.75rem, 4.5vh, 3rem); }
+}
 
 /* ----- MENU DA TELEFONO: una voce per riga ----- */
 #mobile-menu:not(.hidden) {
