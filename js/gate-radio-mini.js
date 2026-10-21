@@ -67,6 +67,24 @@
         const m = String(d || '').match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
         return m ? (+(m[1] || 0)) * 3600 + (+(m[2] || 0)) * 60 + (+(m[3] || 0)) : 7200;
     };
+    // Pulizia della rotazione (uguale in js/radio.js e js/gate-radio-mini.js, così
+    // pagina Radio e mini player restano sincronizzati): via i video privati o
+    // cancellati, le clip sotto i 20 minuti e i doppioni con lo stesso titolo
+    // (resta il più lungo, al posto del primo).
+    function cleanPlaylist(list) {
+        const ok = (list || []).filter(v => v && v.youtubeId
+            && !/^(private|deleted) video$/i.test(String(v.title || '').trim())
+            && (v.duration || 0) >= 1200);
+        const best = new Map();
+        ok.forEach((v, i) => {
+            const key = String(v.title || v.artist || '').trim().toLowerCase();
+            const b = best.get(key);
+            if (!b) best.set(key, { v, i });
+            else if (v.duration > b.v.duration) best.set(key, { v, i: b.i });
+        });
+        return [...best.values()].sort((a, b) => a.i - b.i).map(x => x.v);
+    }
+
     async function loadPlaylist() {
         try {
             const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
@@ -247,7 +265,7 @@
 
     async function init() {
         buildBar();
-        playlist = await loadPlaylist();
+        playlist = cleanPlaylist(await loadPlaylist());
         if (!playlist.length) { bar.remove(); document.body.classList.remove('gn-has-bar'); return; }
         state = currentState();
         showOnAir();

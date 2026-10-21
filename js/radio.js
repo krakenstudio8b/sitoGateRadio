@@ -390,6 +390,29 @@
         navigator.mediaSession.setActionHandler('stop', () => player?.pauseVideo());
     }
 
+    // Pulizia della rotazione (uguale in js/radio.js e js/gate-radio-mini.js, così
+    // pagina Radio e mini player restano sincronizzati): via i video privati o
+    // cancellati, le clip sotto i 20 minuti e i doppioni con lo stesso titolo
+    // (resta il più lungo, al posto del primo).
+    function cleanPlaylist(list) {
+        const ok = (list || []).filter(v => v && v.youtubeId
+            && !/^(private|deleted) video$/i.test(String(v.title || '').trim())
+            && (v.duration || 0) >= 1200);
+        const best = new Map();
+        ok.forEach((v, i) => {
+            const key = String(v.title || v.artist || '').trim().toLowerCase();
+            const b = best.get(key);
+            if (!b) best.set(key, { v, i });
+            else if (v.duration > b.v.duration) best.set(key, { v, i: b.i });
+        });
+        return [...best.values()].sort((a, b) => a.i - b.i).map(x => x.v);
+    }
+
+    const fmtLen = (sec) => {
+        const h = Math.floor((sec || 0) / 3600), m = Math.round(((sec || 0) % 3600) / 60);
+        return h ? `${h} h ${String(m).padStart(2, '0')} min` : `${m} min`;
+    };
+
     function renderMiniPlaylist() {
         const container = $('radio-mini-playlist');
         if (!container || !state) return;
@@ -405,7 +428,7 @@
                 <img src="${item.imageUrl}" alt="${item.artist}" class="radio-playlist-thumb" loading="lazy">
                 <div class="radio-playlist-info">
                     <p class="radio-playlist-artist">${item.artist}</p>
-                    <p class="radio-playlist-title">${item.title}</p>
+                    <p class="radio-playlist-title">${item.title && item.title !== item.artist ? item.title : fmtLen(item.duration)}</p>
                 </div>
                 ${item.isCurrent ? '<div class="radio-playlist-playing"><i class="fas fa-volume-high"></i></div>' : ''}
             </div>
@@ -631,7 +654,7 @@
         showStatus('SINTONIZZAZIONE...', 'radio.syncing');
 
         // Carica playlist (API YouTube o fallback)
-        playlist = await initPlaylist();
+        playlist = cleanPlaylist(await initPlaylist());
 
         if (playlist.length === 0) {
             showStatus('NESSUN VIDEO DISPONIBILE', 'radio.novideo');

@@ -679,7 +679,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const sortedEvents = [...eventsData].sort((a, b) => new Date(b.date) - new Date(a.date));
         if (eventsGrid) { eventsGrid.innerHTML = sortedEvents.map(createEventCardHTML).join(''); }
-        if (eventsPreviewGrid) { eventsPreviewGrid.innerHTML = sortedEvents.slice(0, 3).map(createEventCardHTML).join(''); }
+        if (eventsPreviewGrid) { eventsPreviewGrid.innerHTML = sortedEvents.slice(0, 4).map(createEventCardHTML).join(''); }
 
         document.body.addEventListener('click', function(e) {
             const clickedCard = e.target.closest('.event-card');

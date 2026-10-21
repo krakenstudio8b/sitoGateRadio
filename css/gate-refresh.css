@@ -659,3 +659,9 @@ main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
 .gn-foot-ctas .gn-foot-cta:hover, .gn-foot-ctas .gn-foot-cta:focus-visible { background-color: #921EC8; filter: brightness(1.12); transform: translateY(-2px); }
 .gn-foot-ctas .gn-foot-cta + .gn-foot-cta:hover, .gn-foot-ctas .gn-foot-cta + .gn-foot-cta:focus-visible { background-color: #BAEC32; }
 @media (prefers-reduced-motion: reduce) { .gn-foot-ctas .gn-foot-cta:hover { transform: none; } }
+
+/* ----- HOME: "Ultime dirette" e "I nostri eventi" alla stessa larghezza, 4 card ciascuna ----- */
+#archive-preview > .max-w-6xl, #events-preview > .max-w-6xl { max-width: 72rem !important; width: 100%; }
+@media (min-width: 1024px) {
+    #archive-grid-preview, #events-grid-preview { grid-template-columns: repeat(4, 1fr) !important; gap: 1.25rem !important; }
+}
