@@ -581,6 +581,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     tags: ev.tags || [],
                     galleryImages: ev.galleryImages || [],
                     _type: 'event',
+                    _noLive: true,   // evento senza diretta: niente "Ultime dirette" in Home
                 });
             }
         }
@@ -617,7 +618,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (archivePreviewGrid) {
-            renderGrid(pastStreams.slice(0, 4), archivePreviewGrid);
+            renderGrid(pastStreams.filter(x => !x._noLive).slice(0, 4), archivePreviewGrid);
         }
     }
     
