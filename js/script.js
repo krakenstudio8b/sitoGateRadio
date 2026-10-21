@@ -570,9 +570,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     tags: matchingEvent.tags || s.tags || [],
                     galleryImages: matchingEvent.galleryImages || [],
                     _type: 'event',
+                    _noLive: s.noLive === true,   // serata con live segnata "senza diretta"
                 });
             } else {
-                mergedArchive.push({ ...s, _type: 'stream' });
+                mergedArchive.push({ ...s, _type: 'stream', _noLive: s.noLive === true });
             }
         }
 

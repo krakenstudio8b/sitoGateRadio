@@ -358,7 +358,7 @@ function hasLiveLink(s) {
 // Cosa manca a una live: link della diretta, copertina, descrizione italiana
 function missingFields(s) {
     const miss = [];
-    if (!hasLiveLink(s)) miss.push('link');
+    if (!hasLiveLink(s) && s.noLive !== true) miss.push('link');   // noLive = serata senza diretta
     if (!String(s.imageUrl || '').trim()) miss.push('cover');
     if (!String(s.description || '').trim()) miss.push('desc');
     return miss;
@@ -421,6 +421,11 @@ function initStreams() {
     $('#fix-list').addEventListener('click', e => {
         const btn = e.target.closest('[data-action="edit-stream"]');
         if (btn) openEditModal('stream', btn.dataset.key);
+        const noLive = e.target.closest('[data-action="no-live-stream"]');
+        if (noLive) {
+            update(ref(database, `gateRadio/streams/${noLive.dataset.key}`), { noLive: true })
+                .catch(err => alert('Errore: ' + err.message));
+        }
     });
 
     // Suggerimenti YouTube nel modale di modifica
@@ -634,6 +639,11 @@ function renderFixPanel() {
                 </div>
             </div>
             <div class="flex gap-2 flex-shrink-0">
+${miss.includes('link') ? `
+                <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;" title="Serata o post senza streaming: non serve il link"
+                    data-action="no-live-stream" data-key="${key}">
+                    <i class="fas fa-video-slash"></i> Non è una diretta
+                </button>` : ''}
                 <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;"
                     data-action="edit-stream" data-key="${key}">
                     <i class="fas fa-pen"></i> Modifica

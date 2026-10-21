@@ -100,7 +100,7 @@ async function handleUpload(request, env) {
 // pubblica di Firebase verrà chiusa.
 const PUBLIC_STREAM_FIELDS = ['artist', 'title', 'date', 'timeStart', 'timeEnd', 'season', 'tags',
     'imageUrl', 'soundcloudUrl', 'liveLinks', 'description', 'description_en', 'location',
-    'duration', 'source', 'published', 'hidden'];
+    'duration', 'source', 'published', 'hidden', 'noLive'];
 
 async function readFirebase(path, env) {
     const auth = env.FIREBASE_DB_SECRET ? `?auth=${encodeURIComponent(env.FIREBASE_DB_SECRET)}` : '';
