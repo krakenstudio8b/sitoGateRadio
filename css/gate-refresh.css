@@ -536,10 +536,6 @@ header .header-logo-text > a > span {
     max-width: 72rem; margin: 0 auto;
     padding: clamp(2.5rem, 6vh, 4rem) 1.5rem 0;
 }
-.gn-about-kicker {
-    font: 500 0.72rem 'Roboto Mono', monospace; letter-spacing: 0.14em; color: var(--accent);
-    margin-bottom: 0.6rem;
-}
 .gn-about-hero h1 { text-align: left; margin: 0; }
 .gn-about-sub { color: var(--text-secondary); margin-top: 0.4rem; }
 .gn-about-photo {
