@@ -536,8 +536,8 @@ header .header-logo-text > a > span {
     max-width: 72rem; margin: 0 auto;
     padding: clamp(2.5rem, 6vh, 4rem) 1.5rem 0;
 }
-.gn-about-hero h1 { text-align: left; margin: 0; }
-.gn-about-sub { color: var(--text-secondary); margin-top: 0.4rem; }
+.gn-about-hero h1 { text-align: center; margin: 0; }
+.gn-about-sub { color: var(--text-secondary); margin-top: 0.4rem; text-align: center; }
 .gn-about-photo {
     margin: clamp(1.5rem, 3vw, 2.25rem) 0 0;
     aspect-ratio: 3 / 2; overflow: hidden;
