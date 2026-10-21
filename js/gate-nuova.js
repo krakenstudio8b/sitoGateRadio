@@ -84,8 +84,8 @@
     };
     // Galleria di Info: ai lati due video al posto delle immagini (il centrale resta)
     const ABOUT_SIDE_VIDEOS = [
-        'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/video/dioppppp.mp4',          // sinistra
-        'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/video/animazione_banner.mp4', // destra
+        'https://media.gateradiorm.com/video/dioppppp.mp4',          // sinistra
+        'https://media.gateradiorm.com/video/animazione_banner.mp4', // destra
     ];
     function buildAboutVideos() {
         const items = document.querySelectorAll('.about-media-grid > .about-media-item');

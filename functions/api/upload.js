@@ -65,7 +65,7 @@ export async function onRequestPost(context) {
         });
 
         // URL pubblico (usa il dev URL del bucket R2)
-        const publicUrl = `https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/${encodeURIComponent(folder)}/${timestamp}_${encodeURIComponent(safeName)}`;
+        const publicUrl = `https://media.gateradiorm.com/${encodeURIComponent(folder)}/${timestamp}_${encodeURIComponent(safeName)}`;
 
         return new Response(JSON.stringify({ url: publicUrl, key }), {
             status: 200, headers: { ...headers, 'Content-Type': 'application/json' }

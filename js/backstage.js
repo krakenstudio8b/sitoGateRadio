@@ -329,35 +329,230 @@ function initEvents() {
 // STREAMS CRUD
 // ═══════════════════════════════════════════════════════════════════════════
 
+// published === false → live in attesa di approvazione (arrivata dal Sheet).
+// Tutto il resto (senza il campo, o true) è già pubblicato sul sito.
+// Le live del calendario con data, orario e nome sono approvate in automatico
+// (stessa regola di js/firebase-data.js); restano "in attesa" le altre e
+// quelle nascoste con l'occhio (hidden:true).
+function isVisibleStream(s) {
+    return s.hidden !== true && (s.published !== false
+        || (s.source === 'google-sheets' && !!s.date && !!s.timeStart && !!s.artist));
+}
+
+// Data di oggi come "YYYY-MM-DD" nell'ora italiana del computer (non UTC),
+// così una live di stasera non risulta "passata" già dalle 2 di notte.
+function todayISO() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// La live ha almeno un link della diretta? (soundcloudUrl o liveLinks; '#' = vuoto)
+function hasLiveLink(s) {
+    const links = Array.isArray(s.liveLinks) ? s.liveLinks
+        : (s.liveLinks && typeof s.liveLinks === 'object' ? Object.values(s.liveLinks) : []);
+    if (links.some(l => l && l.url && String(l.url).trim() && l.url !== '#')) return true;
+    const sc = String(s.soundcloudUrl || '').trim();
+    return !!sc && sc !== '#';
+}
+
+// Cosa manca a una live: link della diretta, copertina, descrizione italiana
+function missingFields(s) {
+    const miss = [];
+    if (!hasLiveLink(s)) miss.push('link');
+    if (!String(s.imageUrl || '').trim()) miss.push('cover');
+    if (!String(s.description || '').trim()) miss.push('desc');
+    return miss;
+}
+const MISS_LABELS = {
+    link:  { icon: 'fa-link',     text: 'Link diretta' },
+    cover: { icon: 'fa-image',    text: 'Copertina' },
+    desc:  { icon: 'fa-align-left', text: 'Descrizione' },
+};
+
+// Stato della scheda Live (dati arrivati da Firebase + filtri scelti)
+let streamItems = [];        // [[key, live], ...] ordinate dalla più recente
+let streamFilter = 'all';    // all | future | past | hidden | pending
+let streamSearch = '';
+let fixFilter = 'all';       // all | link | cover | desc
+let fixShowAll = false;
+let fixCollapsed = false;
+const FIX_PAGE = 10;         // quante live mostrare nel pannello prima di "Mostra tutte"
+
 function initStreams() {
     const streamsRef = ref(database, 'gateRadio/streams');
 
     onValue(streamsRef, snap => {
-        const container = $('#streams-list');
         const data = snap.val();
-        if (!data) {
-            container.innerHTML = '<p class="text-sm" style="color: var(--text-dim);">Nessuna live ancora.</p>';
-            return;
-        }
-        const items = Object.entries(data).sort((a, b) => new Date(b[1].date) - new Date(a[1].date));
-        // published === false → live in attesa di approvazione (arrivata dal Sheet).
-        // Tutto il resto (senza il campo, o true) è già pubblicato sul sito.
-        // Le live del calendario con data, orario e nome sono approvate in automatico
-        // (stessa regola di js/firebase-data.js); restano "in attesa" le altre e
-        // quelle nascoste con l'occhio (hidden:true).
-        const isVisible = (s) => s.hidden !== true && (s.published !== false
-            || (s.source === 'google-sheets' && !!s.date && !!s.timeStart && !!s.artist));
-        const pending = items.filter(([, s]) => !isVisible(s));
-        const live    = items.filter(([, s]) => isVisible(s));
+        streamItems = data
+            ? Object.entries(data).sort((a, b) => new Date(b[1].date) - new Date(a[1].date))
+            : [];
+        renderStreamsList();
+        renderFixPanel();
+    });
 
-        const renderRow = ([key, s], isPending) => `
+    // Ricerca + filtri della lista
+    $('#streams-search').addEventListener('input', e => {
+        streamSearch = e.target.value;
+        renderStreamsList();
+    });
+    $('#streams-filters').addEventListener('click', e => {
+        const chip = e.target.closest('[data-filter]');
+        if (!chip) return;
+        streamFilter = chip.dataset.filter;
+        renderStreamsList();
+    });
+
+    // Pannello "Da sistemare"
+    $('#fix-filters').addEventListener('click', e => {
+        const chip = e.target.closest('[data-fix]');
+        if (!chip) return;
+        fixFilter = chip.dataset.fix;
+        fixShowAll = false;
+        renderFixPanel();
+    });
+    $('#fix-more-btn').addEventListener('click', () => {
+        fixShowAll = !fixShowAll;
+        renderFixPanel();
+    });
+    $('#fix-toggle').addEventListener('click', () => {
+        fixCollapsed = !fixCollapsed;
+        renderFixPanel();
+    });
+    $('#fix-list').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action="edit-stream"]');
+        if (btn) openEditModal('stream', btn.dataset.key);
+    });
+
+    // Suggerimenti YouTube nel modale di modifica
+    $('#yt-search-btn').addEventListener('click', searchYouTubeForEdit);
+    $('#yt-results').addEventListener('click', e => {
+        const btn = e.target.closest('[data-yt-link]');
+        if (btn) linkYouTubeVideo(btn.dataset.ytLink, btn);
+    });
+
+    $('#stream-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        try {
+            feedback('stream-feedback', 'Salvataggio...');
+            const stLinks = parseLiveLinks($('#st-url').value);
+            const stream = {
+                artist:         $('#st-artist').value.trim(),
+                title:          $('#st-title').value.trim() || 'LIVE STREAMING',
+                date:           $('#st-date').value,
+                timeStart:      $('#st-time-start').value || '18:00',
+                timeEnd:        $('#st-time-end').value || '19:00',
+                season:         $('#st-season').value,
+                soundcloudUrl:  stLinks.length ? stLinks[0].url : '#',
+                liveLinks:      stLinks.length > 1 ? stLinks : null,
+                imageUrl:       $('#st-image').value.trim(),
+                description:    $('#st-description').value.trim(),
+                description_en: $('#st-description-en').value.trim(),
+                tags:           $('#st-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+                published:      true, // creata a mano → online subito
+            };
+            await push(streamsRef, stream);
+            feedback('stream-feedback', '✓ Live pubblicata!');
+            e.target.reset();
+            $('#st-title').value = 'LIVE STREAMING';
+        } catch (err) {
+            feedback('stream-feedback', 'Errore: ' + err.message, false);
+        } finally {
+            btn.disabled = false;
+        }
+    });
+
+    $('#streams-list').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const key = btn.dataset.key;
+        if (btn.dataset.action === 'edit-stream') openEditModal('stream', key);
+        if (btn.dataset.action === 'delete-stream') deleteItem(`gateRadio/streams/${key}`, btn.dataset.label);
+        if (btn.dataset.action === 'publish-stream') {
+            update(ref(database, `gateRadio/streams/${key}`), { published: true, hidden: null })
+                .catch(err => alert('Errore: ' + err.message));
+        }
+        if (btn.dataset.action === 'publish-as-event') publishStreamAsEvent(key);
+        if (btn.dataset.action === 'hide-stream') {
+            update(ref(database, `gateRadio/streams/${key}`), { published: false, hidden: true })
+                .catch(err => alert('Errore: ' + err.message));
+        }
+    });
+}
+
+// ── Lista "Live in archivio" con ricerca e filtri ───────────────────────────
+function renderStreamsList() {
+    const container = $('#streams-list');
+    const today = todayISO();
+    const items = streamItems;
+
+    // Quante live per ogni filtro (il numero accanto alla pillola)
+    const groups = {
+        all:     () => true,
+        future:  (s) => !!s.date && s.date >= today,
+        past:    (s) => !!s.date && s.date < today,
+        hidden:  (s) => s.hidden === true,
+        pending: (s) => !isVisibleStream(s) && s.hidden !== true,
+    };
+    const filterDefs = [
+        ['all', 'Tutte'], ['future', 'Future'], ['past', 'Passate'],
+        ['hidden', 'Nascoste'], ['pending', 'In attesa'],
+    ];
+    $('#streams-filters').innerHTML = filterDefs.map(([id, label]) => `
+        <button type="button" class="chip ${streamFilter === id ? 'active' : ''}" data-filter="${id}">
+            ${label}<span class="count">${items.filter(([, s]) => groups[id](s)).length}</span>
+        </button>`).join('');
+
+    if (!items.length) {
+        container.innerHTML = '<p class="text-sm" style="color: var(--text-dim);">Nessuna live ancora.</p>';
+        return;
+    }
+
+    // Ricerca su nome artista e titolo, senza badare a maiuscole/spazi/punteggiatura
+    const q = normalizeText(streamSearch);
+    const matchesSearch = (s) => !q || normalizeText(`${s.artist || ''} ${s.title || ''}`).includes(q);
+
+    let filtered = items.filter(([, s]) => groups[streamFilter](s) && matchesSearch(s));
+    // Le future dalla più vicina alla più lontana
+    if (streamFilter === 'future') filtered = [...filtered].reverse();
+
+    if (!filtered.length) {
+        container.innerHTML = `<p class="text-sm" style="color: var(--text-dim);">Nessuna live trovata${q ? ' per "' + escapeHtml(streamSearch.trim()) + '"' : ''}.</p>`;
+        return;
+    }
+
+    // "Tutte" senza ricerca: come prima, prima quelle da approvare poi le pubblicate
+    if (streamFilter !== 'all') {
+        container.innerHTML = filtered.map(it => renderStreamRow(it, !isVisibleStream(it[1]))).join('');
+        return;
+    }
+    const pending = filtered.filter(([, s]) => !isVisibleStream(s));
+    const live    = filtered.filter(([, s]) => isVisibleStream(s));
+    let html = '';
+    if (pending.length) {
+        html += `<div class="mb-2 text-sm font-semibold" style="color: var(--accent);">
+            <i class="fas fa-hourglass-half mr-1"></i> ${pending.length} live non pubblicate (in attesa o nascoste)
+        </div>`;
+        html += pending.map(it => renderStreamRow(it, true)).join('');
+        if (live.length) html += `<div class="mt-5 mb-2 text-sm font-semibold" style="color: var(--text-dim);">Pubblicate sul sito</div>`;
+    }
+    html += live.map(it => renderStreamRow(it, false)).join('');
+    container.innerHTML = html;
+}
+
+function renderStreamRow([key, s], isPending) {
+    const pendingBadge = s.hidden === true
+        ? '<span class="badge ml-2" style="background:rgba(239,68,68,.12);color:var(--danger);border:1px solid rgba(239,68,68,.3);">NASCOSTA</span>'
+        : '<span class="badge ml-2" style="background:rgba(255,242,0,.15);color:var(--accent);border:1px solid rgba(255,242,0,.3);">IN ATTESA</span>';
+    return `
             <div class="list-item" ${isPending ? 'style="border-color: var(--accent);"' : ''}>
                 <div class="flex items-center gap-3 min-w-0">
                     ${s.imageUrl ? `<img src="${s.imageUrl}" alt="" class="resident-thumb" style="width:48px;height:48px;">` : ''}
                     <div class="min-w-0">
                         <div class="font-semibold truncate">
                             ${escapeHtml(s.artist || '')}
-                            ${isPending ? '<span class="badge ml-2" style="background:rgba(255,242,0,.15);color:var(--accent);border:1px solid rgba(255,242,0,.3);">IN ATTESA</span>' : ''}
+                            ${isPending ? pendingBadge : ''}
                         </div>
                         <div class="text-xs" style="color: var(--text-dim);">
                             <span class="mono">${s.date || ''}</span>
@@ -391,68 +586,271 @@ function initStreams() {
                     </button>
                 </div>
             </div>`;
+}
 
-        let html = '';
-        if (pending.length) {
-            html += `<div class="mb-2 text-sm font-semibold" style="color: var(--accent);">
-                <i class="fas fa-hourglass-half mr-1"></i> ${pending.length} live non pubblicate (in attesa o nascoste)
-            </div>`;
-            html += pending.map(it => renderRow(it, true)).join('');
-            html += `<div class="mt-5 mb-2 text-sm font-semibold" style="color: var(--text-dim);">Pubblicate sul sito</div>`;
-        }
-        html += live.length
-            ? live.map(it => renderRow(it, false)).join('')
-            : (pending.length ? '' : '<p class="text-sm" style="color: var(--text-dim);">Nessuna live pubblicata.</p>');
-        container.innerHTML = html;
-    });
+// ── Pannello "Da sistemare" ─────────────────────────────────────────────────
+// Live già passate e visibili sul sito a cui manca link, copertina o descrizione.
+function renderFixPanel() {
+    const panel = $('#fix-panel');
+    const today = todayISO();
+    const toFix = streamItems
+        .filter(([, s]) => isVisibleStream(s) && !!s.date && s.date < today)
+        .map(([key, s]) => ({ key, s, miss: missingFields(s) }))
+        .filter(it => it.miss.length > 0);
 
-    $('#stream-form').addEventListener('submit', async e => {
-        e.preventDefault();
-        const btn = e.target.querySelector('button[type="submit"]');
-        btn.disabled = true;
-        try {
-            feedback('stream-feedback', 'Salvataggio...');
-            const stLinks = parseLiveLinks($('#st-url').value);
-            const stream = {
-                artist:        $('#st-artist').value.trim(),
-                title:         $('#st-title').value.trim() || 'LIVE STREAMING',
-                date:          $('#st-date').value,
-                timeStart:     $('#st-time-start').value || '18:00',
-                timeEnd:       $('#st-time-end').value || '19:00',
-                season:        $('#st-season').value,
-                soundcloudUrl: stLinks.length ? stLinks[0].url : '#',
-                liveLinks:     stLinks.length > 1 ? stLinks : null,
-                imageUrl:      $('#st-image').value.trim(),
-                tags:          $('#st-tags').value.split(',').map(t => t.trim()).filter(Boolean),
-                published:     true, // creata a mano → online subito
-            };
-            await push(streamsRef, stream);
-            feedback('stream-feedback', '✓ Live pubblicata!');
-            e.target.reset();
-            $('#st-title').value = 'LIVE STREAMING';
-        } catch (err) {
-            feedback('stream-feedback', 'Errore: ' + err.message, false);
-        } finally {
-            btn.disabled = false;
-        }
-    });
+    if (!toFix.length) { hide(panel); return; }
+    show(panel);
 
-    $('#streams-list').addEventListener('click', e => {
-        const btn = e.target.closest('[data-action]');
-        if (!btn) return;
-        const key = btn.dataset.key;
-        if (btn.dataset.action === 'edit-stream') openEditModal('stream', key);
-        if (btn.dataset.action === 'delete-stream') deleteItem(`gateRadio/streams/${key}`, btn.dataset.label);
-        if (btn.dataset.action === 'publish-stream') {
-            update(ref(database, `gateRadio/streams/${key}`), { published: true, hidden: null })
-                .catch(err => alert('Errore: ' + err.message));
+    $('#fix-count').textContent = toFix.length;
+    $('#fix-count').title = `${toFix.length} live da completare`;
+    $('#fix-body').classList.toggle('hidden', fixCollapsed);
+    $('#fix-toggle').innerHTML = fixCollapsed
+        ? '<i class="fas fa-chevron-down"></i> Apri'
+        : '<i class="fas fa-chevron-up"></i> Chiudi';
+
+    // Pillole: tutte / solo senza link / senza copertina / senza descrizione
+    const countOf = (m) => toFix.filter(it => it.miss.includes(m)).length;
+    const defs = [['all', 'Tutte', toFix.length], ['link', 'Senza link', countOf('link')],
+        ['cover', 'Senza copertina', countOf('cover')], ['desc', 'Senza descrizione', countOf('desc')]];
+    if (fixFilter !== 'all' && !countOf(fixFilter)) fixFilter = 'all';
+    $('#fix-filters').innerHTML = defs.filter(([id, , n]) => id === 'all' || n > 0).map(([id, label, n]) => `
+        <button type="button" class="chip ${fixFilter === id ? 'active' : ''}" data-fix="${id}">
+            ${label}<span class="count">${n}</span>
+        </button>`).join('');
+
+    const list = fixFilter === 'all' ? toFix : toFix.filter(it => it.miss.includes(fixFilter));
+    const visible = fixShowAll ? list : list.slice(0, FIX_PAGE);
+
+    $('#fix-list').innerHTML = visible.map(({ key, s, miss }) => `
+        <div class="list-item">
+            <div class="flex items-center gap-3 min-w-0">
+                ${s.imageUrl ? `<img src="${s.imageUrl}" alt="" class="resident-thumb" style="width:48px;height:48px;">` : ''}
+                <div class="min-w-0">
+                    <div class="font-semibold truncate">${escapeHtml(s.artist || '(senza nome)')}</div>
+                    <div class="text-xs flex flex-wrap items-center gap-1 mt-1" style="color: var(--text-dim);">
+                        <span class="mono mr-1">${formatDateIT(s.date)}</span>
+                        ${miss.map(m => `<span class="badge badge-miss"><i class="fas ${MISS_LABELS[m].icon} mr-1"></i>${MISS_LABELS[m].text}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-2 flex-shrink-0">
+                <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;"
+                    data-action="edit-stream" data-key="${key}">
+                    <i class="fas fa-pen"></i> Modifica
+                </button>
+            </div>
+        </div>`).join('');
+
+    const more = $('#fix-more');
+    if (list.length > FIX_PAGE) {
+        show(more);
+        $('#fix-more-btn').innerHTML = fixShowAll
+            ? '<i class="fas fa-chevron-up"></i> Mostra meno'
+            : `<i class="fas fa-chevron-down"></i> Mostra tutte (${list.length})`;
+    } else {
+        hide(more);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SUGGERIMENTO LINK YOUTUBE
+// Nel modale di modifica di una live: legge gli ultimi video del canale Gate
+// Radio (chiave e playlist da js/config.js, stessa API di js/radio.js) e
+// propone quelli col nome dell'artista nel titolo o usciti vicino alla data
+// della live. "Collega" aggiunge il link nel campo "Link della live".
+// Si limita a LEGGERE YouTube: nel database si scrive solo premendo Salva.
+// ═══════════════════════════════════════════════════════════════════════════
+
+const YT_BASE = 'https://www.googleapis.com/youtube/v3';
+const YT_DATE_WINDOW_DAYS = 7;   // "data vicina" = entro una settimana dalla live
+const YT_MAX_RESULTS = 8;
+let ytVideosPromise = null;      // video letti una volta sola per sessione
+let configPromise = null;
+
+// config.js è uno script "classico" del sito: se nel backstage non è ancora
+// caricato lo aggiungiamo al volo. RADIO_CONFIG diventa poi leggibile da qui.
+function loadRadioConfig() {
+    if (typeof RADIO_CONFIG !== 'undefined') return Promise.resolve(RADIO_CONFIG);
+    if (!configPromise) {
+        configPromise = new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = 'js/config.js';
+            s.onload = () => (typeof RADIO_CONFIG !== 'undefined')
+                ? resolve(RADIO_CONFIG)
+                : reject(new Error('config.js caricato ma RADIO_CONFIG manca'));
+            s.onerror = () => { configPromise = null; reject(new Error('impossibile caricare js/config.js')); };
+            document.head.appendChild(s);
+        });
+    }
+    return configPromise;
+}
+
+// Legge fino a maxPages pagine (50 video l'una) di una playlist YouTube
+async function fetchYTPlaylist(playlistId, apiKey, maxPages) {
+    const out = [];
+    let pageToken = '';
+    let pages = 0;
+    do {
+        const url = `${YT_BASE}/playlistItems?part=snippet,contentDetails&playlistId=${encodeURIComponent(playlistId)}&maxResults=50&key=${encodeURIComponent(apiKey)}${pageToken ? '&pageToken=' + pageToken : ''}`;
+        const res = await fetch(url);
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || json.error) throw new Error(json.error?.message || `YouTube HTTP ${res.status}`);
+        for (const item of (json.items || [])) {
+            const id = item.contentDetails?.videoId || item.snippet?.resourceId?.videoId;
+            // i video privati/eliminati non hanno data di pubblicazione
+            const published = item.contentDetails?.videoPublishedAt;
+            if (!id || !published) continue;
+            out.push({
+                id,
+                title: item.snippet?.title || '',
+                date: published,
+                thumb: item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url || '',
+                channelId: item.snippet?.videoOwnerChannelId || item.snippet?.channelId || '',
+            });
         }
-        if (btn.dataset.action === 'publish-as-event') publishStreamAsEvent(key);
-        if (btn.dataset.action === 'hide-stream') {
-            update(ref(database, `gateRadio/streams/${key}`), { published: false, hidden: true })
-                .catch(err => alert('Errore: ' + err.message));
+        pageToken = json.nextPageToken || '';
+        pages++;
+    } while (pageToken && pages < maxPages);
+    return out;
+}
+
+// Tutti i video utili: la playlist del sito + gli ultimi caricamenti del canale
+// (le dirette nuove spesso non sono ancora nella playlist). Esclusi gli Shorts.
+function loadYouTubeVideos() {
+    if (ytVideosPromise) return ytVideosPromise;
+    ytVideosPromise = (async () => {
+        const cfg = await loadRadioConfig();
+        if (!cfg.YOUTUBE_API_KEY || !cfg.YOUTUBE_PLAYLIST_ID) {
+            throw new Error('mancano YOUTUBE_API_KEY o YOUTUBE_PLAYLIST_ID in js/config.js');
         }
-    });
+        const fromPlaylist = await fetchYTPlaylist(cfg.YOUTUBE_PLAYLIST_ID, cfg.YOUTUBE_API_KEY, 6);
+        // La playlist "caricamenti" di un canale UCxxxx si chiama UUxxxx
+        let fromUploads = [];
+        const channelId = (fromPlaylist.find(v => v.channelId.startsWith('UC')) || {}).channelId;
+        if (channelId) {
+            try {
+                fromUploads = await fetchYTPlaylist('UU' + channelId.slice(2), cfg.YOUTUBE_API_KEY, 6);
+            } catch (err) {
+                console.warn('[Backstage] caricamenti del canale non letti:', err.message);
+            }
+        }
+        const byId = new Map();
+        [...fromUploads, ...fromPlaylist].forEach(v => { if (!byId.has(v.id)) byId.set(v.id, v); });
+        return [...byId.values()]
+            .filter(v => !/#shorts/i.test(v.title) && !/^\s*highlight/i.test(v.title))
+            .sort((a, b) => b.date.localeCompare(a.date));
+    })();
+    // se va male si potrà riprovare
+    ytVideosPromise.catch(() => { ytVideosPromise = null; });
+    return ytVideosPromise;
+}
+
+// Nomi dell'artista da cercare nel titolo: il nome intero e, per le line-up
+// ("FIONN, ROSIE CPT", "A b2b B"), anche ogni nome da solo.
+function artistNeedles(artist) {
+    const parts = String(artist || '')
+        .split(/,|&|\+|\/|\||\bb2b\b|\bfeat\.?|\bft\.?|\bvs\.?|\bwith\b/i)
+        .map(normalizeText);
+    return [...new Set([normalizeText(artist), ...parts])].filter(n => n.length >= 3);
+}
+
+// Giorni tra la data della live (YYYY-MM-DD) e quella del video (ISO, UTC)
+function daysBetween(liveDate, videoIso) {
+    const a = Date.parse(liveDate + 'T12:00:00');
+    const b = Date.parse(videoIso);
+    if (isNaN(a) || isNaN(b)) return Infinity;
+    return Math.round((b - a) / 86400000);
+}
+
+function suggestYouTubeVideos(videos, artist, liveDate) {
+    const needles = artistNeedles(artist);
+    return videos
+        .map(v => {
+            const t = normalizeText(v.title);
+            const nameMatch = needles.some(n => t.includes(n));
+            const diff = liveDate ? daysBetween(liveDate, v.date) : Infinity;
+            const dateNear = Math.abs(diff) <= YT_DATE_WINDOW_DAYS;
+            return { ...v, nameMatch, dateNear, diff };
+        })
+        .filter(v => v.nameMatch || v.dateNear)
+        // prima chi ha nome E data, poi solo nome, poi solo data; a parità il più vicino
+        .sort((a, b) => ((b.nameMatch * 2 + b.dateNear) - (a.nameMatch * 2 + a.dateNear))
+            || (Math.abs(a.diff) - Math.abs(b.diff)))
+        .slice(0, YT_MAX_RESULTS);
+}
+
+function ytWatchUrl(id) { return `https://www.youtube.com/watch?v=${id}`; }
+
+// Il campo link contiene già questo video? (qualsiasi forma di link YouTube)
+function linkFieldHasVideo(id) {
+    return $('#edit-url').value.includes(id);
+}
+
+async function searchYouTubeForEdit() {
+    const box = $('#yt-results');
+    const btn = $('#yt-search-btn');
+    const artist = $('#edit-artist').value.trim();
+    const liveDate = $('#edit-date').value;
+    if (!artist && !liveDate) {
+        feedback('yt-feedback', 'Scrivi prima artista o data', false);
+        return;
+    }
+    btn.disabled = true;
+    box.innerHTML = '<p class="text-xs" style="color: var(--text-dim);"><i class="fas fa-spinner fa-spin mr-1"></i> Leggo i video del canale…</p>';
+    try {
+        const videos = await loadYouTubeVideos();
+        const found = suggestYouTubeVideos(videos, artist, liveDate);
+        if (!found.length) {
+            box.innerHTML = `<p class="text-xs" style="color: var(--text-dim);">
+                Nessun video con "${escapeHtml(artist)}" nel titolo né uscito entro ${YT_DATE_WINDOW_DAYS} giorni dalla live
+                (controllati ${videos.length} video). Forse non è ancora stato caricato.</p>`;
+            return;
+        }
+        box.innerHTML = `<p class="text-xs mb-2" style="color: var(--text-dim);">
+                Possibili video (su ${videos.length} letti). Controlla che sia quello giusto prima di collegarlo:</p>`
+            + found.map(v => {
+                const already = linkFieldHasVideo(v.id);
+                const when = v.diff === 0 ? 'stesso giorno'
+                    : (v.diff > 0 ? `${v.diff} gg dopo` : `${-v.diff} gg prima`);
+                return `
+                <div class="yt-item">
+                    ${v.thumb ? `<img src="${v.thumb}" alt="" loading="lazy">` : ''}
+                    <div class="min-w-0 flex-1">
+                        <a href="${ytWatchUrl(v.id)}" target="_blank" rel="noopener" class="text-sm font-semibold block truncate" style="color: var(--text);" title="Apri su YouTube">${escapeHtml(v.title)}</a>
+                        <div class="text-xs flex flex-wrap items-center gap-1 mt-1" style="color: var(--text-dim);">
+                            <span class="mono mr-1">${formatDateIT(v.date.slice(0, 10))}</span>
+                            ${v.nameMatch ? '<span class="badge badge-ok">nome</span>' : ''}
+                            ${v.dateNear ? `<span class="badge badge-season">data: ${when}</span>` : ''}
+                        </div>
+                    </div>
+                    <button type="button" class="btn ${already ? 'btn-ghost' : 'btn-primary'}" style="padding:6px 12px;font-size:12px;white-space:nowrap;"
+                        data-yt-link="${v.id}" ${already ? 'disabled' : ''}>
+                        ${already ? '<i class="fas fa-check"></i> Collegato' : '<i class="fas fa-link"></i> Collega'}
+                    </button>
+                </div>`;
+            }).join('');
+    } catch (err) {
+        box.innerHTML = '';
+        feedback('yt-feedback', 'YouTube non risponde: ' + err.message, false);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+// Aggiunge il link del video nel campo "Link della live" (non salva: serve Salva)
+function linkYouTubeVideo(id, btn) {
+    const field = $('#edit-url');
+    if (linkFieldHasVideo(id)) return;
+    const url = ytWatchUrl(id);
+    const current = field.value.trim();
+    field.value = current ? current + '\n' + url : url;
+    btn.disabled = true;
+    btn.classList.remove('btn-primary');
+    btn.classList.add('btn-ghost');
+    btn.innerHTML = '<i class="fas fa-check"></i> Collegato';
+    feedback('yt-feedback', current
+        ? '✓ Aggiunto come riga in più: se serve scrivi "NOME | " davanti. Poi premi Salva.'
+        : '✓ Link inserito. Ricordati di premere Salva.');
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -549,8 +947,14 @@ function openEditModal(type, key) {
             $('#edit-time-start').value = data.timeStart || '18:00';
             $('#edit-time-end').value = data.timeEnd || '19:00';
             $('#edit-url').value = liveLinksToText(data);
+            $('#edit-st-description').value = data.description || '';
+            $('#edit-st-description-en').value = data.description_en || '';
             editGallery = data.imageUrl ? [data.imageUrl] : [];
         }
+
+        // suggerimenti YouTube della live aperta prima: via
+        $('#yt-results').innerHTML = '';
+        $('#yt-feedback').textContent = '';
 
         renderEditGallery();
         modal.classList.add('open');
@@ -618,9 +1022,11 @@ $('#edit-form').addEventListener('submit', async e => {
                 timeStart:     $('#edit-time-start').value || '18:00',
                 timeEnd:       $('#edit-time-end').value || '19:00',
                 season:        $('#edit-season').value,
-                soundcloudUrl: editLinks.length ? editLinks[0].url : '#',
-                liveLinks:     editLinks.length > 1 ? editLinks : null,
-                imageUrl:      editGallery[0] || '',
+                soundcloudUrl:  editLinks.length ? editLinks[0].url : '#',
+                liveLinks:      editLinks.length > 1 ? editLinks : null,
+                imageUrl:       editGallery[0] || '',
+                description:    $('#edit-st-description').value.trim(),
+                description_en: $('#edit-st-description-en').value.trim(),
                 tags,
             };
         } else {
@@ -658,12 +1064,12 @@ $('#edit-form').addEventListener('submit', async e => {
 const DEFAULT_RESIDENTS = [
     { name: 'ADAD',            order: 10, image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
     { name: 'ALIUS BENZ',      order: 20, image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
-    { name: 'COUNTERCULTURE',  order: 30, image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/counterculture.jpg', bio: 'Manuel López (Counterculture) is a Colombian DJ and live act based in Rome, focused on underground techno, modular live performance and hybrid sets combining vinyl, hardware and digital sources. A member of Gate Radio and resident of the Bugs collective, his sound is raw, hypnotic and functional for the dancefloor. He has performed at underground clubs and spaces in Rome such as Brancaleone and Hacienda, as well as independent venues, record stores and alternative organizations.', instagram: 'https://www.instagram.com/counterculturx/', soundcloud: 'https://soundcloud.com/counterculture666', mixcloud: '' },
-    { name: 'MRQS',            order: 40, image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/mrqs.jpg', bio: "MRQS brings together two worlds: that of a sound engineer and sound designer, and that of a DJ. This dual expertise is clearly reflected in his sets, which are meticulously crafted, powerful in impact, and surprising in their selections. He moves seamlessly from tribal hardgroove to techno atmospheres, all the way to UK garage grooves, maintaining constant attention to sound quality and the room's response. His experience has been shaped on stages such as Acrobax and through numerous events for various collectives. Beyond the decks, he is the founder and driving force behind Gate Radio.", instagram: 'https://www.instagram.com/romarcomani/', soundcloud: 'https://soundcloud.com/marco-romani-308872897', mixcloud: '' },
+    { name: 'COUNTERCULTURE',  order: 30, image: 'https://media.gateradiorm.com/residents/counterculture.jpg', bio: 'Manuel López (Counterculture) is a Colombian DJ and live act based in Rome, focused on underground techno, modular live performance and hybrid sets combining vinyl, hardware and digital sources. A member of Gate Radio and resident of the Bugs collective, his sound is raw, hypnotic and functional for the dancefloor. He has performed at underground clubs and spaces in Rome such as Brancaleone and Hacienda, as well as independent venues, record stores and alternative organizations.', instagram: 'https://www.instagram.com/counterculturx/', soundcloud: 'https://soundcloud.com/counterculture666', mixcloud: '' },
+    { name: 'MRQS',            order: 40, image: 'https://media.gateradiorm.com/residents/mrqs.jpg', bio: "MRQS brings together two worlds: that of a sound engineer and sound designer, and that of a DJ. This dual expertise is clearly reflected in his sets, which are meticulously crafted, powerful in impact, and surprising in their selections. He moves seamlessly from tribal hardgroove to techno atmospheres, all the way to UK garage grooves, maintaining constant attention to sound quality and the room's response. His experience has been shaped on stages such as Acrobax and through numerous events for various collectives. Beyond the decks, he is the founder and driving force behind Gate Radio.", instagram: 'https://www.instagram.com/romarcomani/', soundcloud: 'https://soundcloud.com/marco-romani-308872897', mixcloud: '' },
     { name: 'MERLO',           order: 50, image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
-    { name: 'PUG',             order: 60, image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/pug.jpg', bio: 'Pug is a sound designer and producer of club and experimental music. His productions stand out for their use of synthesized sounds, creative sample processing, and polyrhythms. In addition to his DJ career, he performs live sets both solo and B2B, with an approach focused on techno and bass music. His track Cast Iron Plate is included in the compilation Nodi 001.', instagram: 'https://www.instagram.com/prod.pug/', soundcloud: 'https://soundcloud.com/user-66581760', mixcloud: '' },
+    { name: 'PUG',             order: 60, image: 'https://media.gateradiorm.com/residents/pug.jpg', bio: 'Pug is a sound designer and producer of club and experimental music. His productions stand out for their use of synthesized sounds, creative sample processing, and polyrhythms. In addition to his DJ career, he performs live sets both solo and B2B, with an approach focused on techno and bass music. His track Cast Iron Plate is included in the compilation Nodi 001.', instagram: 'https://www.instagram.com/prod.pug/', soundcloud: 'https://soundcloud.com/user-66581760', mixcloud: '' },
     { name: 'ROBBSS',          order: 70, image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
-    { name: 'SOFFICE',         order: 80, image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/soffice.jpg', bio: "A key resident of Freenetica Crew, Soffice is a techno DJ shaped by the Roman underground scene. Her sound moves through percussive grooves and pulsing basslines, drawing inspiration from the energy of '90s and 2000s dancefloors, reworked through a contemporary and dynamic vision. Evolving toward hypnotic, percussion-driven sounds, she delivers solid, dancefloor-focused sets. She has played at key venues such as Cieloterra, Forte Antenne, Warehouse 303, Gate Milano, and Serendipity with MRC.", instagram: 'https://www.instagram.com/s0ffice/', soundcloud: 'https://soundcloud.com/user-872402408', mixcloud: '' },
+    { name: 'SOFFICE',         order: 80, image: 'https://media.gateradiorm.com/residents/soffice.jpg', bio: "A key resident of Freenetica Crew, Soffice is a techno DJ shaped by the Roman underground scene. Her sound moves through percussive grooves and pulsing basslines, drawing inspiration from the energy of '90s and 2000s dancefloors, reworked through a contemporary and dynamic vision. Evolving toward hypnotic, percussion-driven sounds, she delivers solid, dancefloor-focused sets. She has played at key venues such as Cieloterra, Forte Antenne, Warehouse 303, Gate Milano, and Serendipity with MRC.", instagram: 'https://www.instagram.com/s0ffice/', soundcloud: 'https://soundcloud.com/user-872402408', mixcloud: '' },
 ];
 
 function initResidents() {
@@ -681,7 +1087,9 @@ function initResidents() {
         }
         hide(seedWrapper);
 
-        const items = Object.entries(data).sort((a, b) => (a[1].order || 0) - (b[1].order || 0));
+        // Stesso ordine del sito: alfabetico per nome (il vecchio campo "order" resta nei dati ma non conta più)
+        const items = Object.entries(data).sort((a, b) =>
+            String(a[1].name || '').localeCompare(String(b[1].name || ''), 'it', { sensitivity: 'base' }));
         container.innerHTML = items.map(([key, r]) => {
             const hasBio = r.bio && r.bio.trim();
             const hasImg = r.image && r.image.trim();
@@ -741,7 +1149,6 @@ function openResidentModal(key) {
         $('#res-key').value = key;
         $('#resident-modal-title').textContent = `Modifica: ${data.name}`;
         $('#res-name').value = data.name || '';
-        $('#res-order').value = data.order || 0;
         $('#res-image').value = data.image || '';
         $('#res-bio').value = data.bio || '';
         $('#res-bio-it').value = data.bio_it || '';
@@ -764,7 +1171,6 @@ $('#resident-form').addEventListener('submit', async e => {
     try {
         const data = {
             name:       $('#res-name').value.trim(),
-            order:      parseInt($('#res-order').value, 10) || 0,
             image:      $('#res-image').value.trim(),
             bio:        $('#res-bio').value.trim(),
             bio_it:     $('#res-bio-it').value.trim(),
@@ -815,6 +1221,20 @@ function liveLinksToText(data) {
         return data.liveLinks.map(l => (l.label ? l.label + ' | ' : '') + l.url).join('\n');
     }
     return (data.soundcloudUrl && data.soundcloudUrl !== '#') ? data.soundcloudUrl : '';
+}
+
+// Testo "pulito" per confronti: minuscole, senza accenti, spazi e punteggiatura
+// ("Rosie C.P.T." → "rosiecpt")
+function normalizeText(s) {
+    return String(s || '').toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '');
+}
+
+// "2026-10-21" → "21/10/2026"
+function formatDateIT(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : (iso || '');
 }
 
 function escapeHtml(s) {

@@ -1,6 +1,6 @@
 // Worker che serve Coming Soon su gateradiorm.com e il sito normale su workers.dev
 // URL pubblico del bucket R2 (dev URL)
-const R2_PUBLIC_BASE = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev';
+const R2_PUBLIC_BASE = 'https://media.gateradiorm.com';
 
 function uploadCorsHeaders(request) {
     const origin = request.headers.get('Origin') || '';

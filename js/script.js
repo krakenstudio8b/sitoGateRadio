@@ -50,14 +50,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const galleryContainerEl = $('#gallery-container');
     const galleryLightbox = $('#lightbox');
     const galleryLightboxImg = $('#lightbox-image');
-    const FALLBACK_IMG = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logoverticaleconscritta.png';
+    const FALLBACK_IMG = 'https://media.gateradiorm.com/logoverticaleconscritta.png';
     // Locandine nelle card: versione piccola (600 px, rimpicciolita bene) in R2 sotto
     // thumbs/<stesso percorso>.webp. Il browser che rimpicciolisce l'originale crea
     // "pallini" (moiré) sul retino delle grafiche; la piccola è pulita e pesa metà.
     // Se la piccola non esiste ancora, onerror torna all'originale.
-    const R2_BASE = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/';
-    const thumbOf = (url) => (url && url.startsWith(R2_BASE) && !url.startsWith(R2_BASE + 'thumbs/'))
-        ? `${R2_BASE}thumbs/${url.slice(R2_BASE.length)}.webp` : url;
+    // Le immagini stanno sul dominio media.gateradiorm.com; nel database possono
+    // restare link vecchi al dev URL r2.dev (stesso bucket): li riconosciamo entrambi
+    // e la miniatura la prendiamo sempre dal dominio nuovo.
+    const R2_BASE = 'https://media.gateradiorm.com/';
+    const R2_OLD_BASE = 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/';
+    const r2KeyOf = (url) => !url ? null
+        : url.startsWith(R2_BASE) ? url.slice(R2_BASE.length)
+        : url.startsWith(R2_OLD_BASE) ? url.slice(R2_OLD_BASE.length)
+        : null;
+    const thumbOf = (url) => {
+        const key = r2KeyOf(url);
+        return (key && !key.startsWith('thumbs/')) ? `${R2_BASE}thumbs/${key}.webp` : url;
+    };
     const posterImg = (url, alt, cls, loading = 'lazy') => {
         const t = thumbOf(url);
         const back = t !== url ? ` onerror="this.onerror=null;this.src='${_escHtml(url)}'"` : '';
@@ -630,12 +640,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const fallbackResidents = [
             { name: 'ADAD', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
             { name: 'ALIUS BENZ', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
-            { name: 'COUNTERCULTURE', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/counterculture.jpg', bio: 'Manuel López (Counterculture) is a Colombian DJ and live act based in Rome, focused on underground techno, modular live performance and hybrid sets combining vinyl, hardware and digital sources. A member of Gate Radio and resident of the Bugs collective, his sound is raw, hypnotic and functional for the dancefloor. He has performed at underground clubs and spaces in Rome such as Brancaleone and Hacienda, as well as independent venues, record stores and alternative organizations.', instagram: 'https://www.instagram.com/counterculturx/', soundcloud: 'https://soundcloud.com/counterculture666', mixcloud: '' },
-            { name: 'MRQS', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/mrqs.jpg', bio: 'MRQS brings together two worlds: that of a sound engineer and sound designer, and that of a DJ. This dual expertise is clearly reflected in his sets, which are meticulously crafted, powerful in impact, and surprising in their selections. He moves seamlessly from tribal hardgroove to techno atmospheres, all the way to UK garage grooves, maintaining constant attention to sound quality and the room\'s response. His experience has been shaped on stages such as Acrobax and through numerous events for various collectives. Beyond the decks, he is the founder and driving force behind Gate Radio.', instagram: 'https://www.instagram.com/romarcomani/', soundcloud: 'https://soundcloud.com/marco-romani-308872897', mixcloud: '' },
+            { name: 'COUNTERCULTURE', image: 'https://media.gateradiorm.com/residents/counterculture.jpg', bio: 'Manuel López (Counterculture) is a Colombian DJ and live act based in Rome, focused on underground techno, modular live performance and hybrid sets combining vinyl, hardware and digital sources. A member of Gate Radio and resident of the Bugs collective, his sound is raw, hypnotic and functional for the dancefloor. He has performed at underground clubs and spaces in Rome such as Brancaleone and Hacienda, as well as independent venues, record stores and alternative organizations.', instagram: 'https://www.instagram.com/counterculturx/', soundcloud: 'https://soundcloud.com/counterculture666', mixcloud: '' },
+            { name: 'MRQS', image: 'https://media.gateradiorm.com/residents/mrqs.jpg', bio: 'MRQS brings together two worlds: that of a sound engineer and sound designer, and that of a DJ. This dual expertise is clearly reflected in his sets, which are meticulously crafted, powerful in impact, and surprising in their selections. He moves seamlessly from tribal hardgroove to techno atmospheres, all the way to UK garage grooves, maintaining constant attention to sound quality and the room\'s response. His experience has been shaped on stages such as Acrobax and through numerous events for various collectives. Beyond the decks, he is the founder and driving force behind Gate Radio.', instagram: 'https://www.instagram.com/romarcomani/', soundcloud: 'https://soundcloud.com/marco-romani-308872897', mixcloud: '' },
             { name: 'MERLO', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
-            { name: 'PUG', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/pug.jpg', bio: 'Pug is a sound designer and producer of club and experimental music. His productions stand out for their use of synthesized sounds, creative sample processing, and polyrhythms. In addition to his DJ career, he performs live sets both solo and B2B, with an approach focused on techno and bass music. His track Cast Iron Plate is included in the compilation Nodi 001.', instagram: 'https://www.instagram.com/prod.pug/', soundcloud: 'https://soundcloud.com/user-66581760', mixcloud: '' },
+            { name: 'PUG', image: 'https://media.gateradiorm.com/residents/pug.jpg', bio: 'Pug is a sound designer and producer of club and experimental music. His productions stand out for their use of synthesized sounds, creative sample processing, and polyrhythms. In addition to his DJ career, he performs live sets both solo and B2B, with an approach focused on techno and bass music. His track Cast Iron Plate is included in the compilation Nodi 001.', instagram: 'https://www.instagram.com/prod.pug/', soundcloud: 'https://soundcloud.com/user-66581760', mixcloud: '' },
             { name: 'ROBBSS', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
-            { name: 'SOFFICE', image: 'https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/residents/soffice.jpg', bio: 'A key resident of Freenetica Crew, Soffice is a techno DJ shaped by the Roman underground scene. Her sound moves through percussive grooves and pulsing basslines, drawing inspiration from the energy of \'90s and 2000s dancefloors, reworked through a contemporary and dynamic vision. Evolving toward hypnotic, percussion-driven sounds, she delivers solid, dancefloor-focused sets. She has played at key venues such as Cieloterra, Forte Antenne, Warehouse 303, Gate Milano, and Serendipity with MRC.', instagram: 'https://www.instagram.com/s0ffice/', soundcloud: 'https://soundcloud.com/user-872402408', mixcloud: '' },
+            { name: 'SOFFICE', image: 'https://media.gateradiorm.com/residents/soffice.jpg', bio: 'A key resident of Freenetica Crew, Soffice is a techno DJ shaped by the Roman underground scene. Her sound moves through percussive grooves and pulsing basslines, drawing inspiration from the energy of \'90s and 2000s dancefloors, reworked through a contemporary and dynamic vision. Evolving toward hypnotic, percussion-driven sounds, she delivers solid, dancefloor-focused sets. She has played at key venues such as Cieloterra, Forte Antenne, Warehouse 303, Gate Milano, and Serendipity with MRC.', instagram: 'https://www.instagram.com/s0ffice/', soundcloud: 'https://soundcloud.com/user-872402408', mixcloud: '' },
         ];
 
         // Prova a caricare i resident da Firebase; se vuoto o errore → fallback
@@ -675,7 +685,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="artist-card-image-wrapper">
                         ${artist.image
                             ? `<img src="${artist.image}" alt="${_escHtml(artist.name)}" class="artist-card-image" loading="lazy">`
-                            : `<div class="artist-card-noimage"><img src="https://pub-41e721a087ea4a26b789322b03e6334d.r2.dev/logogate2.png" alt=""><small>${_glLang() === 'it' ? 'FOTO IN ARRIVO' : 'PHOTO COMING SOON'}</small></div>`}
+                            : `<div class="artist-card-noimage"><img src="https://media.gateradiorm.com/logogate2.png" alt=""><small>${_glLang() === 'it' ? 'FOTO IN ARRIVO' : 'PHOTO COMING SOON'}</small></div>`}
                     </div>
                     <div class="artist-card-content">
                         <h3 class="artist-card-title">${_escHtml(artist.name)}</h3>

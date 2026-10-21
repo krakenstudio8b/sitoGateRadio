@@ -69,6 +69,9 @@
             gap: 16px; padding: 12px 16px; background: var(--bg-card-2);
             border: 1px solid var(--border); border-radius: 8px; font-size: 14px;
         }
+        /* Tailwind CDN ha una sua classe "list-item" (display:list-item, col pallino)
+           caricata dopo questo stile: la doppia classe vince e tiene la riga in flex */
+        .list-item.list-item { display: flex; }
         .list-item + .list-item { margin-top: 8px; }
         .badge { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; }
         .badge-season { background: rgba(255,242,0,.1); color: var(--accent); border: 1px solid rgba(255,242,0,.2); }
@@ -109,6 +112,28 @@
         .resident-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); background: var(--bg-card-2); }
         .nav-link { color: var(--text-dim); text-decoration: none; font-size: 13px; transition: color .15s; }
         .nav-link:hover { color: var(--accent); }
+        /* Filtri a "pillola" (lista Live, pannello Da sistemare) */
+        .chip {
+            padding: 6px 14px; border-radius: 99px; font-size: 12px; font-weight: 600;
+            cursor: pointer; background: transparent; color: var(--text-dim);
+            border: 1px solid var(--border); transition: all .15s; white-space: nowrap;
+        }
+        .chip.active { background: var(--accent); color: #000; border-color: var(--accent); }
+        .chip:hover:not(.active) { color: var(--text); border-color: var(--accent); }
+        .chip .count { opacity: .7; margin-left: 4px; font-weight: 400; }
+        /* Badge "cosa manca" */
+        .badge-miss { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+        .badge-ok { background: rgba(34,197,94,.12); color: var(--ok); border: 1px solid rgba(34,197,94,.3); }
+        .fix-panel { border-color: rgba(255,242,0,.35); }
+        /* Suggerimenti YouTube nel modale */
+        .yt-item { display: flex; align-items: center; gap: 12px; padding: 8px; background: var(--bg-card-2); border: 1px solid var(--border); border-radius: 8px; }
+        .yt-item + .yt-item { margin-top: 6px; }
+        .yt-item img { width: 96px; height: 54px; object-fit: cover; border-radius: 6px; flex-shrink: 0; background: #000; }
+        @media (max-width: 640px) {
+            .list-item { flex-wrap: wrap; }
+            .list-item > .flex-shrink-0 { flex-wrap: wrap; flex-shrink: 1; }
+            .yt-item img { width: 72px; height: 40px; }
+        }
     </style>
 </head>
 <body>
@@ -241,6 +266,30 @@
 
             <!-- ───────── TAB STREAMS ───────── -->
             <section id="tab-streams" class="tab-panel hidden">
+                <!-- Pannello "Da sistemare": live passate e visibili con dati mancanti -->
+                <div id="fix-panel" class="card fix-panel mb-6 hidden">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                        <h2 class="text-xl font-bold">
+                            <i class="fas fa-screwdriver-wrench mr-2 accent"></i>Da sistemare
+                            <span id="fix-count" class="badge badge-season ml-2" style="font-size:13px;">0</span>
+                        </h2>
+                        <button type="button" id="fix-toggle" class="btn btn-ghost" style="padding:6px 14px;font-size:12px;">
+                            <i class="fas fa-chevron-up"></i> Chiudi
+                        </button>
+                    </div>
+                    <div id="fix-body">
+                        <p class="text-sm mb-3" style="color: var(--text-dim);">
+                            Live già andate in onda e visibili sul sito a cui manca qualcosa.
+                            Premi <b>Modifica</b>, completa e salva: sparisce da qui da sola.
+                        </p>
+                        <div id="fix-filters" class="flex flex-wrap gap-2 mb-4"></div>
+                        <div id="fix-list"></div>
+                        <div id="fix-more" class="mt-3 hidden">
+                            <button type="button" id="fix-more-btn" class="btn btn-ghost" style="padding:6px 14px;font-size:12px;"></button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card mb-6">
                     <h2 class="text-xl font-bold mb-4">Aggiungi Live Streaming</h2>
                     <form id="stream-form" class="grid-form">
@@ -287,6 +336,14 @@
                             <input id="st-image" type="url" class="form-input" placeholder="…oppure incolla un URL immagine">
                         </div>
                         <div class="col-span-2">
+                            <label class="field-label">Descrizione (IT)</label>
+                            <textarea id="st-description" rows="2" class="form-input" placeholder="Due righe sull'artista o sul set..."></textarea>
+                        </div>
+                        <div class="col-span-2">
+                            <label class="field-label">Descrizione (EN)</label>
+                            <textarea id="st-description-en" rows="2" class="form-input" placeholder="Short description (optional)..."></textarea>
+                        </div>
+                        <div class="col-span-2">
                             <label class="field-label">Tag (separati da virgola)</label>
                             <input id="st-tags" type="text" class="form-input" placeholder="es. Techno, Live, Minimal">
                         </div>
@@ -301,6 +358,14 @@
 
                 <div class="card">
                     <h2 class="text-xl font-bold mb-4">Live in archivio</h2>
+                    <div class="mb-4">
+                        <div class="relative mb-3">
+                            <i class="fas fa-magnifying-glass" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:13px;"></i>
+                            <input id="streams-search" type="search" class="form-input" style="padding-left:38px;"
+                                   placeholder="Cerca per nome artista o titolo..." autocomplete="off">
+                        </div>
+                        <div id="streams-filters" class="flex flex-wrap gap-2"></div>
+                    </div>
                     <div id="streams-list">
                         <p style="color: var(--text-dim);" class="text-sm">Caricamento...</p>
                     </div>
@@ -402,6 +467,22 @@
                         Serata spezzata in più dirette? Una riga per artista:
                         <span class="mono">NOME ARTISTA | link</span>
                     </p>
+                    <!-- Suggerimento link: legge gli ultimi video del canale YouTube -->
+                    <div class="mt-3">
+                        <button type="button" id="yt-search-btn" class="btn btn-ghost" style="padding:6px 14px;font-size:12px;">
+                            <i class="fab fa-youtube" style="color:#ff0000;"></i> Cerca su YouTube
+                        </button>
+                        <span id="yt-feedback" class="feedback ml-2"></span>
+                        <div id="yt-results" class="mt-3"></div>
+                    </div>
+                </div>
+                <div class="col-span-2 edit-stream-only">
+                    <label class="field-label">Descrizione (IT)</label>
+                    <textarea id="edit-st-description" rows="3" class="form-input" placeholder="Due righe sull'artista o sul set..."></textarea>
+                </div>
+                <div class="col-span-2 edit-stream-only">
+                    <label class="field-label">Descrizione (EN)</label>
+                    <textarea id="edit-st-description-en" rows="3" class="form-input" placeholder="Short description (optional)..."></textarea>
                 </div>
 
                 <div class="col-span-2">
@@ -442,13 +523,10 @@
             <form id="resident-form" class="grid-form">
                 <input type="hidden" id="res-key">
 
-                <div>
+                <!-- Niente più campo "Ordine": sul sito i resident sono in ordine alfabetico -->
+                <div class="col-span-2">
                     <label class="field-label">Nome</label>
                     <input id="res-name" type="text" required class="form-input">
-                </div>
-                <div>
-                    <label class="field-label">Ordine (0-99)</label>
-                    <input id="res-order" type="number" min="0" max="99" class="form-input" value="0">
                 </div>
                 <div class="col-span-2">
                     <label class="field-label">Foto</label>
