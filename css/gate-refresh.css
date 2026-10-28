@@ -532,8 +532,10 @@ header .header-logo-text > a > span {
 /* ----- CHI SIAMO: apertura = titolo "GATE RADIO" + simbolo del logo,
    centrati, piccoli abbastanza da stare nel primo schermo ----- */
 .gn-about-hero {
-    max-width: 72rem; margin: 0 auto;
-    padding: clamp(2.5rem, 6vh, 4rem) 1.5rem 0;
+    /* fascia nera piena come l'apertura della home, così il logo stacca dal retino */
+    position: relative; z-index: 1;
+    background: #000;
+    padding: clamp(2.5rem, 6vh, 4rem) 1.5rem clamp(2.5rem, 6vh, 4rem);
     text-align: center;
 }
 .gn-about-hero h1 { text-align: center; margin: 0; }
