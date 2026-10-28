@@ -288,8 +288,11 @@
                 });
             const track = document.querySelector('.gn-ticker-track');
             if (track && names.length) {
-                const row = names.slice(0, 70).map(n => `<span>${esc(n)}</span>`).join('<b aria-hidden="true">/</b>');
+                const row = names.map(n => `<span>${esc(n)}</span>`).join('<b aria-hidden="true">/</b>');
                 track.innerHTML = `<div>${row}<b aria-hidden="true">/</b></div><div>${row}<b aria-hidden="true">/</b></div>`;
+                // tutti i nomi da sempre: il giro dura in proporzione, così la velocità
+                // resta quella di prima (70 nomi = 140 s) anche quando i nomi crescono
+                track.style.animationDuration = `${Math.max(140, names.length * 2)}s`;
             }
         };
         if (window.gateRadioDataPromise) window.gateRadioDataPromise.then(run).catch(() => {});
