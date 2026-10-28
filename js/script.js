@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         galleryModalContent.classList.toggle('multi-image-mode', imgs.length > 1);
         galleryCoverStep = null;
         if (imgs.length === 1) {
-            galleryContainerEl.innerHTML = `<div class="single-image-wrapper"><img src="${imgs[0]}" alt="${title}" loading="lazy"></div>`;
+            galleryContainerEl.innerHTML = `<div class="single-image-wrapper"><img src="${imgs[0]}" alt="${title}"></div>`;
         } else {
             galleryContainerEl.innerHTML = `
                 <div class="single-image-wrapper"><img src="${imgs[0]}" alt="${title}"></div>
@@ -120,13 +120,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const wrap = galleryContainerEl.querySelector('.single-image-wrapper');
             const img = wrap.querySelector('img');
             const dots = [...galleryContainerEl.querySelectorAll('.gn-cover-dots button')];
-            // il riquadro prende le proporzioni della prima copertina e non cambia
-            // più: la scheda non "salta" passando da una all'altra
-            img.addEventListener('load', () => {
-                if (!wrap.style.getPropertyValue('--ar') && img.naturalWidth) {
-                    wrap.style.setProperty('--ar', `${img.naturalWidth} / ${img.naturalHeight}`);
-                }
-            });
             imgs.slice(1).forEach(src => { new Image().src = src; });
             let cur = 0;
             const show = (i) => {
@@ -146,6 +139,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 x0 = null;
                 if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1));
             });
+        }
+        // Il riquadro della copertina parte subito in 4:5 (la scheda non nasce
+        // vuota mentre la foto arriva) e poi prende le proporzioni della prima
+        // copertina; non cambia più passando da una copertina all'altra
+        {
+            const wrap = galleryContainerEl.querySelector('.single-image-wrapper');
+            const img = wrap.querySelector('img');
+            const setAr = () => {
+                if (!wrap.style.getPropertyValue('--ar') && img.naturalWidth) {
+                    wrap.style.setProperty('--ar', `${img.naturalWidth} / ${img.naturalHeight}`);
+                }
+            };
+            if (img.complete) setAr(); else img.addEventListener('load', setAr, { once: true });
         }
 
         if (galleryLightbox && galleryLightboxImg) {
@@ -219,6 +225,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const openArchiveModal = (streamId) => {
         const stream = (window._allArchiveItems || (typeof streamsData !== 'undefined' ? streamsData : []) || []).find(s => s.id == streamId);
         if (!stream) return;
+        // Un evento in archivio apre la stessa scheda della pagina Eventi
+        // (descrizione, dettagli, luogo, lingua), con i link delle dirette di quel giorno
+        if (stream._type === 'event') {
+            const ev = (typeof eventsData !== 'undefined' ? eventsData : []).find(e => e.id == streamId);
+            if (ev) { openEventModal(ev); return; }
+        }
 
         const dateStr = stream.date
             ? new Date(stream.date).toLocaleDateString(_glLocale(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })

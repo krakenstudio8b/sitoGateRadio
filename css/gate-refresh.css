@@ -528,10 +528,12 @@ header nav .gn-nav .lang-toggle-group { height: 34px; display: inline-flex; alig
         border-radius: 0; /* angoli dritti ovunque, come le card del sito */
     }
     .single-image-mode .gallery-column { flex: none; padding: 0; height: 100%; background: #000; }
-    .single-image-mode .single-image-wrapper { width: auto; height: 100%; }
+    .single-image-mode .single-image-wrapper {
+        width: auto; height: 100%; aspect-ratio: var(--ar, 4 / 5);
+        max-width: calc(94vw - 440px);
+    }
     .single-image-mode .single-image-wrapper img {
-        display: block; width: auto; height: 100%;
-        max-width: calc(94vw - 440px); object-fit: contain;
+        display: block; width: 100%; height: 100%; max-width: none; object-fit: contain;
     }
     .single-image-mode .event-details {
         flex: none; width: clamp(440px, 32vw, 580px);
@@ -568,10 +570,6 @@ header nav .gn-nav .lang-toggle-group { height: 34px; display: inline-flex; alig
     background: rgba(255, 255, 255, 0.55); border: none; cursor: pointer;
 }
 .gn-cover-dots button.is-on { background: var(--accent); }
-@media (min-width: 1025px) {
-    .multi-image-mode .single-image-wrapper { width: auto; height: 100%; max-width: calc(94vw - 440px); }
-    .multi-image-mode .single-image-wrapper img { max-width: none; }
-}
 @media (max-width: 1024px) {
     .multi-image-mode .single-image-wrapper { max-height: 70vh; margin: 0 auto; }
     .multi-image-mode .single-image-wrapper img { height: 100% !important; max-height: none; }
