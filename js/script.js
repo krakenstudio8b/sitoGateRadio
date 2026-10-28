@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return `<img src="${_escHtml(t)}"${back} alt="${_escHtml(alt || '')}" class="${cls}" loading="${loading}" decoding="async">`;
     };
     const SEASON_CLASSES = ['winter', 'spring', 'summer', 'autumn'];
+    let galleryCoverStep = null; // passa alla copertina dopo/prima (schede con più copertine)
 
     function openGalleryModal({ title = '', dateStr = '', location = '', description = '', details = '', tags = [], images = [], actionsHTML = '', seasonClass = '' } = {}) {
         if (!galleryModal || !galleryModalContent || !galleryContainerEl) return;
@@ -102,21 +103,49 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (actionsEl) actionsEl.innerHTML = actionsHTML || '';
 
         const imgs = images && images.length > 0 ? images : [FALLBACK_IMG];
-        galleryModalContent.classList.remove('single-image-mode');
+        // Una copertina alla volta, sempre nello stesso riquadro (come la scheda
+        // con una sola locandina). Se sono più di una: frecce, pallini, tastiera
+        // e swipe da telefono per passare alla successiva.
+        galleryModalContent.classList.add('single-image-mode');
+        galleryModalContent.classList.toggle('multi-image-mode', imgs.length > 1);
+        galleryCoverStep = null;
         if (imgs.length === 1) {
-            galleryModalContent.classList.add('single-image-mode');
             galleryContainerEl.innerHTML = `<div class="single-image-wrapper"><img src="${imgs[0]}" alt="${title}" loading="lazy"></div>`;
-        } else if (imgs.length === 2) {
-            galleryContainerEl.innerHTML = `<div class="gallery-grid gallery-grid-2">${imgs.map(src => `<div class="gallery-item"><img src="${src}" alt="${title}" loading="lazy"></div>`).join('')}</div>`;
-        } else if (imgs.length === 3) {
-            galleryContainerEl.innerHTML = `<div class="gallery-grid gallery-grid-3"><div class="gallery-item gallery-item-big"><img src="${imgs[0]}" alt="${title}" loading="lazy"></div><div class="gallery-item"><img src="${imgs[1]}" alt="${title}" loading="lazy"></div><div class="gallery-item"><img src="${imgs[2]}" alt="${title}" loading="lazy"></div></div>`;
         } else {
-            const half = Math.ceil(imgs.length / 2);
-            const row1 = imgs.slice(0, half);
-            const row2 = imgs.slice(half);
             galleryContainerEl.innerHTML = `
-                <div class="gallery-row">${row1.map(src => `<div class="gallery-item"><img src="${src}" alt="${title}" loading="lazy"></div>`).join('')}</div>
-                <div class="gallery-row posts-row">${row2.map(src => `<div class="gallery-item"><img src="${src}" alt="${title}" loading="lazy"></div>`).join('')}</div>`;
+                <div class="single-image-wrapper"><img src="${imgs[0]}" alt="${title}"></div>
+                <button type="button" class="gn-cover-nav gn-cover-prev" aria-label="Copertina precedente">&#8249;</button>
+                <button type="button" class="gn-cover-nav gn-cover-next" aria-label="Copertina successiva">&#8250;</button>
+                <div class="gn-cover-dots">${imgs.map((_, i) => `<button type="button" aria-label="Copertina ${i + 1}"${i === 0 ? ' class="is-on"' : ''}></button>`).join('')}</div>`;
+            const wrap = galleryContainerEl.querySelector('.single-image-wrapper');
+            const img = wrap.querySelector('img');
+            const dots = [...galleryContainerEl.querySelectorAll('.gn-cover-dots button')];
+            // il riquadro prende le proporzioni della prima copertina e non cambia
+            // più: la scheda non "salta" passando da una all'altra
+            img.addEventListener('load', () => {
+                if (!wrap.style.getPropertyValue('--ar') && img.naturalWidth) {
+                    wrap.style.setProperty('--ar', `${img.naturalWidth} / ${img.naturalHeight}`);
+                }
+            });
+            imgs.slice(1).forEach(src => { new Image().src = src; });
+            let cur = 0;
+            const show = (i) => {
+                cur = (i + imgs.length) % imgs.length;
+                img.src = imgs[cur];
+                dots.forEach((d, j) => d.classList.toggle('is-on', j === cur));
+            };
+            galleryCoverStep = (dir) => show(cur + dir);
+            galleryContainerEl.querySelector('.gn-cover-prev').addEventListener('click', (e) => { e.stopPropagation(); show(cur - 1); });
+            galleryContainerEl.querySelector('.gn-cover-next').addEventListener('click', (e) => { e.stopPropagation(); show(cur + 1); });
+            dots.forEach((d, j) => d.addEventListener('click', (e) => { e.stopPropagation(); show(j); }));
+            let x0 = null;
+            wrap.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+            wrap.addEventListener('touchend', (e) => {
+                if (x0 === null) return;
+                const dx = e.changedTouches[0].clientX - x0;
+                x0 = null;
+                if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1));
+            });
         }
 
         if (galleryLightbox && galleryLightboxImg) {
@@ -135,6 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function closeGalleryModal() {
         if (!galleryModal) return;
+        galleryCoverStep = null;
         galleryModal.classList.add('hidden');
         galleryModal.classList.remove(...SEASON_CLASSES);
         document.body.style.overflow = '';
@@ -146,6 +176,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (galleryLightbox) {
             galleryLightbox.addEventListener('click', () => galleryLightbox.classList.add('hidden'));
         }
+        document.addEventListener('keydown', (e) => {
+            if (!galleryCoverStep || galleryModal.classList.contains('hidden')) return;
+            if (galleryLightbox && !galleryLightbox.classList.contains('hidden')) return;
+            if (e.key === 'ArrowRight') galleryCoverStep(1);
+            else if (e.key === 'ArrowLeft') galleryCoverStep(-1);
+        });
     }
 
     // --- APERTURA MODALE STREAMING (archivio + artisti + calendario) ---

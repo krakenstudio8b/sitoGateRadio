@@ -519,6 +519,65 @@ header nav .gn-nav .lang-toggle-group { height: 34px; display: inline-flex; alig
     .posts-row { display: none !important; }
 }
 
+/* ----- SCHEDA APERTA DA PC (una locandina): card stretta quanto la locandina,
+   niente fasce nere ai lati, colonna del testo più larga ----- */
+@media (min-width: 1025px) {
+    .event-modal-content.single-image-mode {
+        width: auto; max-width: 94vw;
+        height: min(88vh, 960px);
+        border-radius: 0; /* angoli dritti ovunque, come le card del sito */
+    }
+    .single-image-mode .gallery-column { flex: none; padding: 0; height: 100%; background: #000; }
+    .single-image-mode .single-image-wrapper { width: auto; height: 100%; }
+    .single-image-mode .single-image-wrapper img {
+        display: block; width: auto; height: 100%;
+        max-width: calc(94vw - 440px); object-fit: contain;
+    }
+    .single-image-mode .event-details {
+        flex: none; width: clamp(440px, 32vw, 580px);
+        padding: 2.5rem 2.25rem 2rem;
+    }
+    /* il titolo non va sotto la X */
+    .single-image-mode .modal-event-title { padding-right: 2.5rem; }
+}
+
+/* ----- SCHEDA CON PIÙ COPERTINE: una alla volta nello stesso riquadro,
+   frecce ai lati e pallini sotto (da telefono anche swipe) ----- */
+.multi-image-mode .gallery-column { position: relative; }
+.multi-image-mode .single-image-wrapper { aspect-ratio: var(--ar, 4 / 5); }
+.multi-image-mode .single-image-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+.gn-cover-nav {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+    width: 2.75rem; height: 2.75rem; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; line-height: 1; color: #fff; padding-bottom: 0.2rem;
+    background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease;
+}
+.gn-cover-nav:hover { background: var(--accent); border-color: var(--accent); }
+.gn-cover-prev { left: 0.75rem; }
+.gn-cover-next { right: 0.75rem; }
+.gn-cover-dots {
+    position: absolute; left: 50%; bottom: 0.9rem; transform: translateX(-50%); z-index: 3;
+    display: flex; gap: 0.55rem; padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.75); border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+}
+.gn-cover-dots button {
+    width: 0.7rem; height: 0.7rem; border-radius: 50%; padding: 0;
+    background: rgba(255, 255, 255, 0.55); border: none; cursor: pointer;
+}
+.gn-cover-dots button.is-on { background: var(--accent); }
+@media (min-width: 1025px) {
+    .multi-image-mode .single-image-wrapper { width: auto; height: 100%; max-width: calc(94vw - 440px); }
+    .multi-image-mode .single-image-wrapper img { max-width: none; }
+}
+@media (max-width: 1024px) {
+    .multi-image-mode .single-image-wrapper { max-height: 70vh; margin: 0 auto; }
+    .multi-image-mode .single-image-wrapper img { height: 100% !important; max-height: none; }
+    .gn-cover-nav { top: calc(50% + 1.4rem); width: 2.4rem; height: 2.4rem; font-size: 1.7rem; }
+}
+
 /* ----- Nome "GATE RADIO" nella barra: centrato col logo ----- */
 header .header-logo-text { margin: 0; display: flex; align-items: center; }
 header .header-logo-text > a { display: flex !important; align-items: center; }
