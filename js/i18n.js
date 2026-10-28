@@ -55,12 +55,12 @@
         'artists.desc':     { it: 'I talenti che rappresentano il sound di Gate Radio.', en: 'The talents that represent the sound of Gate Radio.' },
 
         // ── ABOUT ───────────────────────────────────────────────────────────
-        'about.hero':       { it: 'IL PROGETTO <span class="text-[var(--accent)] grifter-font">GATE RADIO</span>',
-                              en: 'THE <span class="text-[var(--accent)] grifter-font">GATE RADIO</span> PROJECT' },
+        'about.hero':       { it: '<span class="text-[var(--accent)] grifter-font">GATE RADIO</span>',
+                              en: '<span class="text-[var(--accent)] grifter-font">GATE RADIO</span>' },
         'about.herosub':    { it: 'La nostra storia, la nostra visione, la nostra musica.', en: 'Our story, our vision, our music.' },
         'about.herocta':    { it: 'Scopri Chi Siamo', en: 'Discover Who We Are' },
-        'about.identity':   { it: 'LA NOSTRA <span class="text-[var(--accent)]">IDENTIT\u00C0</span>',
-                              en: 'OUR <span class="text-[var(--accent)]">IDENTITY</span>' },
+        'about.identity':   { it: 'CHI <span class="text-[var(--accent)]">SIAMO</span>',
+                              en: 'WHO <span class="text-[var(--accent)]">WE ARE</span>' },
         'about.identdesc':  { it: 'Un portale sulla techno, scandito dal ritmo delle stagioni.', en: 'A portal on techno, driven by the rhythm of the seasons.' },
         'about.bio1':       { it: 'Gate Radio nasce alla fine del 2024 da un gruppo di giovani appassionati di musica elettronica, uniti da un sogno condiviso: creare uno spazio di incontro sonoro dove talenti emergenti e artisti affermati potessero convergere e crescere insieme.',
                               en: 'Gate Radio was born at the end of 2024 from a group of young electronic music enthusiasts, united by a shared dream: creating a sonic meeting space where emerging talents and established artists could converge and grow together.' },
