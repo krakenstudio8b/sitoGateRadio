@@ -46,11 +46,10 @@
 
     // ─── 2. HOME ────────────────────────────────────────────────────────────────
     function buildHome() {
-        // Home come prima: torre-antenna e scritta GATE RADIO, niente frase.
+        // Home: torre-antenna, scritta GATE RADIO e sotto "Expanding sound boundaries."
+        // (stessa frase e stesso carattere di Chi siamo, scritta in index.html).
         // Il bottone ASCOLTA ORA è nascosto (CSS): ora sta nel mini player.
         if (page !== 'index') return;
-        const sub = document.querySelector('#hero-section [data-i18n="home.subtitle"]');
-        if (sub) sub.style.display = 'none';
 
         // "TUTTI GLI EVENTI" accanto al titolo, a destra (come "VAI ALL'ARCHIVIO")
         const ev = document.getElementById('events-preview');
@@ -255,8 +254,8 @@
                     </div>
                 </div>
             </div>
-            <div class="gn-ticker" aria-hidden="true"><div class="gn-ticker-track"></div></div>
-            <p class="gn-foot-mark" aria-hidden="true">GATE RADIO</p>`;
+            <p class="gn-foot-mark" aria-hidden="true">GATE RADIO</p>
+            <div class="gn-ticker" aria-hidden="true"><div class="gn-ticker-track"></div></div>`;
         const bottom = document.querySelector('body > footer p');
         if (bottom) bottom.innerHTML = `<span>© ${new Date().getFullYear()} GATE RADIO · ROMA</span><span>EXPANDING SOUND BOUNDARIES</span>`;
         fillFooterData();
@@ -295,8 +294,14 @@
                 track.style.animationDuration = `${Math.max(140, names.length * 2)}s`;
             }
         };
-        if (window.gateRadioDataPromise) window.gateRadioDataPromise.then(run).catch(() => {});
-        else run();
+        const start = () => {
+            if (window.gateRadioDataPromise) window.gateRadioDataPromise.then(run).catch(() => {});
+            else run();
+        };
+        // questo file a volte parte prima di firebase-data.js (succede soprattutto in
+        // Home): se i dati non sono ancora "in arrivo", aspettiamo la fine del caricamento
+        if (window.gateRadioDataPromise || document.readyState === 'complete') start();
+        else window.addEventListener('load', start, { once: true });
     }
 
     // ─── 6. MINI PLAYER DELLA RADIO (js/gate-radio-mini.js) ──────────────────────
