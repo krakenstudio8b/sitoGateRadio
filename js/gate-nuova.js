@@ -264,9 +264,12 @@
 
     // Dati veri nel footer: i nomi di chi è passato da Gate (striscia)
     function fillFooterData() {
-        const run = () => {
-            const streams = window.streamsData || [];
-            const events = window.eventsData || [];
+        // i nomi si prendono dai dati appena arrivati: su un PC veloce arrivano
+        // prima che script.js li copi in window.streamsData, e la striscia restava vuota
+        const run = (data) => {
+            const seen = new Set();
+            const streams = [...(window.streamsData || []), ...((data && data.streams) || [])]
+                .filter(x => !seen.has(String(x.id)) && seen.add(String(x.id)));
             const now = new Date();
             const endOf = (x) => new Date(`${x.date}T${x.timeEnd || '23:59'}:00`);
             // striscia con i nomi degli artisti passati da Gate, dai più recenti
@@ -289,7 +292,7 @@
                 track.innerHTML = `<div>${row}<b aria-hidden="true">/</b></div><div>${row}<b aria-hidden="true">/</b></div>`;
             }
         };
-        if (window.gateRadioDataPromise) window.gateRadioDataPromise.then(() => setTimeout(run, 50)).catch(() => {});
+        if (window.gateRadioDataPromise) window.gateRadioDataPromise.then(run).catch(() => {});
         else run();
     }
 
