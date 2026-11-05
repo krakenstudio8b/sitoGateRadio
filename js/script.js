@@ -687,7 +687,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Fallback hardcoded: usato se Firebase non ha dati o non è raggiungibile
         const fallbackResidents = [
-            { name: 'ADAD', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
             { name: 'ALIUS BENZ', image: '', bio: '', instagram: '', soundcloud: '', mixcloud: '' },
             { name: 'COUNTERCULTURE', image: 'https://media.gateradiorm.com/residents/counterculture.jpg', bio: 'Manuel López (Counterculture) is a Colombian DJ and live act based in Rome, focused on underground techno, modular live performance and hybrid sets combining vinyl, hardware and digital sources. A member of Gate Radio and resident of the Bugs collective, his sound is raw, hypnotic and functional for the dancefloor. He has performed at underground clubs and spaces in Rome such as Brancaleone and Hacienda, as well as independent venues, record stores and alternative organizations.', instagram: 'https://www.instagram.com/counterculturx/', soundcloud: 'https://soundcloud.com/counterculture666', mixcloud: '' },
             { name: 'MRQS', image: 'https://media.gateradiorm.com/residents/mrqs.jpg', bio: 'MRQS brings together two worlds: that of a sound engineer and sound designer, and that of a DJ. This dual expertise is clearly reflected in his sets, which are meticulously crafted, powerful in impact, and surprising in their selections. He moves seamlessly from tribal hardgroove to techno atmospheres, all the way to UK garage grooves, maintaining constant attention to sound quality and the room\'s response. His experience has been shaped on stages such as Acrobax and through numerous events for various collectives. Beyond the decks, he is the founder and driving force behind Gate Radio.', instagram: 'https://www.instagram.com/romarcomani/', soundcloud: 'https://soundcloud.com/marco-romani-308872897', mixcloud: '' },
@@ -706,7 +705,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             .then(obj => {
                 let residents;
                 if (obj && typeof obj === 'object') {
-                    residents = Object.values(obj).sort((a, b) => (a.order || 0) - (b.order || 0));
+                    // hidden:true = resident tenuto da parte (es. senza foto e presskit), non si mostra
+                    residents = Object.values(obj).filter(r => r && r.hidden !== true).sort((a, b) => (a.order || 0) - (b.order || 0));
                     if (residents.length === 0) residents = fallbackResidents;
                 } else {
                     residents = fallbackResidents;
