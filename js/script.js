@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             detailsEl.textContent = details;
             detailsEl.style.display = details ? '' : 'none';
         }
-        $('#modal-event-tags').innerHTML = tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
+        $('#modal-event-tags').innerHTML = tags.map(tag => `<span class="card-tag">${(window._gateTrTag || (x => x))(tag)}</span>`).join('');
         const actionsEl = $('#modal-event-actions');
         if (actionsEl) actionsEl.innerHTML = actionsHTML || '';
 
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- APERTURA MODALE STREAMING (archivio + artisti + calendario) ---
-    const _glLang = () => window.GateI18n ? window.GateI18n.getLang() : 'it';
+    const _glLang = () => window.GateI18n ? window.GateI18n.getLang() : (() => { try { return localStorage.getItem('gate_lang') || 'it'; } catch (e) { return 'it'; } })();
     const _glLocale = () => _glLang() === 'en' ? 'en-GB' : 'it-IT';
 
     // Una serata può essere spezzata in più dirette YouTube (una per artista):
@@ -201,9 +201,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Luogo di una live: quello scritto nei dati (live fatte fuori, es. Groovelab),
     // altrimenti le live "base" (streaming/resident/set) sono al Gate Studio.
+    // Luoghi scritti in italiano nei dati: in inglese si traducono le parti comuni
+    // (i nomi propri, es. "Parco della Resistenza", restano come sono)
+    const trLuogo = (s) => {
+        if (!s || _glLang() !== 'en') return s || '';
+        return String(s)
+            .replace(/^Studio di (.+?),/, '$1 Studio,')
+            .replace(/^Terrazza su Roma$/, 'Rooftop over Rome')
+            .replace(/^Casale romano$/i, 'Roman farmhouse')
+            .replace(/\bRoma\b/g, 'Rome');
+    };
+    window._gateTrLuogo = trLuogo;
+    // Etichette (tag) in italiano nei dati
+    const TAG_EN = { 'Inaugurazione': 'Grand Opening', 'Aperitivo': 'Aperitivo', 'Evento': 'Event' };
+    const trTag = (t) => (_glLang() === 'en' && TAG_EN[t]) ? TAG_EN[t] : t;
+    window._gateTrTag = trTag;
+
     const liveLocation = (item) => {
         if (!item) return '';
-        if (item.location) return item.location;
+        if (item.location) return trLuogo(item.location);
         if (item._type === 'event') return '';
         return /^(LIVE|EXTENDED)/i.test(item.title || '') ? 'Gate Studio' : '';
     };
@@ -240,7 +256,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             : '';
         const isFuture = stream.date && new Date(stream.date) >= new Date(new Date().setHours(0,0,0,0));
         const where = liveLocation(stream);
-        const location = [timeStr || (isFuture ? 'PROSSIMA DIRETTA' : 'DIRETTA ARCHIVIATA'), where].filter(Boolean).join(' • ');
+        const _en = _glLang() === 'en';
+        const location = [timeStr || (isFuture ? (_en ? 'UPCOMING STREAM' : 'PROSSIMA DIRETTA') : (_en ? 'ARCHIVED STREAM' : 'DIRETTA ARCHIVIATA')), where].filter(Boolean).join(' • ');
 
         const images = stream.galleryImages && stream.galleryImages.length > 0
             ? stream.galleryImages
@@ -269,17 +286,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     function buildLiveActionsHTML(liveLinks, isFuture) {
         let actionsHTML = '';
         if (liveLinks.length === 1) {
-            actionsHTML = `<a href="${_escHtml(liveLinks[0].url)}" target="_blank" rel="noopener" class="archive-modal-soundcloud-btn"><i class="fas fa-play-circle mr-2"></i>GUARDA LA STREAMING</a>`;
+            actionsHTML = `<a href="${_escHtml(liveLinks[0].url)}" target="_blank" rel="noopener" class="archive-modal-soundcloud-btn"><i class="fas fa-play-circle mr-2"></i>${_glLang() === 'en' ? 'WATCH THE STREAM' : 'GUARDA LA STREAMING'}</a>`;
         } else if (liveLinks.length > 1) {
             const label = _glLang() === 'en' ? 'This night is split in' : 'Questa serata è divisa in';
             const setsWord = _glLang() === 'en' ? 'separate streams' : 'dirette separate';
             actionsHTML = `<p class="live-links-intro">${label} ${liveLinks.length} ${setsWord}:</p>
                 <div class="live-links-group">${liveLinks.map((l, i) => `
                     <a href="${_escHtml(l.url)}" target="_blank" rel="noopener" class="archive-modal-soundcloud-btn live-link-multi">
-                        <i class="fas fa-play-circle"></i><span>${_escHtml(l.label || `PARTE ${i + 1}`)}</span>
+                        <i class="fas fa-play-circle"></i><span>${_escHtml(l.label || `${_glLang() === 'en' ? 'PART' : 'PARTE'} ${i + 1}`)}</span>
                     </a>`).join('')}</div>`;
         } else if (isFuture) {
-            actionsHTML = `<p class="text-sm text-[var(--text-secondary)]">Resta sintonizzato.</p>`;
+            actionsHTML = `<p class="text-sm text-[var(--text-secondary)]">${_glLang() === 'en' ? 'Stay tuned.' : 'Resta sintonizzato.'}</p>`;
         }
         return actionsHTML;
     }
@@ -310,7 +327,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         openGalleryModal({
             title: (lang === 'en' && event.title_en) ? event.title_en : event.title,
             dateStr,
-            location: event.location || '',
+            location: trLuogo(event.location || ''),
             description: (lang === 'en' && event.description_en) ? event.description_en : (event.description || ''),
             details: (lang === 'en' && event.details_en) ? event.details_en : (event.details || ''),
             tags: event.tags || [],
@@ -440,7 +457,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const nextStream = findNextEvent([..._streams, ..._events]);
         
         const _t = window.GateI18n ? (k, fb) => window.GateI18n.t(k, window.GateI18n.getLang()) || fb : (k, fb) => fb;
-        const _lang = window.GateI18n ? window.GateI18n.getLang() : 'it';
+        const _lang = window.GateI18n ? window.GateI18n.getLang() : (() => { try { return localStorage.getItem('gate_lang') || 'it'; } catch (e) { return 'it'; } })();
         const listenNow = _t('home.listenNow', 'ASCOLTA ORA');
         const nowPlaying = _t('home.nowPlaying', 'GATE RADIO 24/7 — ORA IN ROTAZIONE');
         const stayTunedMsg = _t('home.stayTuned', 'Nessun evento in programma.');
@@ -543,7 +560,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const loadingAttr = _archiveCardIndex++ < 4 ? 'eager' : 'lazy';
             void loadingAttr; // usato sotto
             const seasonIcons = { spring: 'fas fa-seedling', summer: 'fas fa-sun', autumn: 'fas fa-leaf', winter: 'fas fa-snowflake' };
-            const tagsHTML = item.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('');
+            const tagsHTML = item.tags.map(tag => `<span class="card-tag">${trTag(tag)}</span>`).join('');
             const seasonClass = item.season || 'summer';
             const iconClass = seasonIcons[item.season] || 'fas fa-question-circle';
             const iconHTML = `<i class="${iconClass} fa-fw text-xs"></i>`;
@@ -554,11 +571,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const cardLinks = getLiveLinks(item);
             const playIconSVG = '<svg class="icon-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" /></svg>';
             const playButtonHTML = cardLinks.length === 1
-                ? `<a href="${_escHtml(cardLinks[0].url)}" target="_blank" rel="noopener noreferrer" class="card-play-button-link" aria-label="Guarda la diretta su YouTube">
+                ? `<a href="${_escHtml(cardLinks[0].url)}" target="_blank" rel="noopener noreferrer" class="card-play-button-link" aria-label="${_glLang() === 'en' ? 'Watch the stream on YouTube' : 'Guarda la diretta su YouTube'}">
                        ${playIconSVG}
                    </a>`
                 : cardLinks.length > 1
-                ? `<span class="card-play-button-multi" role="button" tabindex="0" aria-label="${cardLinks.length} dirette disponibili">
+                ? `<span class="card-play-button-multi" role="button" tabindex="0" aria-label="${cardLinks.length} ${_glLang() === 'en' ? 'streams available' : 'dirette disponibili'}">
                        ${playIconSVG}<span class="card-play-count">${cardLinks.length}</span>
                    </span>`
                 : '';
@@ -587,7 +604,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const renderGrid = (items, container) => {
             if (!container) return;
             if (!items.length && window.gateDataError) { container.innerHTML = erroreDatiHTML(); return; }
-            container.innerHTML = items.length > 0 ? items.map(createArchiveItemHTML).join('') : '<p class="col-span-full text-center text-[var(--text-secondary)]">Nessun risultato trovato.</p>';
+            container.innerHTML = items.length > 0 ? items.map(createArchiveItemHTML).join('') : `<p class="col-span-full text-center text-[var(--text-secondary)]">${_glLang() === 'en' ? 'No results found.' : 'Nessun risultato trovato.'}</p>`;
         };
 
         // Unisci streams + eventi nell'archivio (card identiche)
@@ -728,8 +745,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const gridHTML = residents.map(artist => {
             const bio = (_glLang() === 'it' && artist.bio_it) ? artist.bio_it : (artist.bio || '');
             const socials = [
-                artist.instagram ? `<a href="${artist.instagram}" target="_blank" rel="noopener" class="resident-social-link" aria-label="Instagram di ${artist.name}"><i class="fab fa-instagram"></i></a>` : '',
-                artist.soundcloud ? `<a href="${artist.soundcloud}" target="_blank" rel="noopener" class="resident-social-link" aria-label="SoundCloud di ${artist.name}"><i class="fab fa-soundcloud"></i></a>` : '',
+                artist.instagram ? `<a href="${artist.instagram}" target="_blank" rel="noopener" class="resident-social-link" aria-label="${_glLang() === 'en' ? `${artist.name} on Instagram` : `Instagram di ${artist.name}`}"><i class="fab fa-instagram"></i></a>` : '',
+                artist.soundcloud ? `<a href="${artist.soundcloud}" target="_blank" rel="noopener" class="resident-social-link" aria-label="${_glLang() === 'en' ? `${artist.name} on SoundCloud` : `SoundCloud di ${artist.name}`}"><i class="fab fa-soundcloud"></i></a>` : '',
                 artist.mixcloud ? `<a href="${artist.mixcloud}" target="_blank" rel="noopener" class="resident-social-link" aria-label="Mixcloud di ${artist.name}"><i class="fab fa-mixcloud"></i></a>` : '',
             ].filter(Boolean).join('');
 

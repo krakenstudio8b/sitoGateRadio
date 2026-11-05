@@ -321,7 +321,8 @@
         const c = $('radio-video-cover');
         if (!c) return;
         c.classList.toggle('is-suona', playing);
-        c.setAttribute('aria-label', playing ? 'Pausa' : 'Riproduci');
+        const en = window.GateI18n && window.GateI18n.getLang() === 'en';
+        c.setAttribute('aria-label', playing ? (en ? 'Pause' : 'Pausa') : (en ? 'Play' : 'Riproduci'));
         if (!playing) { clearTimeout(setCover.t); setCover.t = 0; c.classList.remove('is-on'); return; }
         if (c.classList.contains('is-on') || setCover.t) return;
         setCover.t = setTimeout(() => { setCover.t = 0; c.classList.add('is-on'); }, COVER_MS);

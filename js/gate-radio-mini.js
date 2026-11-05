@@ -18,7 +18,7 @@
     const BAR_H = 64;
 
     const page = (location.pathname.split('/').pop() || 'index').replace('.html', '') || 'index';
-    const lang = () => (window.GateI18n ? window.GateI18n.getLang() : 'it');
+    const lang = () => (window.GateI18n ? window.GateI18n.getLang() : (() => { try { return localStorage.getItem('gate_lang') || 'it'; } catch (e) { return 'it'; } })());
     const t = (it, en) => (lang() === 'en' ? en : it);
     const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
         c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -265,6 +265,13 @@
 
     async function init() {
         buildBar();
+        // cambio lingua fatto dentro la cornice (la barra qui fuori non si ricarica)
+        window.addEventListener('storage', (e) => {
+            if (e.key !== 'gate_lang' || !bar) return;
+            document.documentElement.lang = lang();
+            setIcon(isPlaying());
+            if (!state) nameEl.textContent = t('Sintonizzazione…', 'Tuning in…');
+        });
         playlist = cleanPlaylist(await loadPlaylist());
         if (!playlist.length) { bar.remove(); document.body.classList.remove('gn-has-bar'); return; }
         state = currentState();

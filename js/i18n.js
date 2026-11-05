@@ -155,8 +155,55 @@
         return localStorage.getItem('gate_lang') || 'it';
     }
     function setLang(lang) {
+        const prima = getLang();
         localStorage.setItem('gate_lang', lang);
         applyLang(lang);
+        // Le parti costruite dagli script (date, card, "prossimo evento", filtri…)
+        // si rifanno nella nuova lingua solo ricaricando la pagina.
+        // La pagina Radio no: ripartirebbe la musica (lì si aggiorna già da sola).
+        if (prima !== lang && !/radio(-texture)?(\.html)?$/.test(location.pathname)) location.reload();
+    }
+
+    // Titoli delle schede del browser ed etichette lette dai lettori di schermo:
+    // nell'HTML sono in italiano, in inglese si sostituiscono all'apertura
+    const TITOLI_EN = {
+        'index': 'GATE RADIO | Techno Seasons - Live Streaming & Events',
+        'events': 'Techno Events - GATE RADIO | Underground Nights & Parties',
+        'archive': 'DJ Set & Stream Archive - GATE RADIO',
+        'artists': 'Resident Artists - GATE RADIO | Our Residents',
+        'programmazione': 'Live Stream Schedule - GATE RADIO | Stream Calendar',
+        'about': 'About Us - GATE RADIO | Our Team & Our Story',
+        'contact': 'Contact - GATE RADIO | Get in Touch',
+    };
+    const ETICHETTE_EN = {
+        'Apri menu': 'Open menu',
+        'Apri menu di navigazione principale': 'Open main navigation menu',
+        'Sezione hero - Benvenuto': 'Hero section - Welcome',
+        'Sezione live streaming': 'Live streaming section',
+        'Filtra per stagione': 'Filter by season',
+        'Animazione grafica Gate': 'Gate graphic animation',
+        'Riproduci': 'Play',
+        'Avanzamento riproduzione': 'Playback progress',
+        'Muto': 'Mute',
+        'Muto / Riattiva': 'Mute / Unmute',
+        'Mese precedente': 'Previous month',
+        'Mese successivo': 'Next month',
+        'Nome': 'Name',
+        'Messaggio': 'Message',
+    };
+    function traduciEtichette() {
+        const pagina = (location.pathname.split('/').pop() || 'index').replace('.html', '') || 'index';
+        if (TITOLI_EN[pagina]) document.title = TITOLI_EN[pagina];
+        document.querySelectorAll('[aria-label], [title]').forEach(el => {
+            ['aria-label', 'title'].forEach(a => {
+                const v = el.getAttribute(a);
+                if (v && ETICHETTE_EN[v] && !(a === 'title' && el.tagName === 'HTML')) el.setAttribute(a, ETICHETTE_EN[v]);
+            });
+        });
+        document.querySelectorAll('label.sr-only').forEach(el => {
+            const v = el.textContent.trim();
+            if (ETICHETTE_EN[v]) el.textContent = ETICHETTE_EN[v];
+        });
     }
     function t(key, lang) {
         const entry = translations[key];
@@ -166,6 +213,7 @@
 
     function applyLang(lang) {
         document.documentElement.lang = lang;
+        if (lang === 'en') traduciEtichette();
         // Translate all elements with data-i18n
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');

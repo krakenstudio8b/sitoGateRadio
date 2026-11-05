@@ -10,7 +10,8 @@
 (function () {
     const OPEN_CALL_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSf_Ot0_OHSMYUuy2oyQtUJaMOaATIIkiMvNxKs_zMCRhZSMyg/viewform';
 
-    const lang = () => (window.GateI18n ? window.GateI18n.getLang() : 'it');
+    // la lingua scelta si legge anche se i18n.js non è ancora caricato
+    const lang = () => (window.GateI18n ? window.GateI18n.getLang() : (() => { try { return localStorage.getItem('gate_lang') || 'it'; } catch (e) { return 'it'; } })());
     const t = (it, en) => (lang() === 'en' ? en : it);
     const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
         c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
