@@ -162,10 +162,12 @@ html.winter .ab { --ab-tit: #7a72ff; } /* il blu pieno sul nero si legge poco */
 .ab-st:active { transform: scale(0.985); }
 .ab-st:focus-visible { outline: 3px solid #fff; outline-offset: -6px; }
 .ab-st-nome { font-family: 'Grifter', sans-serif; font-size: clamp(1.4rem, 2.1vw, 1.9rem); line-height: 1; }
-.ab-st-n { font-size: clamp(1rem, 1.2vw, 1.1rem); }
+.ab-st-n { font-size: clamp(1rem, 1.2vw, 1.1rem); order: 2; }
+.ab-st-ora { order: 1; }
 .ab-st-n b { font-family: 'Grifter', sans-serif; font-weight: 700; font-size: 1.6em; }
 .ab-st-ora {
-    position: absolute; top: clamp(1.1rem, 1.8vw, 1.6rem); right: clamp(1.1rem, 1.8vw, 1.6rem);
+    /* sotto il nome (non in alto a destra: sui tablet copriva "Autunno") */
+    margin: 0.6rem 0 auto;
     font-size: 0.9rem; padding: 0.15rem 0.55rem; background: #000; color: #fff;
     opacity: 0; transform: translateY(-4px); transition: opacity 0.2s ease, transform 0.2s ease;
 }

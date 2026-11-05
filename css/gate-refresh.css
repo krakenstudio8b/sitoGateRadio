@@ -878,3 +878,8 @@ html.spring .gn-nav-cta, html.summer .gn-nav-cta { color: #000 !important; }
 @media (min-width: 900px) {
     body.gn-has-bar .event-modal-container { z-index: 9500; }
 }
+/* Da PC il riquadrino della radio sta in basso a destra: le due scritte
+   dell'ultima riga del footer vanno a sinistra, così non ci finiscono sotto */
+@media (min-width: 900px) {
+    body.gn-has-bar > footer p { justify-content: flex-start; column-gap: 3rem; }
+}
