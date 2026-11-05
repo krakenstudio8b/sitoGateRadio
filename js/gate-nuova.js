@@ -66,51 +66,6 @@
         }
     }
 
-    // ─── 4. CHI SIAMO: DESCRIZIONE NUOVA ────────────────────────────────────────
-    // Testo costruito sul post della open call + i dati dell'archivio.
-    const ABOUT = {
-        sub: { it: 'Expanding sound boundaries.', en: 'Expanding sound boundaries.' },
-        p: [
-            { it: "Gate Radio è un progetto indipendente nato a Roma alla fine del 2024, dedicato alla musica elettronica e alla promozione dell'arte in ogni sua forma. Siamo un collettivo: dal nostro studio trasmettiamo dirette DJ e live set, organizziamo serate e apriamo le porte a chi ha qualcosa da dire con la propria musica.",
-              en: "Gate Radio is an independent project born in Rome at the end of 2024, devoted to electronic music and to promoting art in all its forms. We are a collective: from our studio we stream DJ and live sets, we throw nights and we open our doors to anyone with something to say through their music." },
-            { it: "Dalla prima diretta, nel novembre 2024, sono passatə dalla nostra console più di 90 artistə: i nostri resident, ospiti dalla scena romana e italiana e artistə che oggi suonano tra Berlino e il resto d'Europa. Ogni set resta nel nostro archivio, la memoria di tutto quello che è passato da qui.",
-              en: "Since our first stream in November 2024, more than 90 artists have played behind our decks: our residents, guests from the Roman and Italian scene and artists now playing between Berlin and the rest of Europe. Every set stays in our archive, the memory of everything that has passed through here." },
-            { it: "Il nostro spazio è anche un punto d'incontro tra realtà diverse. Abbiamo ospitato gli showcase di collettivi ed etichette come Freenetica, ASS3, Resistance is Techno, Bugs, Glumpat, Boiler Groove, Blink, Hangover, Footwork e Prima o Poi Music, e portiamo il nostro suono fuori dallo studio con le serate Gate Nacht.",
-              en: "Our space is also a meeting point between different realities. We have hosted showcases by collectives and labels such as Freenetica, ASS3, Resistance is Techno, Bugs, Glumpat, Boiler Groove, Blink, Hangover, Footwork and Prima o Poi Music, and we take our sound beyond the studio with our Gate Nacht nights." },
-            { it: "Crediamo nelle opportunità reali e vogliamo dare voce a chi spesso non trova spazio altrove: che tu sia unə DJ, unə live performer con esperienza o unə giovane artistə alla ricerca della prima vera occasione, questo spazio è anche tuo. La nostra Open Call è aperta.",
-              en: "We believe in real opportunities and want to give a voice to those who rarely find room elsewhere: whether you are a DJ, an experienced live performer or a young artist looking for your first real chance, this space is yours too. Our Open Call is open." },
-        ],
-    };
-    // Galleria di Info: ai lati due video al posto delle immagini (il centrale resta)
-    const ABOUT_SIDE_VIDEOS = [
-        'https://media.gateradiorm.com/video/dioppppp.mp4',          // sinistra
-        'https://media.gateradiorm.com/video/animazione_banner.mp4', // destra
-    ];
-    function buildAboutVideos() {
-        const items = document.querySelectorAll('.about-media-grid > .about-media-item');
-        if (items.length !== 3) return;
-        [items[0], items[2]].forEach((item, i) => {
-            if (item.querySelector('video')) return;
-            item.innerHTML = `<video autoplay muted loop playsinline preload="metadata"><source src="${ABOUT_SIDE_VIDEOS[i]}" type="video/mp4"></video>`;
-        });
-    }
-
-    function buildAbout() {
-        if (page !== 'about') return;
-        buildAboutVideos();
-        const sub = document.querySelector('[data-i18n="about.identdesc"], #gn-about-sub');
-        const box = document.querySelector('#chi-siamo-section .chi-siamo-text');
-        if (!sub || !box) return;
-        const l = lang() === 'en' ? 'en' : 'it';
-        // togliamo il collegamento alle vecchie traduzioni, altrimenti il cambio
-        // lingua rimetterebbe il testo vecchio
-        sub.removeAttribute('data-i18n');
-        sub.id = 'gn-about-sub';
-        sub.textContent = ABOUT.sub[l];
-        box.innerHTML = ABOUT.p.map(x => `<p>${esc(x[l])}</p>`).join('') +
-            `<p class="gn-about-cta"><a href="${OPEN_CALL_URL}" target="_blank" rel="noopener">${l === 'en' ? 'SUBMIT YOUR SET' : 'PROPONI IL TUO SET'} →</a></p>`;
-    }
-
     // ─── 3. ARCHIVIO: RICERCA + FILTRI PER TIPO ─────────────────────────────────
     function kindOf(item) {
         const txt = `${item.artist || ''} ${item.title || ''}`.toUpperCase();
@@ -319,14 +274,13 @@
         loadMiniRadio();
         buildMenu();
         buildHome();
-        buildAbout();
         buildArchiveSearch();
         buildFooter();
         // grafica nuova pronta: la pagina può comparire (vedi js/style-toggle.js)
         requestAnimationFrame(() => document.documentElement.classList.remove('gn-attesa'));
         // le traduzioni IT/EN cambiano i testi del menu: lo ricostruiamo
         document.addEventListener('click', (e) => {
-            if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(() => { buildMenu(); buildHome(); buildAbout(); buildFooter(); }, 50);
+            if (e.target.closest && e.target.closest('.lang-toggle-btn')) setTimeout(() => { buildMenu(); buildHome(); buildFooter(); }, 50);
         });
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

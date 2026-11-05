@@ -66,6 +66,7 @@
         </script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/gate-refresh.css" id="gate-refresh-css">
+    <link rel="stylesheet" href="css/chi-siamo.css">
     <script src="js/style-toggle.js"></script>
 
 </head>
@@ -109,35 +110,104 @@
         </div>
     </header>
 
-    <main id="main-content">
-        <section class="gn-about-hero">
-            <div class="gn-about-hero-text">
-                <h1 class="glow-text" data-i18n-html="about.hero"><span class="text-[var(--accent)] grifter-font">GATE RADIO</span></h1>
-            </div>
-            <figure class="gn-about-logo">
-                <img src="assets/gate-simbolo-bianco.png" alt="Logo Gate Radio" width="640" height="640" fetchpriority="high" decoding="async">
-            </figure>
-        </section>
-
-        <section id="chi-siamo-section" class="section-padding">
-            <div class="max-w-6xl mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold glow-text" data-i18n-html="about.identity">CHI <span class="text-[var(--accent)]">SIAMO</span></h2>
-                    <p class="text-lg text-[var(--text-secondary)] mt-2" data-i18n="about.identdesc">Un portale sulla techno, scandito dal ritmo delle stagioni.</p>
+    <main id="main-content" class="ab">
+        <!-- 1. Il logo, da solo sul nero: scorrendo si attraversa il cancello e si entra nel colore della stagione -->
+        <section class="ab-gate" aria-labelledby="ab-title">
+            <div class="ab-gate-stage">
+                <div class="ab-gate-fill" aria-hidden="true"></div>
+                <img class="ab-gate-logo" src="assets/gate-simbolo.png" alt="" width="1365" height="1366" fetchpriority="high" decoding="async">
+                <div class="ab-gate-title">
+                    <h1 id="ab-title">GATE RADIO</h1>
+                    <p>Expanding sound boundaries.</p>
                 </div>
-                <div class="chi-siamo-text">
-                    <p data-i18n="about.bio1">Gate Radio was born at the end of 2024 from a group of young electronic music enthusiasts, united by a shared dream: creating a sonic meeting space where emerging talents and established artists could converge and grow together.</p>
-                    <p data-i18n="about.bio2">More than just a streaming platform, Gate Radio is a musical journey celebrating the most innovative and experimental sounds, with the ambition of always pushing the boundaries of sound further. At its core lies a deep connection with the natural cycle of the seasons — we believe music, like nature, has its own rhythms and atmospheres. That's why our programming evolves throughout the year, shifting colors and sounds as the months pass.</p>
-                </div>
-
-                <div class="gn-about-gallery mt-24">
-                    <figure style="--r: 1.3333"><img src="https://media.gateradiorm.com/foto/chi-siamo-1.jpg" alt="Una serata Gate, il pubblico e i teli con le grafiche" width="2000" height="1500" loading="lazy" decoding="async"></figure>
-                    <figure style="--r: 0.75"><img src="https://media.gateradiorm.com/foto/chi-siamo-2.jpg" alt="Il logo Gate illuminato di rosso" width="1200" height="1600" loading="lazy" decoding="async"></figure>
-                    <figure style="--r: 1.3333"><img src="https://media.gateradiorm.com/foto/chi-siamo-3.jpg" alt="Un DJ in console durante una serata Gate" width="2000" height="1500" loading="lazy" decoding="async"></figure>
+                <div class="ab-gate-chi">
+                    <div class="ab-wrap">
+                        <h2 class="ab-h2" data-it="Chi siamo" data-en="Who we are">Chi siamo</h2>
+                        <p class="ab-statement" data-it="Piattaforma indipendente nata a Roma nel 2023, dedicata alla musica elettronica e alla promozione dell&#x27;arte in tutte le sue forme." data-en="An independent platform born in Rome in 2023, devoted to electronic music and to promoting art in all its forms.">Piattaforma indipendente nata a Roma nel 2023, dedicata alla musica elettronica e alla promozione dell'arte in tutte le sue forme.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
+        <!-- 2. Lo studio: dal basso e per il basso -->
+        <section class="ab-intro">
+            <div class="ab-wrap ab-intro-grid">
+                <figure class="ab-intro-photo"><img src="https://media.gateradiorm.com/foto/tavolo-gate.jpg" alt="La console di Gate Studio, a Roma" width="2400" height="1800" loading="lazy" decoding="async"><figcaption data-it="Gate Studio, Roma." data-en="Gate Studio, Rome.">Gate Studio, Roma.</figcaption></figure>
+                <div class="ab-intro-text">
+                    <h2 class="ab-h2" data-it="Expanding sound boundaries." data-en="Expanding sound boundaries.">Expanding sound boundaries.</h2>
+                    <div data-ab-p="0,1"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. I numeri, presi dall'archivio vero -->
+        <section class="ab-numeri" aria-labelledby="ab-numeri-h">
+            <div class="ab-wrap">
+                <h2 id="ab-numeri-h" class="ab-h2" data-it="Ad oggi, in archivio" data-en="So far, in the archive">Ad oggi, in archivio</h2>
+                <dl class="ab-num">
+                    <div><dt data-it="dirette in archivio" data-en="streams in the archive">dirette in archivio</dt><dd data-num="dirette">73</dd></div>
+                    <div><dt data-it="artist&#601; in console" data-en="artists behind the decks">artist&#601; in console</dt><dd data-num="artisti">109</dd></div>
+                    <div><dt data-it="showcase di collettivi ed etichette" data-en="showcases by collectives and labels">showcase di collettivi ed etichette</dt><dd data-num="showcase">10</dd></div>
+                    <div><dt data-it="serate Gate Nacht" data-en="Gate Nacht nights">serate Gate Nacht</dt><dd data-num="nacht">4</dd></div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- 4. Le nostre foto -->
+        <section class="ab-foto" aria-labelledby="ab-foto-h">
+            <div class="ab-wrap ab-foto-head">
+                <h2 class="ab-h2" id="ab-foto-h" data-it="Dal vivo" data-en="Live">Dal vivo</h2>
+                <p class="ab-frase" data-it="Nel tempo la piattaforma ha ampliato la propria attività, portando la musica oltre lo streaming e creando occasioni di incontro dal vivo." data-en="Over time the platform has grown beyond streaming, taking the music off the screen and creating chances to meet in real life.">Nel tempo la piattaforma ha ampliato la propria attività, portando la musica oltre lo streaming e creando occasioni di incontro dal vivo.</p>
+            </div>
+            <figure class="ab-foto-larga"><img src="https://media.gateradiorm.com/foto/chi-siamo-1.jpg" alt="Una serata Gate, il pubblico e i teli con le grafiche" width="2000" height="1500" loading="lazy" decoding="async"></figure>
+            <div class="ab-wrap ab-foto-riga">
+                <figure class="ab-foto-v"><video autoplay muted loop playsinline preload="metadata" aria-label="Animazione grafica Gate"><source src="https://media.gateradiorm.com/video/dioppppp.mp4" type="video/mp4"></video></figure>
+                <figure class="ab-foto-dj"><img src="https://media.gateradiorm.com/foto/chi-siamo-3.jpg" alt="Un DJ in console durante una serata Gate" width="2000" height="1500" loading="lazy" decoding="async"></figure>
+                <figure class="ab-foto-v"><video autoplay muted loop playsinline preload="metadata" aria-label="Animazione grafica Gate"><source src="https://media.gateradiorm.com/video/animazione_banner.mp4" type="video/mp4"></video></figure>
+            </div>
+        </section>
+
+        <!-- 5. Le regole delle Gate Nacht -->
+        <section class="ab-nacht" aria-labelledby="ab-nacht-h">
+            <div class="ab-wrap">
+                <h2 class="ab-h2" id="ab-nacht-h" data-it="Gate Nacht" data-en="Gate Nacht">Gate Nacht</h2>
+                <p class="ab-frase" data-it="Le nostre serate al Brancaleone, luogo storico e pioniere dell&#x27;underground romano." data-en="Our nights at Brancaleone, a historic venue and pioneer of Rome&#x27;s underground.">Le nostre serate al Brancaleone, luogo storico e pioniere dell'underground romano.</p>
+                <ul class="ab-regole">
+                    <li data-it="Niente flash." data-en="No flash.">Niente flash.</li>
+                    <li data-it="Niente storie." data-en="No stories.">Niente storie.</li>
+                    <li data-it="Niente video." data-en="No videos.">Niente video.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 6. In continua evoluzione: le stagioni da toccare -->
+        <section class="ab-stagioni" aria-labelledby="ab-stagioni-h">
+            <div class="ab-wrap ab-stagioni-head">
+                <h2 class="ab-h2" id="ab-stagioni-h" data-it="In continua evoluzione" data-en="Always evolving">In continua evoluzione</h2>
+                <p class="ab-frase" data-it="Al centro mettiamo la musica, la community e la condivisione di linguaggi e visioni differenti." data-en="At the centre we put the music, the community and the sharing of different languages and visions.">Al centro mettiamo la musica, la community e la condivisione di linguaggi e visioni differenti.</p>
+                <p class="ab-stagioni-hint" data-it="Come le stagioni, che cambiano il colore del sito. Toccane una:" data-en="Like the seasons, which change the colour of the site. Tap one:">Come le stagioni, che cambiano il colore del sito. Toccane una:</p>
+            </div>
+            <div class="ab-stagioni-row" role="group" aria-labelledby="ab-stagioni-h">
+                <button type="button" class="ab-st" data-st="winter" aria-pressed="false"><span class="ab-st-nome" data-it="Inverno" data-en="Winter">Inverno</span><span class="ab-st-n"><b data-num="st-winter">32</b> <span data-it="dirette" data-en="streams">dirette</span></span><span class="ab-st-ora" data-it="adesso" data-en="now">adesso</span></button>
+                <button type="button" class="ab-st" data-st="spring" aria-pressed="false"><span class="ab-st-nome" data-it="Primavera" data-en="Spring">Primavera</span><span class="ab-st-n"><b data-num="st-spring">18</b> <span data-it="dirette" data-en="streams">dirette</span></span><span class="ab-st-ora" data-it="adesso" data-en="now">adesso</span></button>
+                <button type="button" class="ab-st" data-st="summer" aria-pressed="false"><span class="ab-st-nome" data-it="Estate" data-en="Summer">Estate</span><span class="ab-st-n"><b data-num="st-summer">15</b> <span data-it="dirette" data-en="streams">dirette</span></span><span class="ab-st-ora" data-it="adesso" data-en="now">adesso</span></button>
+                <button type="button" class="ab-st" data-st="autumn" aria-pressed="false"><span class="ab-st-nome" data-it="Autunno" data-en="Autumn">Autunno</span><span class="ab-st-n"><b data-num="st-autumn">7</b> <span data-it="dirette" data-en="streams">dirette</span></span><span class="ab-st-ora" data-it="adesso" data-en="now">adesso</span></button>
+            </div>
+        </section>
+
+        <!-- 7. Open call: la chiamata vera, su un campo del colore della stagione -->
+        <section class="ab-open" aria-labelledby="ab-open-h">
+            <div class="ab-wrap">
+                <h2 id="ab-open-h" class="ab-h2" data-it="Questo spazio &egrave; anche tuo" data-en="This space is yours too">Questo spazio &egrave; anche tuo</h2>
+                <div class="ab-open-grid">
+                    <div data-ab-p="2"></div>
+                    <div class="ab-open-btns">
+                        <a class="ab-btn ab-btn-main" data-open-call href="#" target="_blank" rel="noopener"><span data-it="Proponi il tuo set" data-en="Submit your set">Proponi il tuo set</span> <span aria-hidden="true">&rarr;</span></a>
+                        <a class="ab-btn" href="mailto:gateradiorm@gmail.com"><span data-it="Oppure scrivici" data-en="Or write to us">Oppure scrivici</span> <span aria-hidden="true">&rarr;</span></a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <div class="mt-24 footer-main-area">
@@ -182,5 +252,6 @@
     <script src="js/firebase-data.js" defer></script>
     <script src="js/i18n.js" defer></script>
     <script src="js/script.js"        defer></script>
+    <script src="js/chi-siamo.js" defer></script>
 </body>
 </html>
