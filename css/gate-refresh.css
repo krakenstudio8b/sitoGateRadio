@@ -864,3 +864,17 @@ html.spring .gn-nav-cta, html.summer .gn-nav-cta { color: #000 !important; }
     #mobile-menu:not(.hidden) { display: block !important; }
     #mobile-menu .lang-toggle-group { display: inline-flex !important; width: auto !important; }
 }
+
+/* ----- La scheda di un evento non finisce sotto la barra della radio -----
+   Telefono/tablet: la scheda si ferma sopra la barra (che resta usabile).
+   PC: la scheda passa sopra la schedina della radio. */
+@media (max-width: 899.98px) {
+    body.gn-has-bar .event-modal-container { height: calc(100% - 64px); }
+    body.gn-has-bar .event-modal-content { max-height: calc(100% - 1.5rem); }
+}
+@media (max-width: 640px) {
+    body.gn-has-bar .event-modal-content { height: 100%; max-height: 100%; }
+}
+@media (min-width: 900px) {
+    body.gn-has-bar .event-modal-container { z-index: 9500; }
+}
