@@ -2,7 +2,7 @@
 // Viene caricato solo quando è attiva la versione nuova (vedi js/style-toggle.js):
 // la versione vecchia resta identica a prima.
 //
-//  1. Menu corto: RADIO · ARCHIVIO · EVENTI · RESIDENT · INFO + OPEN CALL, senza icone
+//  1. Menu corto: RADIO · ARCHIVIO · EVENTI · RESIDENT · INFO + PROPONI IL TUO SET, senza icone
 //  2. Home: un solo "ASCOLTA ORA" (va dritto alla Radio)
 //  4. Chi siamo: descrizione nuova
 //  5. Footer: striscia artisti, link/contatti/social, nome GATE RADIO
@@ -29,7 +29,7 @@
         const desktop = document.querySelector('header nav > div.hidden.md\\:flex');
         const mobile = document.getElementById('mobile-menu');
         const item = (n) => `<a href="${n.href}" class="gn-nav-link${n.pages.includes(page) ? ' is-current' : ''}">${t(n.it, n.en)}</a>`;
-        const cta = `<a href="${OPEN_CALL_URL}" target="_blank" rel="noopener" class="gn-nav-cta">OPEN CALL</a>`;
+        const cta = `<a href="${OPEN_CALL_URL}" target="_blank" rel="noopener" class="gn-nav-cta">${t('PROPONI IL TUO SET', 'SUBMIT YOUR SET')}</a>`;
         if (desktop) {
             const keepD = [...desktop.children].filter(el => el.tagName !== 'A'); // selettore lingua
             desktop.className = 'gn-nav hidden md:flex';

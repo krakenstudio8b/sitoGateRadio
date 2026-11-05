@@ -810,3 +810,57 @@ main h1, main h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
 
 /* Footer della pagina Chi siamo: i due pulsanti sono nell'open call, i social restano soli → al centro */
 .page-about .gn-foot-row { grid-template-columns: 1fr; justify-items: center; }
+
+/* ----- Radio 24/7: copertina sopra al video YouTube -----
+   Copre la barra di YouTube (logo del canale e titolo) finché il set non suona
+   e torna in pausa; resta sempre sopra (trasparente) così i comandi di YouTube
+   non si raggiungono: niente salti avanti/indietro, come una radio vera. */
+.radio-video-wrapper .radio-video-cover {
+    position: absolute; inset: 0; z-index: 2; display: grid; place-items: center;
+    width: 100% !important; height: 100% !important;
+    padding: 0; border: 0; background: transparent; cursor: pointer;
+}
+.radio-video-poster {
+    position: absolute; inset: 0; background: #000;
+    transition: opacity 0.35s ease;
+}
+.radio-video-poster::before, .radio-video-poster::after {
+    content: ''; position: absolute; inset: 0;
+    background: var(--poster, none) center / cover no-repeat;
+}
+.radio-video-poster::before { filter: blur(28px) brightness(0.45); transform: scale(1.15); }
+.radio-video-poster::after { background-size: contain; }
+.radio-video-play {
+    position: relative; display: grid; place-items: center;
+    width: 4.5rem; height: 4.5rem; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 1.5rem; padding-left: 0.2rem;
+    transition: opacity 0.25s ease, transform 0.16s ease-out;
+}
+html.spring .radio-video-play, html.summer .radio-video-play { color: #000; }
+.radio-video-cover:hover .radio-video-play { transform: scale(1.06); }
+.radio-video-cover:active .radio-video-play { transform: scale(0.96); }
+.radio-video-cover:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+/* la musica suona ma la copertina è ancora su: via il tasto play, resta la copertina */
+.radio-video-cover.is-suona .radio-video-play { opacity: 0; transform: scale(0.9); }
+.radio-video-cover.is-on .radio-video-poster { transition-duration: 0.8s; }
+.radio-video-cover.is-on .radio-video-poster,
+.radio-video-cover.is-on .radio-video-play { opacity: 0; }
+
+/* ----- Menu: PROPONI IL TUO SET pieno del colore della stagione (era OPEN CALL a filo) ----- */
+.gn-nav-cta, header nav .gn-nav-cta, #mobile-menu > a.gn-nav-cta {
+    background: var(--accent); color: #fff !important; border-color: var(--accent) !important;
+    white-space: nowrap; transition: background-color 0.2s ease, color 0.2s ease, transform 0.16s ease-out;
+}
+html.spring .gn-nav-cta, html.summer .gn-nav-cta { color: #000 !important; }
+.gn-nav-cta:hover, header nav .gn-nav-cta:hover, #mobile-menu > a.gn-nav-cta:hover {
+    background: transparent; color: var(--accent) !important;
+}
+.gn-nav-cta:active { transform: scale(0.97); }
+/* tablet (768–1023 px): con PROPONI IL TUO SET il menu non ci sta più in una riga
+   (il logo si sovrapponeva alle voci) → menu a tendina come sul telefono */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+    header nav .gn-nav { display: none !important; }
+    #mobile-menu-button { display: inline-block !important; }
+    #mobile-menu:not(.hidden) { display: block !important; }
+    #mobile-menu .lang-toggle-group { display: inline-flex !important; width: auto !important; }
+}

@@ -295,6 +295,8 @@
         set('radio-next-title',  same(next.title, next.artist) ? '' : next.title);
         setSrc('radio-artwork',      current.imageUrl, current.artist);
         setSrc('radio-next-artwork', next.imageUrl,    next.artist);
+        const poster = document.querySelector('.radio-video-poster');
+        if (poster) poster.style.setProperty('--poster', current.imageUrl ? `url("${current.imageUrl}")` : 'none');
 
         const tagsEl = $('radio-tags');
         if (tagsEl) tagsEl.innerHTML = current.tags.map(t => `<span class="card-tag">${t}</span>`).join('');
@@ -308,6 +310,21 @@
         updateProgress();
         renderMiniPlaylist();
         updateMediaSession();
+    }
+
+    // copertina sopra al video. YouTube, ogni volta che un video parte (o riparte
+    // dopo una pausa), mostra per qualche secondo il logo del canale e il titolo:
+    // la copertina resta su finché quella barra non è sparita (misurata: ~4 s dopo
+    // l'avvio, qui 8 s di margine), intanto la musica suona già.
+    const COVER_MS = 8000;
+    function setCover(playing) {
+        const c = $('radio-video-cover');
+        if (!c) return;
+        c.classList.toggle('is-suona', playing);
+        c.setAttribute('aria-label', playing ? 'Pausa' : 'Riproduci');
+        if (!playing) { clearTimeout(setCover.t); setCover.t = 0; c.classList.remove('is-on'); return; }
+        if (c.classList.contains('is-on') || setCover.t) return;
+        setCover.t = setTimeout(() => { setCover.t = 0; c.classList.add('is-on'); }, COVER_MS);
     }
 
     function updateProgress() {
@@ -379,14 +396,9 @@
 
         navigator.mediaSession.setActionHandler('play',          () => player?.playVideo());
         navigator.mediaSession.setActionHandler('pause',         () => player?.pauseVideo());
-        navigator.mediaSession.setActionHandler('nexttrack',     () => {
-            loadNext();
-            if (player && isPlaying) player.loadVideoById({ videoId: state.current.youtubeId, startSeconds: 0 });
-        });
-        navigator.mediaSession.setActionHandler('previoustrack', () => {
-            loadPrev();
-            if (player && isPlaying) player.loadVideoById({ videoId: state.current.youtubeId, startSeconds: 0 });
-        });
+        // è una radio: tutti ascoltano lo stesso punto, quindi niente avanti/indietro
+        navigator.mediaSession.setActionHandler('nexttrack',     null);
+        navigator.mediaSession.setActionHandler('previoustrack', null);
         navigator.mediaSession.setActionHandler('stop', () => player?.pauseVideo());
     }
 
@@ -464,7 +476,6 @@
     }
 
     function loadNext() { loadAt((state.currentIndex + 1) % playlist.length, 0); }
-    function loadPrev() { loadAt((state.currentIndex - 1 + playlist.length) % playlist.length, 0); }
 
     // ─── YOUTUBE IFRAME API ──────────────────────────────────────────────────────
 
@@ -478,10 +489,11 @@
             videoId: state.current.youtubeId,
             host: 'https://www.youtube-nocookie.com',
             playerVars: {
-                autoplay: 0, controls: 1, rel: 0,
+                // comandi di YouTube spenti: si usano solo play/pausa e volume del sito
+                autoplay: 0, controls: 0, disablekb: 1, rel: 0, iv_load_policy: 3,
                 modestbranding: 1, playsinline: 1,
                 start: Math.floor(state.startAt),
-                enablejsapi: 1, fs: 1,
+                enablejsapi: 1, fs: 0,
                 origin: window.location.origin || 'https://gateradio.com'
             },
             events: {
@@ -519,16 +531,20 @@
             }
             startTick();
             updatePlayBtn(true);
+            setCover(true);
             showStatus('IN ROTAZIONE', 'radio.playing');
         } else if (event.data === 2) {    // PAUSED
             isPlaying = false;
             stopTick();
             updatePlayBtn(false);
+            setCover(false);
             showStatus('IN PAUSA', 'radio.paused');
             if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
         } else if (event.data === 0) {    // ENDED
             loadNext();
             if (player) player.loadVideoById({ videoId: state.current.youtubeId, startSeconds: 0 });
+        } else if (event.data === -1) {   // VIDEO NUOVO CARICATO (cambio set)
+            setCover(false);
         } else if (event.data === 3) {    // BUFFERING
             showStatus('BUFFERING...', 'radio.buffering');
         }
@@ -669,21 +685,31 @@
         updateUI();
 
         // Pulsanti
-        const playBtn = $('radio-play-btn');
-        if (playBtn) playBtn.addEventListener('click', () => {
+        // play/pausa come una radio: dopo una pausa si riparte dal punto in cui
+        // sono tutti adesso, cioè dove eravamo + il tempo passato in pausa
+        // (non si ricalcola da zero: le durate imparate dal player sposterebbero tutto)
+        let pausaDa = 0;
+        const toggle = () => {
             if (!player) return;
-            isPlaying ? player.pauseVideo() : player.playVideo();
-        });
-        const nextBtn = $('radio-next-btn');
-        if (nextBtn) nextBtn.addEventListener('click', () => {
-            loadNext();
-            if (player && isPlaying) player.loadVideoById({ videoId: state.current.youtubeId, startSeconds: 0 });
-        });
-        const prevBtn = $('radio-prev-btn');
-        if (prevBtn) prevBtn.addEventListener('click', () => {
-            loadPrev();
-            if (player && isPlaying) player.loadVideoById({ videoId: state.current.youtubeId, startSeconds: 0 });
-        });
+            if (isPlaying) { pausaDa = Date.now(); player.pauseVideo(); return; }
+            if (!pausaDa) { player.playVideo(); return; }
+            let idx = state.currentIndex;
+            let pos = elapsedSeconds + (Date.now() - pausaDa) / 1000;
+            pausaDa = 0;
+            while (pos >= playlist[idx].duration) { pos -= playlist[idx].duration; idx = (idx + 1) % playlist.length; }
+            if (idx === state.currentIndex) {
+                elapsedSeconds = Math.floor(pos);
+                player.seekTo(Math.floor(pos), true);
+                player.playVideo();
+            } else {
+                loadAt(idx, pos);
+                player.loadVideoById({ videoId: state.current.youtubeId, startSeconds: Math.floor(pos) });
+            }
+        };
+        const playBtn = $('radio-play-btn');
+        if (playBtn) playBtn.addEventListener('click', toggle);
+        const cover = $('radio-video-cover');
+        if (cover) cover.addEventListener('click', toggle);
 
         // Volume slider
         const volSlider = $('radio-volume');

@@ -488,11 +488,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Senza locandina (il grafico non l'ha ancora fatta) mostriamo un blocco
             // tipografico col nome, invece del logo generico.
             const nextName  = _escHtml(nextStream.artist || '');
-            const nextKind  = _escHtml(nextStream.title || '');
+            const isEvent   = nextStream._kind === 'event';
+            // per gli eventi la scritta in alto dice già "evento": niente riga ripetuta
+            const nextKind  = isEvent ? '' : _escHtml(nextStream.title || '');
             const posterHTML = nextStream.imageUrl
                 ? posterImg(nextStream.imageUrl, nextStream.artist, 'w-full h-auto')
                 : `<div class="next-event-noposter"><span>${nextName}</span></div>`;
-            const nextLabel = _lang === 'en' ? 'NEXT LIVE' : 'PROSSIMA LIVE';
+            const nextLabel = isEvent
+                ? (_lang === 'en' ? 'NEXT EVENT' : 'PROSSIMO EVENTO')
+                : (_lang === 'en' ? 'NEXT LIVE' : 'PROSSIMA LIVE');
             liveContainer.innerHTML = `
                 <div class="coming-soon-container text-center flex flex-col items-center">
                     <div class="w-full">${buildRadioWidget()}</div>

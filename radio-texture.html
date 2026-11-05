@@ -126,6 +126,12 @@
                         <div class="radio-video-col">
                             <div class="radio-video-wrapper">
                                 <div id="radio-yt-player"></div>
+                                <!-- Copertina sopra al video: nasconde la barra di YouTube (logo e titolo)
+                                     quando è in pausa, e blocca i comandi di YouTube (niente salti nel set) -->
+                                <button type="button" id="radio-video-cover" class="radio-video-cover" aria-label="Riproduci">
+                                    <span class="radio-video-poster" aria-hidden="true"></span>
+                                    <span class="radio-video-play" aria-hidden="true"><i class="fas fa-play"></i></span>
+                                </button>
                             </div>
                         </div>
 
@@ -162,14 +168,8 @@
 
                             <!-- Controlli -->
                             <div class="radio-controls">
-                                <button id="radio-prev-btn" class="radio-ctrl-btn radio-ctrl-secondary" aria-label="Set precedente" title="Set precedente">
-                                    <i class="fas fa-backward-step"></i>
-                                </button>
                                 <button id="radio-play-btn" class="radio-ctrl-btn radio-ctrl-primary" aria-label="Riproduci">
                                     <i class="fas fa-play"></i>
-                                </button>
-                                <button id="radio-next-btn" class="radio-ctrl-btn radio-ctrl-secondary" aria-label="Set successivo" title="Set successivo">
-                                    <i class="fas fa-forward-step"></i>
                                 </button>
                             </div>
 
